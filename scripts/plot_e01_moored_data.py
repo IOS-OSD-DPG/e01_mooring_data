@@ -245,22 +245,11 @@ def plot_raw_time_series(df: pd.DataFrame, output_dir: str):
     return
 
 
-def plot_daily_mean_time_series(df: pd.DataFrame, output_dir: str):
-    """
-    Plot daily mean time series plots for temperature, salinity, and oxygen
-    :param df:
-    :param output_dir:
-    :return:
-    """
-    # Take the average over all measurements with the same year-month-day
+def plot_monthly_means(df: pd.DataFrame, output_dir: str):
     return
 
 
-def plot_monthly_mean_time_series(df: pd.DataFrame, output_dir: str):
-    return
-
-
-def plot_daily_clim(df: pd.DataFrame, output_dir: str):
+def plot_daily_means(df: pd.DataFrame, output_dir: str):
     """
     Calculate 1990-2020 climatology, which is 30 years because no data from 2007
     :return:
@@ -272,19 +261,42 @@ def plot_daily_clim(df: pd.DataFrame, output_dir: str):
     obs_dates, indices = np.unique(df['Date'], return_index=True)
     obs_days_of_year = np.array([x.timetuple().tm_yday for x in df.loc[indices, 'Datetime']])
 
-    for var in VARS:
-        # Compute average for every day
-        daily_means = np.zeros(len(obs_dates))
+    for depth in BIN_DEPTHS:
+        # Make a mask to capture data within 5 vertical meters of each bin depth
+        depth_mask = (df.loc[:, 'Depth'].to_numpy() >= depth - 5) & (df.loc[:, 'Depth'].to_numpy() <= depth + 5)
 
-        for i, date in enumerate(obs_dates):
-            daily_means[i] = df.loc[df['Date'] == date, var].mean()
+        # Exclude oxygen for this work
+        num_subplots = 2
+        figsize = (10, 7)
 
-        # Compute the average over all time for each day in 1-365
-        var_clim = np.zeros(len(days_of_year))
-        for dy in days_of_year:
-            # dy_mask = df.loc[:, 'Day_of_year'] == dy
-            var_clim[dy - 1] = np.nanmean(daily_means[obs_days_of_year == dy])
+        # Make plots with 3 subplots
 
+        # Daily mean figure
+        fig_dm, ax_dm = plt.subplots(num_subplots, figsize=figsize, sharex=True)
+
+        # Daily climatology figure
+        fig_dc, ax_dc = plt.subplots(num_subplots, figsize=figsize, sharex=True)
+
+        # Daily anom figure
+        fig_da, ax_da = plt.subplots(num_subplots, figsize=figsize, sharex=True)
+
+        for k, var in enumerate(VARS[:num_subplots]):
+            # Compute average for every day
+            daily_means = np.zeros(len(obs_dates))
+
+            for i, date in enumerate(obs_dates):
+                daily_means[i] = df.loc[df['Date'] == date, var].mean()
+
+            # Plot daily means
+            ax_dm[k].scatter(df.loc[indices, 'Datetime'], daily_means, marker='.', s=2)
+            ax_dm[k].set_title(var.split(':')[0])
+            # todo add more plot formatting here
+
+            # Compute the average over all time for each day in 1-365
+            var_clim = np.zeros(len(days_of_year))
+            for dy in days_of_year:
+                # dy_mask = df.loc[:, 'Day_of_year'] == dy
+                var_clim[dy - 1] = np.nanmean(daily_means[obs_days_of_year == dy])
 
     return
 
