@@ -1,0 +1,89 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <title>Mooring Station E01</title>
+    <link rel="stylesheet" href="style.css">
+</head>
+<body>
+
+<h1>Mooring Station E01</h1>
+<p>
+    Time series plots of temperature and salinity are presented for station E01. Data are available
+    for May 1979 to July 2022.
+</p>
+
+<div class="tab">
+    <button class="tablinks" onclick="openTab(event, 'Map of Station')" id="defaultOpen">Map of Station</button>
+    <button class="tablinks" onclick="openTab(event, 'Annual Data Availability')">Annual Data Availability</button>
+    <button class="tablinks" onclick="openTab(event, 'Monthly Data Availability')">Monthly Data Availability</button>
+    <button class="tablinks" onclick="openTab(event, 'Raw Time Series')">Raw Time Series</button>
+</div>
+
+<div id="Map of Station" class="tabcontent">
+  <a href="./figures/e01_map.png">
+      <img src="./figures/e01_map.png" class="map" loading="lazy" width="600" height="450">
+  </a>
+  <p>
+      Map showing the location of DFO Mooring Station E01.
+  </p>
+</div>
+
+<div id="Annual Data Availability" class="tabcontent">
+  <p>
+      The following plots count how many measurements are available for each month of the data record.
+      Separate plots are provided for each of temperature, salinity, and oxygen.
+  </p>
+  <a href="./figures/e01_Temperature_annual_sampling_counts.png">
+      <img src="./figures/e01_Temperature_annual_sampling_counts.png">
+  </a>
+  <a href="./figures/e01_Salinity_annual_sampling_counts.png">
+      <img src="./figures/e01_Salinity_annual_sampling_counts.png">
+  </a>
+  <a href="./figures/e01_Oxygen_annual_sampling_counts.png">
+      <img src="./figures/e01_Oxygen_annual_sampling_counts.png">
+  </a>
+</div>
+
+<div id="Monthly Data Availability" class="tabcontent">
+  <p>
+      The following plots count how many measurements are available for each month of the data record.
+      Separate plots are provided for each of temperature, salinity, and oxygen.
+  </p>
+  <a href="./figures/e01_Temperature_monthly_sampling_counts.png">
+      <img src="./figures/e01_Temperature_monthly_sampling_counts.png">
+  </a>
+  <a href="./figures/e01_Salinity_monthly_sampling_counts.png">
+      <img src="./figures/e01_Salinity_monthly_sampling_counts.png">
+  </a>
+  <a href="./figures/e01_Oxygen_monthly_sampling_counts.png">
+      <img src="./figures/e01_Oxygen_monthly_sampling_counts.png">
+  </a>
+</div>
+
+<div id="Raw Time Series" class="tabcontent">
+  <p>
+      The data were binned into 10m bins centred on the depths 35m, 75m, and 95m to make these plots.
+      Not all data from station E01 fit into these bins, particularly data from earlier years.
+  </p>
+  <a href="./figures/e01_raw_tso_35m.png">
+      <img src="./figures/e01_raw_tso_35m.png">
+  </a>
+  <a href="./figures/e01_raw_tso_75m.png">
+      <img src="./figures/e01_raw_tso_75m.png">
+  </a>
+  <a href="./figures/e01_raw_tso_95m.png">
+      <img src="./figures/e01_raw_tso_95m.png">
+  </a>
+</div>
+
+<h2>Contact</h2>
+<p>
+    Data Products Team, Ocean Sciences Division<br>
+    DFO.PAC.SCI.IOSData-DonneesISO.SCI.PAC.MPO@dfo-mpo.gc.ca
+</p>
+
+<script src="main.js"></script>
+
+</body>
+</html>
