@@ -9,7 +9,8 @@
 
 <h1>Mooring Station E01</h1>
 <p>
-    Time series plots of temperature and salinity are presented for station E01. Data are available
+    Time series plots of temperature and salinity data are presented for station E01, which
+    is located off the west coast of Vancouver Island, BC. Data are available
     for May 1979 to July 2022.
 </p>
 
@@ -18,6 +19,8 @@
     <button class="tablinks" onclick="openTab(event, 'Annual Data Availability')">Annual Data Availability</button>
     <button class="tablinks" onclick="openTab(event, 'Monthly Data Availability')">Monthly Data Availability</button>
     <button class="tablinks" onclick="openTab(event, 'Raw Time Series')">Raw Time Series</button>
+    <button class="tablinks" onclick="openTab(event, 'Daily Mean Data')">Daily Mean Data</button>
+    <button class="tablinks" onclick="openTab(event, 'Daily Climatologies')">Daily Climatologies</button>
 </div>
 
 <div id="Map of Station" class="tabcontent">
@@ -51,30 +54,82 @@
       Separate plots are provided for each of temperature, salinity, and oxygen.
   </p>
   <a href="./figures/e01_Temperature_monthly_sampling_counts.png">
-      <img src="./figures/e01_Temperature_monthly_sampling_counts.png">
+      <img src="./figures/e01_Temperature_monthly_sampling_counts.png" height="250">
   </a>
   <a href="./figures/e01_Salinity_monthly_sampling_counts.png">
-      <img src="./figures/e01_Salinity_monthly_sampling_counts.png">
+      <img src="./figures/e01_Salinity_monthly_sampling_counts.png" height="250">
   </a>
   <a href="./figures/e01_Oxygen_monthly_sampling_counts.png">
-      <img src="./figures/e01_Oxygen_monthly_sampling_counts.png">
+      <img src="./figures/e01_Oxygen_monthly_sampling_counts.png" height="250">
   </a>
 </div>
 
 <div id="Raw Time Series" class="tabcontent">
   <p>
       The data were binned into 10m bins centred on the depths 35m, 75m, and 95m to make these plots.
-      Not all data from station E01 fit into these bins, particularly data from earlier years.
+      Not all data from station E01 fit into these bins, particularly data from earlier years. Data
+      are separated by instrument (current meter or CTD).
   </p>
-  <a href="./figures/e01_raw_tso_35m.png">
-      <img src="./figures/e01_raw_tso_35m.png">
-  </a>
-  <a href="./figures/e01_raw_tso_75m.png">
-      <img src="./figures/e01_raw_tso_75m.png">
-  </a>
-  <a href="./figures/e01_raw_tso_95m.png">
-      <img src="./figures/e01_raw_tso_95m.png">
-  </a>
+  <div class="grouped-plots">
+      <a href="./figures/e01_raw_Temperature_35m_cur_vs_ctd.png">
+          <div class="column"> <img src="./figures/e01_raw_Temperature_35m_cur_vs_ctd.png"> </div>
+      </a>
+      <a href="./figures/e01_raw_Temperature_35m_cur_vs_ctd.png">
+          <div class="column"> <img src="./figures/e01_raw_Salinity_35m_cur_vs_ctd.png"> </div>
+      </a>
+  </div>
+    <div class="grouped-plots">
+      <a href="./figures/e01_raw_Temperature_75m_cur_vs_ctd.png">
+          <div class="column"> <img src="./figures/e01_raw_Temperature_75m_cur_vs_ctd.png"> </div>
+      </a>
+      <a href="./figures/e01_raw_Salinity_75m_cur_vs_ctd.png">
+          <div class="column"> <img src="./figures/e01_raw_Salinity_75m_cur_vs_ctd.png"> </div>
+      </a>
+  </div>
+    <div class="grouped-plots">
+      <a href="./figures/e01_raw_Temperature_95m_cur_vs_ctd.png">
+          <div class="column"> <img src="./figures/e01_raw_Temperature_95m_cur_vs_ctd.png"> </div>
+      </a>
+      <a href="./figures/e01_raw_Salinity_95m_cur_vs_ctd.png">
+          <div class="column"> <img src="./figures/e01_raw_Salinity_95m_cur_vs_ctd.png"> </div>
+      </a>
+  </div>
+</div>
+
+<div id="Daily Mean Data" class="tabcontent">
+    <p>
+        Current meter data from before 2007 and CTD data from after 2007 were combined and presented
+        in these plots.
+        The data were binned into 10m bins centred on the depths 35m, 75m, and 95m to make these plots.
+        Daily means were computed for each day that temperature or salinity data were present.
+    </p>
+    <a href="./figures/e01_daily_mean_ts_35m.png">
+        <img src="./figures/e01_daily_mean_ts_35m.png">
+    </a>
+    <a href="./figures/e01_daily_mean_ts_75m.png">
+        <img src="./figures/e01_daily_mean_ts_75m.png">
+    </a>
+    <a href="./figures/e01_daily_mean_ts_95m.png">
+        <img src="./figures/e01_daily_mean_ts_95m.png">
+    </a>
+</div>
+
+<div id="Daily Climatologies" class="tabcontent">
+    <p>
+        Current meter data from before 2007 and CTD data from after 2007 were combined and presented
+        in these plots.
+        The data were binned into 10m bins centred on the depths 35m, 75m, and 95m to make these plots.
+        Daily means were computed for each day that temperature or salinity data were present.
+    </p>
+    <a href="./figures/e01_climatology_1990-2020_ts_35m.png">
+        <img src="./figures/e01_climatology_1990-2020_ts_35m.png">
+    </a>
+    <a href="./figures/e01_climatology_1990-2020_ts_75m.png">
+        <img src="./figures/e01_climatology_1990-2020_ts_75m.png">
+    </a>
+    <a href="./figures/e01_climatology_1990-2020_ts_95m.png">
+        <img src="./figures/e01_climatology_1990-2020_ts_95m.png">
+    </a>
 </div>
 
 <h2>Contact</h2>
