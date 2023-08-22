@@ -8,6 +8,7 @@ from tqdm import trange
 
 VARS = ['Temperature', 'Salinity', 'Oxygen:Dissolved:SBE']
 BIN_DEPTHS = [35, 75, 95]  # Bin the data to +/- 5m around each bin centre
+START_YEAR = 1979
 
 
 def add_datetime(df: pd.DataFrame):
@@ -125,7 +126,7 @@ def plot_monthly_samp_freq(df: pd.DataFrame, var: str, output_dir: str):
     # Access datetime.datetime properties
     df_masked['Month'] = [x.month for x in df_masked.loc[:, 'Datetime'].copy()]
     df_masked['Year'] = [x.year for x in df_masked.loc[:, 'Datetime'].copy()]
-    min_year = df_masked['Year'].min()
+    min_year = START_YEAR  # df_masked['Year'].min() Make the same for all of T, S, O
     max_year = df_masked['Year'].max()
     year_range = max_year - min_year + 1
 
@@ -147,11 +148,9 @@ def plot_monthly_samp_freq(df: pd.DataFrame, var: str, output_dir: str):
     matplotlib.rc("axes", titlesize=25)
     matplotlib.rc("xtick", labelsize=20)
     matplotlib.rc("ytick", labelsize=20)
-    # Adjust figsize since oxy has shorted time series than temp and sal
-    if var in ['Temperature', 'Salinity']:
-        figsize = (40, 8)
-    elif var == 'Oxygen:Dissolved:SBE':
-        figsize = (9, 10)
+
+    figsize = (40, 8)
+
     plt.figure(figsize=figsize, constrained_layout=True)
 
     # Display data as an image, i.e., on a 2D regular raster.
@@ -475,8 +474,8 @@ def compute_daily_anom(df_daily_mean: pd.DataFrame):
                             'Salinity_75m': np.repeat(np.nan, len(df_daily_mean)),
                             'Salinity_95m': np.repeat(np.nan, len(df_daily_mean))})
 
-    # Iterate through the days of year in 1-365
     for i, depth in enumerate(BIN_DEPTHS):
+        # Iterate through the days of year in 1-365
         for day_num in days_of_year:
             # Create a mask for the day of year
             day_mask = df_daily_mean.loc[:, 'Day_of_year'].to_numpy() == day_num
@@ -569,6 +568,20 @@ def run_plot(
         do_monthly_clim: bool = False,
         do_monthly_anom: bool = False
 ):
+    """
+
+    :param do_monthly_avail: Plot monthly observation counts
+    :param do_annual_avail: Plot annual observation counts
+    :param do_raw_by_inst: Plot
+    :param do_raw:
+    :param do_daily_means:
+    :param do_daily_clim:
+    :param do_daily_anom:
+    :param do_monthly_means:
+    :param do_monthly_clim:
+    :param do_monthly_anom:
+    :return:
+    """
     old_dir = os.getcwd()
     if os.path.basename(old_dir) == 'scripts':
         new_dir = os.path.dirname(old_dir)
@@ -584,9 +597,14 @@ def run_plot(
     file_list = [data_dir + 'e01_cur_data_all.csv', data_dir + 'e01_ctd_data.csv']
 
     # Only keep current meter data before 2007 since 2008 is when CTD data start
-    cur_data = pd.read_csv(file_list[0])
-    cur_data_pre2007 = cur_data.loc[cur_data['Date'].to_numpy() < '2007', :]
-    df_all = pd.concat((cur_data_pre2007, pd.read_csv(file_list[1])))
+    if do_raw_by_inst:
+        df_all = pd.concat((pd.read_csv(file_list[0]), pd.read_csv(file_list[1])))
+    else:
+        cur_data = pd.read_csv(file_list[0])
+        cur_data_pre2007 = cur_data.loc[cur_data['Date'].to_numpy() < '2007', :]
+        df_all = pd.concat((cur_data_pre2007, pd.read_csv(file_list[1])))
+
+    # Reset the index in the dataframe
     df_all.reset_index(drop=True, inplace=True)
 
     # Add datetime-format date for plotting ease
