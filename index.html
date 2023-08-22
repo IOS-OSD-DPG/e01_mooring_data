@@ -21,6 +21,10 @@
     <button class="tablinks" onclick="openTab(event, 'Raw Time Series')">Raw Time Series</button>
     <button class="tablinks" onclick="openTab(event, 'Daily Mean Data')">Daily Mean Data</button>
     <button class="tablinks" onclick="openTab(event, 'Daily Climatologies')">Daily Climatologies</button>
+    <button class="tablinks" onclick="openTab(event, 'Daily Mean Anomalies')">Daily Mean Anomalies</button>
+    <button class="tablinks" onclick="openTab(event, 'Monthly Mean Data')">Monthly Mean Data</button>
+    <button class="tablinks" onclick="openTab(event, 'Monthly Climatologies')">Monthly Climatologies</button>
+    <button class="tablinks" onclick="openTab(event, 'Monthly Mean Anomalies')">Monthly Mean Anomalies</button>
 </div>
 
 <div id="Map of Station" class="tabcontent">
@@ -68,7 +72,7 @@
   <p>
       The data were binned into 10m bins centred on the depths 35m, 75m, and 95m to make these plots.
       Not all data from station E01 fit into these bins, particularly data from earlier years. Data
-      are separated by instrument (current meter or CTD).
+      are separated by instrument (current meter or CTD) and variable (temperature or salinity).
   </p>
   <div class="grouped-plots">
       <a href="./figures/e01_raw_Temperature_35m_cur_vs_ctd.png">
@@ -116,10 +120,9 @@
 
 <div id="Daily Climatologies" class="tabcontent">
     <p>
-        Current meter data from before 2007 and CTD data from after 2007 were combined and presented
-        in these plots.
-        The data were binned into 10m bins centred on the depths 35m, 75m, and 95m to make these plots.
-        Daily means were computed for each day that temperature or salinity data were present.
+        The daily climatologies were computed from the daily mean data by taking the
+        average for each day of the year over the years 1990-2020. This is a 30-year
+        climatology due to the year 2007 having no temperature or salinity observations.
     </p>
     <a href="./figures/e01_climatology_1990-2020_ts_35m.png">
         <img src="./figures/e01_climatology_1990-2020_ts_35m.png">
@@ -130,6 +133,40 @@
     <a href="./figures/e01_climatology_1990-2020_ts_95m.png">
         <img src="./figures/e01_climatology_1990-2020_ts_95m.png">
     </a>
+</div>
+
+<div id="Daily Mean Anomalies" class="tabcontent">
+    <p>
+        Daily mean anomalies were computed by subtracting the daily climatologies for the
+        period 1990-2020 from the daily mean data.
+    </p>
+    <a href="./figures/e01_daily_anom_ts_35m.png">
+        <img src="./figures/e01_daily_anom_ts_35m.png">
+    </a>
+    <a href="./figures/e01_daily_anom_ts_75m.png">
+        <img src="./figures/e01_daily_anom_ts_75m.png">
+    </a>
+    <a href="./figures/e01_daily_anom_ts_95m.png">
+        <img src="./figures/e01_daily_anom_ts_95m.png">
+    </a>
+</div>
+
+<div id="Monthly Mean Data" class="tabcontent">
+    <p>
+        Filler
+    </p>
+</div>
+
+<div id="Monthly Climatologies" class="tabcontent">
+    <p>
+        Filler
+    </p>
+</div>
+
+<div id="Monthly Mean Anomalies" class="tabcontent">
+    <p>
+        Filler
+    </p>
 </div>
 
 <h2>Contact</h2>
