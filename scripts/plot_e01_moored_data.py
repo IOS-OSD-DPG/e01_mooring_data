@@ -524,8 +524,8 @@ def plot_daily_anom(df_daily_mean: pd.DataFrame, output_dir: str):
         ax[0].set_ylim(range_T)
         ax[1].set_ylim(range_S)
 
-        ax[0].set_title('Temperature Anomalies')
-        ax[1].set_title('Salinity Anomalies')
+        # ax[0].set_title('Temperature Anomalies')
+        # ax[1].set_title('Salinity Anomalies')
 
         ax[0].legend(loc='upper left', scatterpoints=3)
         ax[1].legend(loc='upper left', scatterpoints=3)
