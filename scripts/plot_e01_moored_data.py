@@ -591,18 +591,15 @@ def run_plot(
     os.chdir(new_dir)
     output_dir = os.path.join(new_dir, 'figures')
 
-    # Files are too big to store in the github project directory
+    # Files are too big to store in the GitHub project directory
     data_dir = 'E:\\charles\\e01_data_page\\csv_data\\'
 
     file_list = [data_dir + 'e01_cur_data_all.csv', data_dir + 'e01_ctd_data.csv']
 
     # Only keep current meter data before 2007 since 2008 is when CTD data start
-    if do_raw_by_inst:
-        df_all = pd.concat((pd.read_csv(file_list[0]), pd.read_csv(file_list[1])))
-    else:
-        cur_data = pd.read_csv(file_list[0])
-        cur_data_pre2007 = cur_data.loc[cur_data['Date'].to_numpy() < '2007', :]
-        df_all = pd.concat((cur_data_pre2007, pd.read_csv(file_list[1])))
+    cur_data = pd.read_csv(file_list[0])
+    cur_data_pre2007 = cur_data.loc[cur_data['Date'].to_numpy() < '2007', :]
+    df_all = pd.concat((cur_data_pre2007, pd.read_csv(file_list[1])))
 
     # Reset the index in the dataframe
     df_all.reset_index(drop=True, inplace=True)
@@ -620,13 +617,21 @@ def run_plot(
         for var in VARS:
             plot_annual_samp_freq(df_dt, var, output_dir)
 
-    if do_raw_by_inst:
-        print('Plotting raw data by instrument ...')
-        plot_raw_TS_by_inst(df_dt, output_dir)
+    if do_raw_by_inst or do_raw:
+        # Include current meter data after 2007!
+        df_all = pd.concat((pd.read_csv(file_list[0]), pd.read_csv(file_list[1])))
+        # Reset the index in the dataframe
+        df_all.reset_index(drop=True, inplace=True)
+        # Add datetime-format date for plotting ease
+        df_dt = add_datetime(df_all)
 
-    if do_raw:
-        print('Plotting raw data combining CTD and CUR data ...')
-        plot_raw_time_series(df_dt, output_dir)
+        if do_raw_by_inst:
+            print('Plotting raw data by instrument ...')
+            plot_raw_TS_by_inst(df_dt, output_dir)
+
+        if do_raw:
+            print('Plotting raw data combining CTD and CUR data ...')
+            plot_raw_time_series(df_dt, output_dir)
 
     if do_daily_means:
         print('Plotting daily mean data ...')
