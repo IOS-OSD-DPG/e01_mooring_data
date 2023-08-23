@@ -544,16 +544,16 @@ def plot_daily_anom(df_daily_mean: pd.DataFrame, output_dir: str):
     return
 
 
-def plot_monthly_means(df: pd.DataFrame, output_dir: str):
-    return
-
-
-def plot_monthly_clim():
-    return
-
-
-def plot_monthly_anom():
-    return
+# def plot_monthly_means(df: pd.DataFrame, output_dir: str):
+#     return
+#
+#
+# def plot_monthly_clim():
+#     return
+#
+#
+# def plot_monthly_anom():
+#     return
 
 
 def run_plot(
@@ -564,9 +564,9 @@ def run_plot(
         do_daily_means: bool = False,
         do_daily_clim: bool = False,
         do_daily_anom: bool = False,
-        do_monthly_means: bool = False,
-        do_monthly_clim: bool = False,
-        do_monthly_anom: bool = False
+        # do_monthly_means: bool = False,
+        # do_monthly_clim: bool = False,
+        # do_monthly_anom: bool = False
 ):
     """
 
@@ -577,9 +577,6 @@ def run_plot(
     :param do_daily_means:
     :param do_daily_clim:
     :param do_daily_anom:
-    :param do_monthly_means:
-    :param do_monthly_clim:
-    :param do_monthly_anom:
     :return:
     """
     old_dir = os.getcwd()
