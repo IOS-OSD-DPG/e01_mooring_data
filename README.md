@@ -19,9 +19,11 @@ The raw data were obtained from [Water Properties](https://www.waterproperties.c
 * filename = "e01*"
 * file suffixes = "ctd", "cur"
 
+A netCDF-format file was only used for one case where the corresponding IOS Shell file could not be parsed using the ios_shell Python package. 
+
 The raw data were too large to save within this repository.
 
-##### Scripts
+#### Scripts
 count_nc_files.py: Compare the number of IOS Shell-format files with the number of netCDF file versions available from the "wget" CSV file download lists from Water Properties. This showed that there were two IOS Shell files without a netCDF version.
 
 convert_cur_ctd_from_shell.py: Convert IOS Shell-format files (*.CUR and *.CTD) to CSV format. This didn't work for one file.
