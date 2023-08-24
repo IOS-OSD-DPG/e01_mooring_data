@@ -544,16 +544,232 @@ def plot_daily_anom(df_daily_mean: pd.DataFrame, output_dir: str):
     return
 
 
-# def plot_monthly_means(df: pd.DataFrame, output_dir: str):
-#     return
-#
-#
-# def plot_monthly_clim():
-#     return
-#
-#
-# def plot_monthly_anom():
-#     return
+def compute_monthly_means(df_daily_mean: pd.DataFrame) -> tuple:
+    """
+    Compute monthly means from daily means
+    :param df_daily_mean:
+    :return:
+    """
+    months = np.arange(1, 12 + 1)
+    num_months = len(months)
+
+    # Get all unique years
+    unique_years = np.unique([dt.year for dt in df_daily_mean.loc[:, 'Datetime']])
+    unique_years.sort()
+
+    # Initialize array to hold the monthly mean data
+    monthly_mean_T = np.zeros((len(BIN_DEPTHS), len(unique_years) * len(months)))
+    monthly_mean_S = np.zeros((len(BIN_DEPTHS), len(unique_years) * len(months)))
+
+    init_dt_value = df_daily_mean.loc[0, 'Datetime']
+    unique_months = np.repeat(init_dt_value, len(unique_years) * len(months))
+
+    for j, year in enumerate(unique_years):
+        for k, month in enumerate(months):
+            unique_months[j * num_months + k] = datetime.datetime.fromisoformat(
+                '{}-{:02d}-01'.format(year, month)
+            )
+            # Iterate through the set depths
+            for i, depth in enumerate(BIN_DEPTHS):
+                month_mask = [
+                    (dt.year == year) & (dt.month == month) for dt in df_daily_mean.loc[:, 'Datetime']
+                ]
+                monthly_mean_T[i, j * num_months + k] = df_daily_mean.loc[
+                    month_mask, f'Temperature_{depth}m'
+                ].mean()
+                monthly_mean_S[i, j * num_months + k] = df_daily_mean.loc[
+                    month_mask, f'Salinity_{depth}m'
+                ].mean()
+
+    return unique_months, monthly_mean_T, monthly_mean_S
+
+
+def plot_monthly_means(df_daily_mean: pd.DataFrame, output_dir: str):
+    """
+    Plot monthly means computed from daily means
+    :param df_daily_mean:
+    :param output_dir:
+    :return:
+    """
+    unique_months, monthly_mean_T, monthly_mean_S = compute_monthly_means(df_daily_mean)
+
+    range_T = (np.nanmin(monthly_mean_T) - 0.5, np.nanmax(monthly_mean_T) + 0.5)
+    range_S = (np.nanmin(monthly_mean_S) - 0.5, np.nanmax(monthly_mean_S) + 0.5)
+
+    # Iterate through the binned depths
+    for i, depth in enumerate(BIN_DEPTHS):
+        fig, ax = plt.subplots(2, figsize=(10, 7), sharex=True)
+
+        ax[0].plot(unique_months, monthly_mean_T[i, :], c='tab:red', marker='o', markersize=2,
+                   label='Monthly Mean Temperature')
+        ax[1].plot(unique_months, monthly_mean_S[i, :], c='tab:blue', marker='o', markersize=2,
+                   label='Monthly Mean Salinity')
+
+        ax[0].set_ylabel('Temperature (C)')
+        ax[1].set_ylabel('Salinity (PSS-78)')
+
+        ax[0].set_ylim(range_T)
+        ax[1].set_ylim(range_S)
+
+        for ax_j in [0, 1]:
+            # Add legend
+            ax[ax_j].legend(loc='upper left')
+            # Make ticks point inward and on all sides
+            ax[ax_j].tick_params(which='major', direction='in',
+                                 bottom=True, top=True, left=True, right=True)
+            ax[ax_j].tick_params(which='minor', direction='in',
+                                 bottom=True, top=True, left=True, right=True)
+
+        # Save figure
+        plt.suptitle(f'Station E01 - {depth} m')
+        plt.tight_layout()
+        plt.savefig(os.path.join(output_dir, f'e01_monthly_mean_ts_{depth}m.png'))
+        plt.close(fig)
+    return
+
+
+def compute_monthly_clim(df_daily_mean: pd.DataFrame):
+    """
+    Compute monthly climatologies for temperature and salinity
+    :param df_daily_mean:
+    :return:
+    """
+    unique_months, monthly_mean_T, monthly_mean_S = compute_monthly_means(df_daily_mean)
+    month_only = np.array([dt.month for dt in unique_months])
+
+    months = np.arange(1, 12 + 1)
+
+    year_range_mask = np.array([1990 <= dt.year <= 2020 for dt in unique_months])
+
+    # Initialize arrays to hold climatological values
+    monthly_clim_T = np.zeros((len(BIN_DEPTHS), len(months)))
+    monthly_clim_S = np.zeros((len(BIN_DEPTHS), len(months)))
+
+    for i, month in enumerate(months):
+        for j, depth in enumerate(BIN_DEPTHS):
+            monthly_clim_T[j, i] = np.nanmean(monthly_mean_T[j, (month_only == month) & year_range_mask])
+            monthly_clim_S[j, i] = np.nanmean(monthly_mean_S[j, (month_only == month) & year_range_mask])
+
+    return months, monthly_clim_T, monthly_clim_S
+
+
+def plot_monthly_clim(df_daily_mean: pd.DataFrame, output_dir: str):
+    """
+    Plot monthly climatologies
+    :param df_daily_mean:
+    :param output_dir:
+    :return:
+    """
+    xtick_labels = ['Jan', 'Feb', 'Mar', 'Apr', 'May', 'Jun', 'Jul', 'Aug', 'Sep', 'Oct', 'Nov', 'Dec']
+
+    months, monthly_clim_T, monthly_clim_S = compute_monthly_clim(df_daily_mean)
+
+    range_T = (np.nanmin(monthly_clim_T) - 0.5, np.nanmax(monthly_clim_T) + 0.5)
+    range_S = (np.nanmin(monthly_clim_S) - 0.5, np.nanmax(monthly_clim_S) + 0.5)
+
+    # Iterate through the binned depths
+    for i, depth in enumerate(BIN_DEPTHS):
+        fig, ax = plt.subplots(2, figsize=(10, 7), sharex=True)
+
+        ax[0].plot(months, monthly_clim_T[i, :], c='tab:red',
+                   label='Monthly Temperature Climatology')
+        ax[1].plot(months, monthly_clim_S[i, :], c='tab:blue',
+                   label='Monthly Salinity Climatology')
+
+        ax[0].set_ylabel('Temperature (C)')
+        ax[1].set_ylabel('Salinity (PSS-78)')
+
+        ax[0].set_ylim(range_T)
+        ax[1].set_ylim(range_S)
+
+        ax[1].set_xticks(ticks=months, labels=xtick_labels, rotation=45)
+
+        for ax_j in [0, 1]:
+            # Add legend
+            ax[ax_j].legend(loc='upper left')
+            # Make ticks point inward and on all sides
+            ax[ax_j].tick_params(which='major', direction='in',
+                                 bottom=True, top=True, left=True, right=True)
+            ax[ax_j].tick_params(which='minor', direction='in',
+                                 bottom=True, top=True, left=True, right=True)
+
+        # Save figure
+        plt.suptitle(f'Station E01 - {depth} m')
+        plt.tight_layout()
+        plt.savefig(os.path.join(output_dir, f'e01_monthly_clim_ts_{depth}m.png'))
+        plt.close(fig)
+    return
+
+
+def compute_monthly_anom(df_daily_mean: pd.DataFrame):
+    """
+    Compute monthly mean anomalies
+    :param df_daily_mean:
+    :return:
+    """
+    unique_months, monthly_mean_T, monthly_mean_S = compute_monthly_means(df_daily_mean)
+    month_only = np.array([dt.month for dt in unique_months])
+
+    months, monthly_clim_T, monthly_clim_S = compute_monthly_clim(df_daily_mean)
+
+    # Initialize array to hold the monthly mean data
+    monthly_anom_T = np.zeros((len(BIN_DEPTHS), len(unique_months)))
+    monthly_anom_S = np.zeros((len(BIN_DEPTHS), len(unique_months)))
+
+    for i, depth in enumerate(BIN_DEPTHS):
+        for j, month in enumerate(months):
+            month_mask = month_only == month
+            monthly_anom_T[i, month_mask] = monthly_mean_T[i, month_mask] - monthly_clim_T[i, j]
+            monthly_anom_S[i, month_mask] = monthly_mean_S[i, month_mask] - monthly_clim_S[i, j]
+
+    return unique_months, monthly_anom_T, monthly_anom_S
+
+
+def plot_monthly_anom(df_daily_mean: pd.DataFrame, output_dir: str):
+    """
+    Plot monthly mean anomalies
+    :param df_daily_mean:
+    :param output_dir:
+    :return:
+    """
+    unique_months, monthly_anom_T, monthly_anom_S = compute_monthly_anom(df_daily_mean)
+
+    # Make the ranges centred on zero
+    abs_max_T = np.nanmax(abs(monthly_anom_T))
+    abs_max_S = np.nanmax(abs(monthly_anom_S))
+    range_T = (-abs_max_T - 0.5, abs_max_T + 0.5)
+    range_S = (-abs_max_S - 0.5, abs_max_S + 0.5)
+
+    # Iterate through the binned depths
+    for i, depth in enumerate(BIN_DEPTHS):
+        fig, ax = plt.subplots(2, figsize=(10, 7), sharex=True)
+
+        ax[0].plot(unique_months, monthly_anom_T[i, :], c='tab:red', marker='o', markersize=2,
+                   label='Monthly Mean Temperature')
+        ax[1].plot(unique_months, monthly_anom_S[i, :], c='tab:blue', marker='o', markersize=2,
+                   label='Monthly Mean Salinity')
+
+        ax[0].set_ylabel('Temperature (C)')
+        ax[1].set_ylabel('Salinity (PSS-78)')
+
+        ax[0].set_ylim(range_T)
+        ax[1].set_ylim(range_S)
+
+        for ax_j in [0, 1]:
+            # Add legend
+            ax[ax_j].legend(loc='upper left')
+            # Make ticks point inward and on all sides
+            ax[ax_j].tick_params(which='major', direction='in',
+                                 bottom=True, top=True, left=True, right=True)
+            ax[ax_j].tick_params(which='minor', direction='in',
+                                 bottom=True, top=True, left=True, right=True)
+
+        # Save figure
+        plt.suptitle(f'Station E01 - {depth} m')
+        plt.tight_layout()
+        plt.savefig(os.path.join(output_dir, f'e01_monthly_anom_ts_{depth}m.png'))
+        plt.close(fig)
+    return
 
 
 def run_plot(
@@ -564,19 +780,24 @@ def run_plot(
         do_daily_means: bool = False,
         do_daily_clim: bool = False,
         do_daily_anom: bool = False,
-        # do_monthly_means: bool = False,
-        # do_monthly_clim: bool = False,
-        # do_monthly_anom: bool = False
+        do_monthly_means: bool = False,
+        do_monthly_clim: bool = False,
+        do_monthly_anom: bool = False,
+        recompute_daily_means: bool = False
 ):
     """
-
+    Main function to make plots of temperature, salinity, and oxygen
     :param do_monthly_avail: Plot monthly observation counts
     :param do_annual_avail: Plot annual observation counts
-    :param do_raw_by_inst: Plot
+    :param do_raw_by_inst:
     :param do_raw:
     :param do_daily_means:
     :param do_daily_clim:
     :param do_daily_anom:
+    :param do_monthly_anom:
+    :param do_monthly_clim:
+    :param do_monthly_means:
+    :param recompute_daily_means:
     :return:
     """
     old_dir = os.getcwd()
@@ -633,12 +854,12 @@ def run_plot(
     if do_daily_means:
         print('Plotting daily mean data ...')
         daily_means_file = os.path.join(new_dir, 'data', 'e01_daily_mean_TS_data.csv')
-        if not os.path.exists(daily_means_file):
+        if not os.path.exists(daily_means_file) or recompute_daily_means:
             unique_datetimes, daily_means_T, daily_means_S = compute_daily_means(df_dt, output_dir)
         else:
             df_daily_means = pd.read_csv(daily_means_file)
-            unique_datetimes = df_daily_means.loc[:, 'Datetime'].to_numpy()
             # Fix formatting - convert from string/object to datetime.datetime
+            unique_datetimes = df_daily_means.loc[:, 'Datetime'].to_numpy()
             unique_datetimes = [
                 datetime.datetime.fromisoformat(x.split(' ')[0]) for x in unique_datetimes
             ]
@@ -651,36 +872,39 @@ def run_plot(
 
         plot_daily_means(unique_datetimes, daily_means_T, daily_means_S, output_dir)
 
-    if do_daily_clim:
-        print('Plotting daily T and S climatologies ...')
+    if any([do_daily_clim, do_daily_anom, do_monthly_means, do_monthly_clim, do_monthly_anom]):
+        # Make daily means file if not already existing
         daily_means_file = os.path.join(new_dir, 'data', 'e01_daily_mean_TS_data.csv')
-        if not os.path.exists(daily_means_file):
+        if not os.path.exists(daily_means_file) or recompute_daily_means:
             unique_datetimes, daily_means_T, daily_means_S = compute_daily_means(
                 df_dt, output_dir
             )
         df_daily_means = pd.read_csv(daily_means_file)
-        # Fix formatting
+        # Fix formatting, extract only YYYY-mm-dd, may be separated from HH:MM:SS by ' ' or 'T'
         df_daily_means.loc[:, 'Datetime'] = [
-            datetime.datetime.fromisoformat(x.split(' ')[0]) for x in
+            datetime.datetime.fromisoformat(x[:10]) for x in
             df_daily_means['Datetime']
         ]
-        # Plot climatologies
-        plot_daily_clim(df_daily_means, output_dir)
 
-    if do_daily_anom:
-        print('Plotting daily mean anomalies ...')
-        daily_means_file = os.path.join(new_dir, 'data', 'e01_daily_mean_TS_data.csv')
-        if not os.path.exists(daily_means_file):
-            unique_datetimes, daily_means_T, daily_means_S = compute_daily_means(
-                df_dt, output_dir
-            )
-        df_daily_means = pd.read_csv(daily_means_file)
-        # Fix formatting
-        df_daily_means.loc[:, 'Datetime'] = [
-            datetime.datetime.fromisoformat(x.split(' ')[0]) for x in
-            df_daily_means['Datetime']
-        ]
-        plot_daily_anom(df_daily_means, output_dir)
+        if do_daily_clim:
+            print('Plotting daily T and S climatologies ...')
+            plot_daily_clim(df_daily_means, output_dir)
+
+        if do_daily_anom:
+            print('Plotting daily T and S anomalies ...')
+            plot_daily_anom(df_daily_means, output_dir)
+
+        if do_monthly_means:
+            print('Plotting monthly mean T and S data ...')
+            plot_monthly_means(df_daily_means, output_dir)
+
+        if do_monthly_clim:
+            print('Plotting monthly T and S climatologies ...')
+            plot_monthly_clim(df_daily_means, output_dir)
+
+        if do_monthly_anom:
+            print('Plotting monthly mean T and S anomalies ...')
+            plot_monthly_anom(df_daily_means, output_dir)
 
     # Reset the current directory
     os.chdir(old_dir)
