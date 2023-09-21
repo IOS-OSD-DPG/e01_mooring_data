@@ -16,6 +16,7 @@
 
 <div class="tab">
     <button class="tablinks" onclick="openTab(event, 'Map of Station')" id="defaultOpen">Map of Station</button>
+    <button class="tablinks" onclick="openTab(event, 'Instrument Depths Over Time')">Instrument Depths Over Time</button>
     <button class="tablinks" onclick="openTab(event, 'Annual Data Availability')">Annual Data Availability</button>
     <button class="tablinks" onclick="openTab(event, 'Monthly Data Availability')">Monthly Data Availability</button>
     <button class="tablinks" onclick="openTab(event, 'Raw Time Series')">Raw Time Series</button>
@@ -28,11 +29,21 @@
 </div>
 
 <div id="Map of Station" class="tabcontent">
-  <a href="./figures/e01_map.png">
-      <img src="./figures/e01_map.png" class="map" loading="lazy" width="600" height="450">
+  <a href="./e01/figures/e01_map.png">
+      <img src="./e01/figures/e01_map.png" class="map" loading="lazy" width="600" height="450">
   </a>
   <p>
       Map showing the location of DFO Mooring Station E01.
+  </p>
+</div>
+
+<div id="Instrument Depths Over Time" class="tabcontent">
+  <a href="./e01/figures/e01_cur_ctd_depths.png">
+      <img src="./e01/figures/e01_cur_ctd_depths.png" loading="lazy" width="600" height="450">
+  </a>
+  <p>
+      Plot showing the depths of CTDs and current meters on the mooring line for each deployment.
+      Each point represents a CTD or current meter.
   </p>
 </div>
 
@@ -41,14 +52,14 @@
       The following plots count how many measurements are available for each month of the data record.
       Separate plots are provided for each of temperature, salinity, and oxygen.
   </p>
-  <a href="./figures/e01_Temperature_annual_sampling_counts.png">
+  <a href="./e01/figures/e01_Temperature_annual_sampling_counts.png">
       <img src="./figures/e01_Temperature_annual_sampling_counts.png">
   </a>
-  <a href="./figures/e01_Salinity_annual_sampling_counts.png">
+  <a href="./e01/figures/e01_Salinity_annual_sampling_counts.png">
       <img src="./figures/e01_Salinity_annual_sampling_counts.png">
   </a>
-  <a href="./figures/e01_Oxygen_annual_sampling_counts.png">
-      <img src="./figures/e01_Oxygen_annual_sampling_counts.png">
+  <a href="./e01/figures/e01_Oxygen_annual_sampling_counts.png">
+      <img src="./e01/figures/e01_Oxygen_annual_sampling_counts.png">
   </a>
 </div>
 
@@ -57,14 +68,14 @@
       The following plots count how many measurements are available for each month of the data record.
       Separate plots are provided for each of temperature, salinity, and oxygen.
   </p>
-  <a href="./figures/e01_Temperature_monthly_sampling_counts.png">
-      <img src="./figures/e01_Temperature_monthly_sampling_counts.png">
+  <a href="./e01/figures/e01_Temperature_monthly_sampling_counts.png">
+      <img src="./e01/figures/e01_Temperature_monthly_sampling_counts.png">
   </a>
-  <a href="./figures/e01_Salinity_monthly_sampling_counts.png">
-      <img src="./figures/e01_Salinity_monthly_sampling_counts.png">
+  <a href="./e01/figures/e01_Salinity_monthly_sampling_counts.png">
+      <img src="./e01/figures/e01_Salinity_monthly_sampling_counts.png">
   </a>
-  <a href="./figures/e01_Oxygen_monthly_sampling_counts.png">
-      <img src="./figures/e01_Oxygen_monthly_sampling_counts.png">
+  <a href="./e01/figures/e01_Oxygen_monthly_sampling_counts.png">
+      <img src="./e01/figures/e01_Oxygen_monthly_sampling_counts.png">
   </a>
 </div>
 
@@ -75,27 +86,27 @@
       are separated by instrument (current meter or CTD) and variable (temperature or salinity).
   </p>
   <div class="grouped-plots">
-      <a href="./figures/e01_raw_Temperature_35m_cur_vs_ctd.png">
-          <div class="column"> <img src="./figures/e01_raw_Temperature_35m_cur_vs_ctd.png"> </div>
+      <a href="./e01/figures/e01_raw_Temperature_35m_cur_vs_ctd.png">
+          <div class="column"> <img src="./e01/figures/e01_raw_Temperature_35m_cur_vs_ctd.png"> </div>
       </a>
-      <a href="./figures/e01_raw_Temperature_35m_cur_vs_ctd.png">
-          <div class="column"> <img src="./figures/e01_raw_Salinity_35m_cur_vs_ctd.png"> </div>
-      </a>
-  </div>
-    <div class="grouped-plots">
-      <a href="./figures/e01_raw_Temperature_75m_cur_vs_ctd.png">
-          <div class="column"> <img src="./figures/e01_raw_Temperature_75m_cur_vs_ctd.png"> </div>
-      </a>
-      <a href="./figures/e01_raw_Salinity_75m_cur_vs_ctd.png">
-          <div class="column"> <img src="./figures/e01_raw_Salinity_75m_cur_vs_ctd.png"> </div>
+      <a href="./e01/figures/e01_raw_Temperature_35m_cur_vs_ctd.png">
+          <div class="column"> <img src="./e01/figures/e01_raw_Salinity_35m_cur_vs_ctd.png"> </div>
       </a>
   </div>
     <div class="grouped-plots">
-      <a href="./figures/e01_raw_Temperature_95m_cur_vs_ctd.png">
-          <div class="column"> <img src="./figures/e01_raw_Temperature_95m_cur_vs_ctd.png"> </div>
+      <a href="./e01/figures/e01_raw_Temperature_75m_cur_vs_ctd.png">
+          <div class="column"> <img src="./e01/figures/e01_raw_Temperature_75m_cur_vs_ctd.png"> </div>
       </a>
-      <a href="./figures/e01_raw_Salinity_95m_cur_vs_ctd.png">
-          <div class="column"> <img src="./figures/e01_raw_Salinity_95m_cur_vs_ctd.png"> </div>
+      <a href="./e01/figures/e01_raw_Salinity_75m_cur_vs_ctd.png">
+          <div class="column"> <img src="./e01/figures/e01_raw_Salinity_75m_cur_vs_ctd.png"> </div>
+      </a>
+  </div>
+    <div class="grouped-plots">
+      <a href="./e01/figures/e01_raw_Temperature_95m_cur_vs_ctd.png">
+          <div class="column"> <img src="./e01/figures/e01_raw_Temperature_95m_cur_vs_ctd.png"> </div>
+      </a>
+      <a href="./e01/figures/e01_raw_Salinity_95m_cur_vs_ctd.png">
+          <div class="column"> <img src="./e01/figures/e01_raw_Salinity_95m_cur_vs_ctd.png"> </div>
       </a>
   </div>
 </div>
@@ -108,16 +119,16 @@
         Daily means were computed for each day that temperature or salinity data were present.
     </p>
     <div class="grouped-plots">
-        <a href="./figures/e01_daily_mean_ts_35m.png">
-            <div class="column"> <img src="./figures/e01_daily_mean_ts_35m.png"> </div>
+        <a href="./e01/figures/e01_daily_mean_ts_35m.png">
+            <div class="column"> <img src="./e01/figures/e01_daily_mean_ts_35m.png"> </div>
         </a>
-        <a href="./figures/e01_daily_mean_ts_75m.png">
-            <div class="column"> <img src="./figures/e01_daily_mean_ts_75m.png"> </div>
+        <a href="./e01/figures/e01_daily_mean_ts_75m.png">
+            <div class="column"> <img src="./e01/figures/e01_daily_mean_ts_75m.png"> </div>
         </a>
     </div>
     <div class="grouped-plots">
-        <a href="./figures/e01_daily_mean_ts_95m.png">
-            <div class="column"> <img src="./figures/e01_daily_mean_ts_95m.png"> </div>
+        <a href="./e01/figures/e01_daily_mean_ts_95m.png">
+            <div class="column"> <img src="./e01/figures/e01_daily_mean_ts_95m.png"> </div>
         </a>
     </div>
 </div>
@@ -129,16 +140,16 @@
         climatology due to the year 2007 having no temperature or salinity observations.
     </p>
     <div class="grouped-plots">
-        <a href="./figures/e01_climatology_1990-2020_ts_35m.png">
-            <div class="column"> <img src="./figures/e01_climatology_1990-2020_ts_35m.png"> </div>
+        <a href="./e01/figures/e01_climatology_1990-2020_ts_35m.png">
+            <div class="column"> <img src="./e01/figures/e01_climatology_1990-2020_ts_35m.png"> </div>
         </a>
-        <a href="./figures/e01_climatology_1990-2020_ts_75m.png">
-            <div class="column"> <img src="./figures/e01_climatology_1990-2020_ts_75m.png"> </div>
+        <a href="./e01/figures/e01_climatology_1990-2020_ts_75m.png">
+            <div class="column"> <img src="./e01/figures/e01_climatology_1990-2020_ts_75m.png"> </div>
         </a>
     </div>
     <div class="grouped-plots">
-        <a href="./figures/e01_climatology_1990-2020_ts_95m.png">
-            <div class="column"> <img src="./figures/e01_climatology_1990-2020_ts_95m.png"> </div>
+        <a href="./e01/figures/e01_climatology_1990-2020_ts_95m.png">
+            <div class="column"> <img src="./e01/figures/e01_climatology_1990-2020_ts_95m.png"> </div>
         </a>
     </div>
 </div>
@@ -150,16 +161,16 @@
     </p>
     <div class="grouped-plots">
         <div class="column">
-            <a href="./figures/e01_daily_anom_ts_35m.png">
-                <img src="./figures/e01_daily_anom_ts_35m.png">
+            <a href="./e01/figures/e01_daily_anom_ts_35m.png">
+                <img src="./e01/figures/e01_daily_anom_ts_35m.png">
             </a>
-            <a href="./figures/e01_daily_anom_ts_95m.png">
-                <img src="./figures/e01_daily_anom_ts_95m.png">
+            <a href="./e01/figures/e01_daily_anom_ts_95m.png">
+                <img src="./e01/figures/e01_daily_anom_ts_95m.png">
             </a>
         </div>
         <div class="column">
-            <a href="./figures/e01_daily_anom_ts_75m.png">
-                <img src="./figures/e01_daily_anom_ts_75m.png">
+            <a href="./e01/figures/e01_daily_anom_ts_75m.png">
+                <img src="./e01/figures/e01_daily_anom_ts_75m.png">
             </a>
         </div>
     </div>
@@ -171,16 +182,16 @@
     </p>
     <div class="grouped-plots">
         <div class="column">
-            <a href="./figures/e01_monthly_mean_ts_35m.png">
-                <img src="./figures/e01_monthly_mean_ts_35m.png">
+            <a href="./e01/figures/e01_monthly_mean_ts_35m.png">
+                <img src="./e01/figures/e01_monthly_mean_ts_35m.png">
             </a>
-            <a href="./figures/e01_monthly_mean_ts_95m.png">
-                <img src="./figures/e01_monthly_mean_ts_95m.png">
+            <a href="./e01/figures/e01_monthly_mean_ts_95m.png">
+                <img src="./e01/figures/e01_monthly_mean_ts_95m.png">
             </a>
         </div>
         <div class="column">
-            <a href="./figures/e01_monthly_mean_ts_75m.png">
-                <img src="./figures/e01_monthly_mean_ts_75m.png">
+            <a href="./e01/figures/e01_monthly_mean_ts_75m.png">
+                <img src="./e01/figures/e01_monthly_mean_ts_75m.png">
             </a>
         </div>
     </div>
@@ -194,16 +205,16 @@
     </p>
     <div class="grouped-plots">
         <div class="column">
-            <a href="./figures/e01_monthly_clim_ts_35m.png">
-                <img src="./figures/e01_monthly_clim_ts_35m.png">
+            <a href="./e01/figures/e01_monthly_clim_ts_35m.png">
+                <img src="./e01/figures/e01_monthly_clim_ts_35m.png">
             </a>
-            <a href="./figures/e01_monthly_clim_ts_95m.png">
-                <img src="./figures/e01_monthly_clim_ts_95m.png">
+            <a href="./e01/figures/e01_monthly_clim_ts_95m.png">
+                <img src="./e01/figures/e01_monthly_clim_ts_95m.png">
             </a>
         </div>
         <div class="column">
-            <a href="./figures/e01_monthly_clim_ts_75m.png">
-                <img src="./figures/e01_monthly_clim_ts_75m.png">
+            <a href="./e01/figures/e01_monthly_clim_ts_75m.png">
+                <img src="./e01/figures/e01_monthly_clim_ts_75m.png">
             </a>
         </div>
     </div>
@@ -216,16 +227,16 @@
     </p>
     <div class="grouped-plots">
         <div class="column">
-            <a href="./figures/e01_monthly_anom_ts_35m.png">
-                <img src="./figures/e01_monthly_anom_ts_35m.png">
+            <a href="./e01/figures/e01_monthly_anom_ts_35m.png">
+                <img src="./e01/figures/e01_monthly_anom_ts_35m.png">
             </a>
-            <a href="./figures/e01_monthly_anom_ts_95m.png">
-                <img src="./figures/e01_monthly_anom_ts_95m.png">
+            <a href="./e01/figures/e01_monthly_anom_ts_95m.png">
+                <img src="./e01/figures/e01_monthly_anom_ts_95m.png">
             </a>
         </div>
         <div class="column">
-            <a href="./figures/e01_monthly_anom_ts_75m.png">
-                <img src="./figures/e01_monthly_anom_ts_75m.png">
+            <a href="./e01/figures/e01_monthly_anom_ts_75m.png">
+                <img src="./e01/figures/e01_monthly_anom_ts_75m.png">
             </a>
         </div>
     </div>

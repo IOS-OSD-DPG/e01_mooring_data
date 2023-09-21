@@ -10,6 +10,8 @@ new_wd = os.path.dirname(old_wd)
 os.chdir(new_wd)
 
 nominal_e01_coordinates = (-126.60352, 49.28833)
+# -126 deg 36.2112 minutes
+# 49 deg 17.2998 minutes
 
 # Initialize plot
 fig, ax = plt.subplots()
