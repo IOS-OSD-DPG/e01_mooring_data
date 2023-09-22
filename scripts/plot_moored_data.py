@@ -351,7 +351,7 @@ def compute_daily_means(df: pd.DataFrame, output_dir: str, station: str, half_bi
 
     # Save daily means to a file
     df_daily_mean = pd.DataFrame(data_dict)
-    df_daily_mean.to_csv(os.path.join(output_dir, f'{station}_daily_mean_TS_data.csv'), index=False)
+    df_daily_mean.to_csv(os.path.join(output_dir, f'{station.lower()}_daily_mean_TS_data.csv'), index=False)
 
     return unique_datetimes, daily_means_T, daily_means_S
 
@@ -948,7 +948,7 @@ def run_plot(
 
     if do_daily_means:
         print('Plotting daily mean data ...')
-        daily_means_file = os.path.join(new_dir, 'data', f'{station}_daily_mean_TS_data.csv')
+        daily_means_file = os.path.join(new_dir, 'data', f'{station.lower()}_daily_mean_TS_data.csv')
         if not os.path.exists(daily_means_file) or recompute_daily_means:
             unique_datetimes, daily_means_T, daily_means_S = compute_daily_means(
                 df_dt, output_dir, station, half_bin_size
@@ -969,7 +969,7 @@ def run_plot(
 
     if any([do_daily_clim, do_daily_anom, do_monthly_means, do_monthly_clim, do_monthly_anom]):
         # Make daily means file if not already existing
-        daily_means_file = os.path.join(new_dir, 'data', f'{station}_daily_mean_TS_data.csv')
+        daily_means_file = os.path.join(new_dir, 'data', f'{station.lower()}_daily_mean_TS_data.csv')
         if not os.path.exists(daily_means_file) or recompute_daily_means:
             unique_datetimes, daily_means_T, daily_means_S = compute_daily_means(
                 df_dt, output_dir, station, half_bin_size
