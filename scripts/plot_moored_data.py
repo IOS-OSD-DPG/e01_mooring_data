@@ -5,13 +5,20 @@ import pandas as pd
 import numpy as np
 import datetime
 from tqdm import trange
+import glob
+import xarray as xr
 
 VARS = ['Temperature', 'Salinity', 'Oxygen:Dissolved:SBE']
+
 # todo populate, may need to expand search up to 10-15m around each bin depth
 BIN_DEPTHS = {'E01': [35, 75, 95],
               'A1': [35, 100, 180, 300, 400, 490],
               'SCOTT2': [40, 100, 150, 200, 280]}  # Bin the data to +/- 5m around each bin centre
+
 START_YEAR = 1979
+
+VAR_CODES = {'Temperature': {'codes': ['TEMPS901', 'TEMPS601'], 'units': 'C'},
+             'Salinity': {'codes': [], 'units': 'PSS-78'}}
 
 
 def add_datetime(df: pd.DataFrame):
@@ -356,9 +363,52 @@ def compute_daily_means(df: pd.DataFrame, output_dir: str, station: str, half_bi
     return unique_datetimes, daily_means_T, daily_means_S
 
 
-def plot_daily_means(unique_datetimes, daily_means_T, daily_means_S, output_dir: str, station: str):
+def get_cast_sst(station: str):
+    # Add scatter of cast data
+    cast_list = glob.glob(
+        f'E:\\charles\\mooring_data_page\\{station.lower()}\\cast_ctd_data\\' + '*.ctd.nc'
+    )
+    cast_list.sort()
+
+    myvar = 'Temperature'
+
+    # Initialize arrays to hold sst values so that they can be plotted as line plot instead of scatter
+    cast_datetime = np.repeat(pd.NaT, len(cast_list))
+    sst = np.repeat(np.nan, len(cast_list))
+    depth = np.repeat(np.nan, len(cast_list))
+
+    for i in range(0, len(cast_list)):  # take a subset for testing
+        ds = xr.open_dataset(cast_list[i])
+
+        # # Get the date in float year format
+        # cast_time = pd.Timestamp(ds.time.data)
+        # cast_year = cast_time.year
+        # # second arg is to get day of year
+        # cast_year_decimals = cast_year + cast_time.timetuple().tm_yday / 365
+
+        # Find the code for the select var e.g. temperature
+        var_name = None
+        for code in VAR_CODES[myvar]['codes']:
+            if hasattr(ds, code):
+                var_name = code
+        if var_name is None:
+            print('ds', myvar, 'code unknown !')
+
+        cast_datetime[i] = pd.to_datetime(ds.time.data)
+        sst[i] = ds[var_name].data[0]
+        depth[i] = ds.depth.data[0]
+
+    # Sort the data by time
+    indices_sorted = np.argsort(cast_datetime)
+
+    return cast_datetime[indices_sorted], sst[indices_sorted], depth[indices_sorted]
+
+
+def plot_daily_means(unique_datetimes, daily_means_T, daily_means_S, output_dir: str,
+                     station: str, add_cast_sst: bool = False):
     """
     Plot daily mean Temperature and Salinity data
+    :param add_cast_sst:
     :param unique_datetimes:
     :param daily_means_T:
     :param daily_means_S:
@@ -366,7 +416,18 @@ def plot_daily_means(unique_datetimes, daily_means_T, daily_means_S, output_dir:
     :param station:
     :return:
     """
-    range_T = (np.nanmin(daily_means_T) - 0.5, np.nanmax(daily_means_T) + 1)
+
+    if add_cast_sst:
+        datetime_sst, sst, _ = get_cast_sst(station)
+
+        min_T = np.nanmin(np.concatenate((daily_means_T.flatten(), sst)))
+        max_T = 19  # np.nanmax(np.concatenate((daily_means_T.flatten(), sst)))
+    else:
+        min_T = np.nanmin(daily_means_T)
+        max_T = np.nanmax(daily_means_T)
+
+    # + 1 for range_T to gve extra space for the legend in the top left corner
+    range_T = (min_T - 0.5, max_T + 1)
     range_S = (np.nanmin(daily_means_S) - 0.5, np.nanmax(daily_means_S) + 0.5)
 
     # Plot the data
@@ -385,9 +446,6 @@ def plot_daily_means(unique_datetimes, daily_means_T, daily_means_S, output_dir:
         ax[1].set_ylim(range_S)
         ax[1].set_ylabel('Salinity (PSS-78)')
 
-        ax[0].legend(loc='upper left', scatterpoints=3)
-        ax[1].legend(loc='upper left', scatterpoints=3)
-
         # Make ticks point inward and on all sides
         for ax_j in [0, 1]:
             ax[ax_j].tick_params(which='major', direction='in',
@@ -395,9 +453,21 @@ def plot_daily_means(unique_datetimes, daily_means_T, daily_means_S, output_dir:
             ax[ax_j].tick_params(which='minor', direction='in',
                                  bottom=True, top=True, left=True, right=True)
 
+        # Add cast SST to most upper mooring depth plot
+        if add_cast_sst and i == 0:
+            ax[0].scatter(datetime_sst, sst, color='k', s=10, marker='+', label='Cast CTD SST')
+
+        ax[0].legend(loc='upper left', scatterpoints=3)
+        ax[1].legend(loc='upper left', scatterpoints=3)
+
         plt.suptitle(f'Station {station} - {depth} m')
         plt.tight_layout()
-        plt.savefig(os.path.join(output_dir, f'{station.lower()}_daily_mean_ts_{depth}m.png'))
+
+        if add_cast_sst and i == 0:
+            image_name = f'{station.lower()}_daily_mean_ts_{depth}m_SST.png'
+        else:
+            image_name = f'{station.lower()}_daily_mean_ts_{depth}m.png'
+        plt.savefig(os.path.join(output_dir, image_name))
         plt.close(fig)
     return
 
@@ -889,6 +959,8 @@ def run_plot(
     # Files are too big to store in the GitHub project directory
     data_dir = f'E:\\charles\\mooring_data_page\\{station.lower()}\\csv_data\\'
 
+    add_cast_sst = False
+
     if station == 'E01':
         file_list = [data_dir + f'{station.lower()}_cur_data_all.csv',
                      data_dir + f'{station.lower()}_ctd_data.csv']
@@ -900,6 +972,9 @@ def run_plot(
 
         # Reset the index in the dataframe
         df_all.reset_index(drop=True, inplace=True)
+
+        # Option to add cast sst data
+        add_cast_sst = True
     elif station == 'A1':
         file_list = [data_dir + f'{station.lower()}_cur_data.csv', data_dir + f'{station.lower()}_ctd_data.csv']
         cur_data = pd.read_csv(file_list[0])
@@ -965,7 +1040,8 @@ def run_plot(
             daily_means_T = df_daily_means.loc[:, T_columns].to_numpy().T
             daily_means_S = df_daily_means.loc[:, S_columns].to_numpy().T
 
-        plot_daily_means(unique_datetimes, daily_means_T, daily_means_S, output_dir, station)
+        plot_daily_means(unique_datetimes, daily_means_T, daily_means_S, output_dir, station,
+                         add_cast_sst)
 
     if any([do_daily_clim, do_daily_anom, do_monthly_means, do_monthly_clim, do_monthly_anom]):
         # Make daily means file if not already existing
