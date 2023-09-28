@@ -55,3 +55,4 @@ if (window.sessionStorage.getItem("subtab")) {
 } else {
 	// choose default
 	document.getElementById("raw-data").click();
+}
