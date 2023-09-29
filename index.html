@@ -1,234 +1,333 @@
-<!DOCTYPE html>
-<html lang="en">
-<head>
-    <meta charset="UTF-8">
-    <title>Mooring Station E01</title>
-    <link rel="stylesheet" href="style.css">
-</head>
-<body>
+---
+# front matter tells Jekyll to process Liquid
+# Front matter is a snippet of YAML placed between two triple-dashed lines at the start of a file.
+# You can use front matter to set variables for the page.
 
-<h1>Mooring Station E01</h1>
+layout: default
+title: IOS OSD Mooring Stations
+stations:
+  - e01
+  - scott2
+#  - a1
+plot_types:
+  - annual-data-availability
+  - monthly-data-availability
+  - instrument-depths
+  - raw-data
+  - daily-mean-data
+  - daily-climatologies
+  - daily-mean-anomalies
+  - monthly-mean-data
+  - monthly-climatologies
+  - monthly-mean-anomalies
+datatypes:
+  - Temperature
+  - Salinity
+e01_depths:
+  - 35
+  - 75
+  - 95
+scott2_depths:
+  - 40
+  - 100
+  - 150
+  - 200
+  - 280
+a1_depths:
+  - 35
+  - 100
+  - 180
+  - 300
+  - 400
+  - 490
+e01_climatology_years: 1990-2020
+scott2_climatology_years: 2016-2022
+a1_climatology_years: 1991-2020
+---
+
+<h1>{{ page.title }}</h1>
 <p>
-    Time series plots of temperature and salinity data are presented for station E01, which
-    is located off the west coast of Vancouver Island, BC. Data are available
-    for May 1979 to July 2022.
+    This page hosts time series plots of temperature and salinity data from the
+    Institute of Ocean Sciences (IOS) Ocean Sciences Division (OSD) mooring
+    stations, located off the west coast of BC.
 </p>
+<a href="./map/mooring_map.png">
+    <img src="./map/mooring_map.png" class="map" loading="lazy" width="600" height="450">
+</a>
 
-<div class="tab">
-    <button class="tablinks" onclick="openTab(event, 'Map of Station')" id="defaultOpen">Map of Station</button>
-    <button class="tablinks" onclick="openTab(event, 'Annual Data Availability')">Annual Data Availability</button>
-    <button class="tablinks" onclick="openTab(event, 'Monthly Data Availability')">Monthly Data Availability</button>
-    <button class="tablinks" onclick="openTab(event, 'Raw Time Series')">Raw Time Series</button>
-    <button class="tablinks" onclick="openTab(event, 'Daily Mean Data')">Daily Mean Data</button>
-    <button class="tablinks" onclick="openTab(event, 'Daily Climatologies')">Daily Climatologies</button>
-    <button class="tablinks" onclick="openTab(event, 'Daily Mean Anomalies')">Daily Mean Anomalies</button>
-    <button class="tablinks" onclick="openTab(event, 'Monthly Mean Data')">Monthly Mean Data</button>
-    <button class="tablinks" onclick="openTab(event, 'Monthly Climatologies')">Monthly Climatologies</button>
-    <button class="tablinks" onclick="openTab(event, 'Monthly Mean Anomalies')">Monthly Mean Anomalies</button>
+<div id="station-choice" class="tab">
+    {% for station in page.stations %}
+    <button class="station-tablinks" onclick="changeStation(event)" id="{{ station }}">
+        {{ station | upcase }}
+    </button>
+    {% endfor %}
 </div>
 
-<div id="Map of Station" class="tabcontent">
-  <a href="./figures/e01_map.png">
-      <img src="./figures/e01_map.png" class="map" loading="lazy" width="600" height="450">
-  </a>
-  <p>
-      Map showing the location of DFO Mooring Station E01.
-  </p>
-</div>
+{% for station in page.stations %}
+<p id="{{ station }}-description" class="station-content {{ station }}">
+    Mooring data from station {{ station | upcase }}.
+</p>
+{% endfor %}
 
-<div id="Annual Data Availability" class="tabcontent">
-  <p>
-      The following plots count how many measurements are available for each month of the data record.
-      Separate plots are provided for each of temperature, salinity, and oxygen.
-  </p>
-  <a href="./figures/e01_Temperature_annual_sampling_counts.png">
-      <img src="./figures/e01_Temperature_annual_sampling_counts.png">
-  </a>
-  <a href="./figures/e01_Salinity_annual_sampling_counts.png">
-      <img src="./figures/e01_Salinity_annual_sampling_counts.png">
-  </a>
-  <a href="./figures/e01_Oxygen_annual_sampling_counts.png">
-      <img src="./figures/e01_Oxygen_annual_sampling_counts.png">
-  </a>
-</div>
-
-<div id="Monthly Data Availability" class="tabcontent">
-  <p>
-      The following plots count how many measurements are available for each month of the data record.
-      Separate plots are provided for each of temperature, salinity, and oxygen.
-  </p>
-  <a href="./figures/e01_Temperature_monthly_sampling_counts.png">
-      <img src="./figures/e01_Temperature_monthly_sampling_counts.png">
-  </a>
-  <a href="./figures/e01_Salinity_monthly_sampling_counts.png">
-      <img src="./figures/e01_Salinity_monthly_sampling_counts.png">
-  </a>
-  <a href="./figures/e01_Oxygen_monthly_sampling_counts.png">
-      <img src="./figures/e01_Oxygen_monthly_sampling_counts.png">
-  </a>
-</div>
-
-<div id="Raw Time Series" class="tabcontent">
-  <p>
-      The data were binned into 10m bins centred on the depths 35m, 75m, and 95m to make these plots.
-      Not all data from station E01 fit into these bins, particularly data from earlier years. Data
-      are separated by instrument (current meter or CTD) and variable (temperature or salinity).
-  </p>
-  <div class="grouped-plots">
-      <a href="./figures/e01_raw_Temperature_35m_cur_vs_ctd.png">
-          <div class="column"> <img src="./figures/e01_raw_Temperature_35m_cur_vs_ctd.png"> </div>
-      </a>
-      <a href="./figures/e01_raw_Temperature_35m_cur_vs_ctd.png">
-          <div class="column"> <img src="./figures/e01_raw_Salinity_35m_cur_vs_ctd.png"> </div>
-      </a>
-  </div>
-    <div class="grouped-plots">
-      <a href="./figures/e01_raw_Temperature_75m_cur_vs_ctd.png">
-          <div class="column"> <img src="./figures/e01_raw_Temperature_75m_cur_vs_ctd.png"> </div>
-      </a>
-      <a href="./figures/e01_raw_Salinity_75m_cur_vs_ctd.png">
-          <div class="column"> <img src="./figures/e01_raw_Salinity_75m_cur_vs_ctd.png"> </div>
-      </a>
-  </div>
-    <div class="grouped-plots">
-      <a href="./figures/e01_raw_Temperature_95m_cur_vs_ctd.png">
-          <div class="column"> <img src="./figures/e01_raw_Temperature_95m_cur_vs_ctd.png"> </div>
-      </a>
-      <a href="./figures/e01_raw_Salinity_95m_cur_vs_ctd.png">
-          <div class="column"> <img src="./figures/e01_raw_Salinity_95m_cur_vs_ctd.png"> </div>
-      </a>
-  </div>
-</div>
-
-<div id="Daily Mean Data" class="tabcontent">
-    <p>
-        Current meter data from before 2007 and CTD data from after 2007 were combined and presented
-        in these plots.
-        The data were binned into 10m bins centred on the depths 35m, 75m, and 95m to make these plots.
-        Daily means were computed for each day that temperature or salinity data were present.
-    </p>
-    <div class="grouped-plots">
-        <a href="./figures/e01_daily_mean_ts_35m.png">
-            <div class="column"> <img src="./figures/e01_daily_mean_ts_35m.png"> </div>
-        </a>
-        <a href="./figures/e01_daily_mean_ts_75m.png">
-            <div class="column"> <img src="./figures/e01_daily_mean_ts_75m.png"> </div>
-        </a>
+<div class="station-content e01 scott2 a1">
+<!--    Make subtab button for each station-->
+    <div id="subtab-choice" class="tab">
+        {% for type in page.plot_types %}
+        {% assign words = type | split: "-" %}
+        {% capture name %}
+            {% for word in words %}
+                {{ word | capitalize }}
+            {% endfor %}
+        {% endcapture %}
+        <button class="subtab-tablinks" onclick="changeSubtab(event)" id="{{ type }}">
+            {{ name }}
+        </button>
+        {% endfor %}
     </div>
-    <div class="grouped-plots">
-        <a href="./figures/e01_daily_mean_ts_95m.png">
-            <div class="column"> <img src="./figures/e01_daily_mean_ts_95m.png"> </div>
-        </a>
-    </div>
-</div>
 
-<div id="Daily Climatologies" class="tabcontent">
-    <p>
-        The daily climatologies were computed from the daily mean data by taking the
-        average for each day of the year over the years 1990-2020. This is a 30-year
-        climatology due to the year 2007 having no temperature or salinity observations.
-    </p>
-    <div class="grouped-plots">
-        <a href="./figures/e01_climatology_1990-2020_ts_35m.png">
-            <div class="column"> <img src="./figures/e01_climatology_1990-2020_ts_35m.png"> </div>
-        </a>
-        <a href="./figures/e01_climatology_1990-2020_ts_75m.png">
-            <div class="column"> <img src="./figures/e01_climatology_1990-2020_ts_75m.png"> </div>
-        </a>
-    </div>
-    <div class="grouped-plots">
-        <a href="./figures/e01_climatology_1990-2020_ts_95m.png">
-            <div class="column"> <img src="./figures/e01_climatology_1990-2020_ts_95m.png"> </div>
-        </a>
-    </div>
-</div>
-
-<div id="Daily Mean Anomalies" class="tabcontent">
-    <p>
-        Daily mean anomalies were computed by subtracting the daily climatologies for the
-        period 1990-2020 from the daily mean data.
-    </p>
-    <div class="grouped-plots">
-        <div class="column">
-            <a href="./figures/e01_daily_anom_ts_35m.png">
-                <img src="./figures/e01_daily_anom_ts_35m.png">
+    <div id="annual-data-availability-content" class="subtab-content">
+        <h2>Annual Data Availability</h2>
+        <p>
+            The following plots count how many measurements are available
+            for each year of the data record. Separate plots are provided
+            for each of temperature, salinity, and oxygen.
+        </p>
+        {% for station in page.stations %}
+        <div id="annual-data-availability-{{ station }}" class="station-content {{ station }}">
+            {% for datatype in page.datatypes %}
+            <a href="./{{ station }}/figures/{{ station }}_{{ datatype }}_annual_sampling_counts.png">
+                <img src="./{{ station }}/figures/{{ station }}_{{ datatype }}_annual_sampling_counts.png" loading="lazy">
             </a>
-            <a href="./figures/e01_daily_anom_ts_95m.png">
-                <img src="./figures/e01_daily_anom_ts_95m.png">
+            {% endfor %}
+        </div>
+        {% endfor %}
+    </div>
+
+    <div id="monthly-data-availability-content" class="subtab-content">
+        <h2>Monthly Data Availability</h2>
+        <p>
+            The following plots count how many measurements are available for each month of the data record.
+            Separate plots are provided for each of temperature, salinity, and oxygen.
+        </p>
+        {% for station in page.stations %}
+        <div id="monthly-data-availability-{{ station }}" class="station-content {{ station }}">
+            {% for datatype in page.datatypes %}
+            <a href="./{{ station }}/figures/{{ station }}_{{ datatype }}_monthly_sampling_counts.png">
+                <img src="./{{ station }}/figures/{{ station }}_{{ datatype }}_monthly_sampling_counts.png" loading="lazy">
+            </a>
+            {% endfor %}
+        </div>
+        {% endfor %}
+    </div>
+
+    <div id="instrument-depths-content" class="subtab-content">
+        <h2>Instrument Depths</h2>
+        <p>
+            Plot showing the depths of CTDs and current meters on the mooring line for each deployment.
+            Each point represents a CTD or current meter.
+        </p>
+        {% for station in page.stations %}
+        <div id="instrument-depths-{{ station }}" class="station-content {{ station }}">
+            <a href="./{{ station }}/figures/{{ station }}_cur_ctd_depths.png">
+                <img src="./{{ station }}/figures/{{ station }}_cur_ctd_depths.png"
+                     loading="lazy" width="600" height="450">
             </a>
         </div>
-        <div class="column">
-            <a href="./figures/e01_daily_anom_ts_75m.png">
-                <img src="./figures/e01_daily_anom_ts_75m.png">
-            </a>
-        </div>
+        {% endfor %}
     </div>
-</div>
 
-<div id="Monthly Mean Data" class="tabcontent">
-    <p>
-        Monthly mean data were computed from daily mean data.
-    </p>
-    <div class="grouped-plots">
-        <div class="column">
-            <a href="./figures/e01_monthly_mean_ts_35m.png">
-                <img src="./figures/e01_monthly_mean_ts_35m.png">
-            </a>
-            <a href="./figures/e01_monthly_mean_ts_95m.png">
-                <img src="./figures/e01_monthly_mean_ts_95m.png">
-            </a>
-        </div>
-        <div class="column">
-            <a href="./figures/e01_monthly_mean_ts_75m.png">
-                <img src="./figures/e01_monthly_mean_ts_75m.png">
-            </a>
-        </div>
-    </div>
-</div>
+    <div id="raw-data-content" class="subtab-content">
+        <h2>Raw Data</h2>
+        <p>
+            The data were binned into 10m bins centred on the standard instrument depths
+            for each station to make these plots. Not all the available data fit into these
+            bins. Data are separated by instrument (current meter or CTD) and variable
+            (temperature or salinity).
+        </p>
+        {% for station in page.stations %}
+        <div id="raw-data-{{ station }}" class="station-content {{ station }}">
+            <div class="grouped-plots">
+                {% if station == "e01" %}
+                    {% assign station_depths = page.e01_depths %}
+                {% elsif station == "scott2" %}
+                    {% assign station_depths = page.scott2_depths %}
+                {% elsif station == "a1" %}
+                    {% assign station_depths = page.a1_depths %}
+                {% endif %}
 
-<div id="Monthly Climatologies" class="tabcontent">
-    <p>
-        The monthly climatologies were computed from the monthly mean data by taking the
-        average for each month of the year over the years 1990-2020. This is a 30-year
-        climatology due to the year 2007 having no temperature or salinity observations.
-    </p>
-    <div class="grouped-plots">
-        <div class="column">
-            <a href="./figures/e01_monthly_clim_ts_35m.png">
-                <img src="./figures/e01_monthly_clim_ts_35m.png">
-            </a>
-            <a href="./figures/e01_monthly_clim_ts_95m.png">
-                <img src="./figures/e01_monthly_clim_ts_95m.png">
-            </a>
+                {% for depth in station_depths %}
+                {% for datatype in page.datatypes %}
+                <a href="./{{ station }}/figures/{{ station }}_raw_{{ datatype }}_{{ depth }}m_cur_vs_ctd.png">
+                    <img src="./{{ station }}/figures/{{ station }}_raw_{{ datatype }}_{{ depth }}m_cur_vs_ctd.png" loading="lazy">
+                </a>
+                {% endfor %}
+                {% endfor %}
+            </div>
         </div>
-        <div class="column">
-            <a href="./figures/e01_monthly_clim_ts_75m.png">
-                <img src="./figures/e01_monthly_clim_ts_75m.png">
-            </a>
-        </div>
+        {% endfor %}
     </div>
-</div>
 
-<div id="Monthly Mean Anomalies" class="tabcontent">
-    <p>
-        Monthly mean anomalies were computed by subtracting the monthly climatologies for the
-        period 1990-2020 from the monthly mean data.
-    </p>
-    <div class="grouped-plots">
-        <div class="column">
-            <a href="./figures/e01_monthly_anom_ts_35m.png">
-                <img src="./figures/e01_monthly_anom_ts_35m.png">
-            </a>
-            <a href="./figures/e01_monthly_anom_ts_95m.png">
-                <img src="./figures/e01_monthly_anom_ts_95m.png">
-            </a>
+    <div id="daily-mean-data-content" class="subtab-content">
+        <h2>Daily Mean Data</h2>
+        <p>
+            Filler
+        </p>
+        {% for station in page.stations %}
+        <div id="daily-mean-data-{{ station }}" class="station-content {{ station }}">
+            <div class="grouped-plots">
+                {% if station == "e01" %}
+                    {% assign station_depths = page.e01_depths %}
+                {% elsif station == "scott2" %}
+                    {% assign station_depths = page.scott2_depths %}
+                {% elsif station == "a1" %}
+                    {% assign station_depths = page.a1_depths %}
+                {% endif %}
+
+                {% for depth in station_depths %}
+                {% if station == "e01" and depth == "35" %}
+                <a href="./{{ station }}/figures/{{ station }}_daily_mean_ts_{{ depth }}m_SST.png">
+                    <img src="./{{ station }}/figures/{{ station }}_daily_mean_ts_{{ depth }}m_SST.png" loading="lazy">
+                </a>
+                {% else %}
+                <a href="./{{ station }}/figures/{{ station }}_daily_mean_ts_{{ depth }}m.png">
+                    <img src="./{{ station }}/figures/{{ station }}_daily_mean_ts_{{ depth }}m.png" loading="lazy">
+                </a>
+                {% endif %}
+                {% endfor %}
+            </div>
         </div>
-        <div class="column">
-            <a href="./figures/e01_monthly_anom_ts_75m.png">
-                <img src="./figures/e01_monthly_anom_ts_75m.png">
-            </a>
-        </div>
+        {% endfor %}
     </div>
+
+    <div id="daily-climatologies-content" class="subtab-content">
+        <h2>Daily Climatologies</h2>
+        <p>
+            Filler
+        </p>
+        {% for station in page.stations %}
+        <div id="daily-climatologies-{{ station }}" class="station-content {{ station }}">
+            <div class="grouped-plots">
+                {% if station == "e01" %}
+                    {% assign station_depths = page.e01_depths %}
+                    {% assign station_climatology_years = page.e01_climatology_years %}
+                {% elsif station == "scott2" %}
+                    {% assign station_depths = page.scott2_depths %}
+                    {% assign station_climatology_years = page.scott2_climatology_years %}
+                {% elsif station == "a1" %}
+                    {% assign station_depths = page.a1_depths %}
+                    {% assign station_climatology_years = page.a1_climatology_years %}
+                {% endif %}
+                {% for depth in station_depths %}
+                <a href="./{{ station }}/figures/{{ station }}_climatology_{{ station_climatology_years}}_ts_{{ depth }}m.png">
+                    <img src="./{{ station }}/figures/{{ station }}_climatology_{{ station_climatology_years}}_ts_{{ depth }}m.png" loading="lazy">
+                </a>
+                {% endfor %}
+            </div>
+        </div>
+        {% endfor %}
+    </div>
+
+    <div id="daily-mean-anomalies-content" class="subtab-content">
+        <h2>Daily Mean Anomalies</h2>
+        <p>
+            Filler
+        </p>
+        {% for station in page.stations %}
+        <div id="daily-mean-anomalies-{{ station }}" class="station-content {{ station }}">
+            <div class="grouped-plots">
+                {% if station == "e01" %}
+                    {% assign station_depths = page.e01_depths %}
+                {% elsif station == "scott2" %}
+                    {% assign station_depths = page.scott2_depths %}
+                {% elsif station == "a1" %}
+                    {% assign station_depths = page.a1_depths %}
+                {% endif %}
+                {% for depth in station_depths %}
+                <a href="./{{ station }}/figures/{{ station }}_daily_anom_ts_{{ depth }}m.png">
+                    <img src="./{{ station }}/figures/{{ station }}_daily_anom_ts_{{ depth }}m.png" loading="lazy">
+                </a>
+                {% endfor %}
+            </div>
+        </div>
+        {% endfor %}
+    </div>
+
+    <div id="monthly-mean-data-content" class="subtab-content">
+        <h2>Monthly Mean Data</h2>
+        <p>
+            Monthly mean data were computed from daily mean data.
+        </p>
+        {% for station in page.stations %}
+        <div id="monthly-mean-data-{{ station }}" class="station-content {{ station }}">
+            <div class="grouped-plots">
+                {% if station == "e01" %}
+                    {% assign station_depths = page.e01_depths %}
+                {% elsif station == "scott2" %}
+                    {% assign station_depths = page.scott2_depths %}
+                {% elsif station == "a1" %}
+                    {% assign station_depths = page.a1_depths %}
+                {% endif %}
+                {% for depth in station_depths %}
+                <a href="./{{ station }}/figures/{{ station }}_monthly_mean_ts_{{ depth }}m.png">
+                    <img src="./{{ station }}/figures/{{ station }}_monthly_mean_ts_{{ depth }}m.png" loading="lazy">
+                </a>
+                {% endfor %}
+            </div>
+        </div>
+        {% endfor %}
+    </div>
+
+    <div id="monthly-climatologies-content" class="subtab-content">
+        <h2>Monthly Climatologies</h2>
+        <p>
+            Filler
+        </p>
+        {% for station in page.stations %}
+        <div id="monthly-climatologies-{{ station }}" class="station-content {{ station }}">
+            <div class="grouped-plots">
+                {% if station == "e01" %}
+                    {% assign station_depths = page.e01_depths %}
+                {% elsif station == "scott2" %}
+                    {% assign station_depths = page.scott2_depths %}
+                {% elsif station == "a1" %}
+                    {% assign station_depths = page.a1_depths %}
+                {% endif %}
+                {% for depth in station_depths %}
+                <a href="./{{ station }}/figures/{{ station }}_monthly_clim_ts_{{ depth }}m.png">
+                    <img src="./{{ station }}/figures/{{ station }}_monthly_clim_ts_{{ depth }}m.png" loading="lazy">
+                </a>
+                {% endfor %}
+            </div>
+        </div>
+        {% endfor %}
+    </div>
+
+    <div id="monthly-mean-anomalies-content" class="subtab-content">
+        <h2>Monthly Mean Anomalies</h2>
+        <p>
+            The monthly mean anomalies are the difference between the monthly
+            mean values and the monthly climatological values.
+        </p>
+        {% for station in page.stations %}
+        <div id="monthly-mean-anomalies-{{ station }}" class="station-content {{ station }}">
+            <div class="grouped-plots">
+                {% if station == "e01" %}
+                    {% assign station_depths = page.e01_depths %}
+                {% elsif station == "scott2" %}
+                    {% assign station_depths = page.scott2_depths %}
+                {% elsif station == "a1" %}
+                    {% assign station_depths = page.a1_depths %}
+                {% endif %}
+                {% for depth in station_depths %}
+                <a href="./{{ station }}/figures/{{ station }}_monthly_anom_ts_{{ depth }}m.png">
+                    <img src="./{{ station }}/figures/{{ station }}_monthly_anom_ts_{{ depth }}m.png" loading="lazy">
+                </a>
+                {% endfor %}
+            </div>
+        </div>
+        {% endfor %}
+    </div>
+
 </div>
 
 <h2>Contact</h2>
@@ -238,6 +337,3 @@
 </p>
 
 <script src="main.js"></script>
-
-</body>
-</html>
