@@ -184,7 +184,7 @@ a1_climatology_years: 1991-2020
                 {% endif %}
 
                 {% for depth in station_depths %}
-                {% if station == "e01" and depth == "35" %}
+                {% if station == "e01" and depth == 35 %}
                 <a href="./{{ station }}/figures/{{ station }}_daily_mean_ts_{{ depth }}m_SST.png">
                     <img src="./{{ station }}/figures/{{ station }}_daily_mean_ts_{{ depth }}m_SST.png" loading="lazy">
                 </a>
