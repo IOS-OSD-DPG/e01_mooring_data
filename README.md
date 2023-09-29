@@ -1,6 +1,6 @@
 # osd_mooring_data
 Data page for DFO mooring stations E01, SCOTT2, and A1 in BC. This site is under construction and all figures are provisional.
-The webpage can be found [here](https://ios-osd-dpg.github.io/e01_mooring_data/), or by navigating to Deployments > github-pages.
+The webpage can be found [here](https://ios-osd-dpg.github.io/mooring_data_page/), or by navigating to Deployments > github-pages.
 
 The following types of plots of temperature (T), salinity (S) and oxygen (O) data are presented:
 * Histograms of yearly measurement counts
