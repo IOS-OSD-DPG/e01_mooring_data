@@ -220,8 +220,26 @@ def plot_raw_TS_by_inst(df: pd.DataFrame, output_dir: str, station: str, half_bi
     ctd_mask = np.array([x.lower().endswith('.ctd') for x in df.loc[:, 'Filename']])
     cur_mask = np.array([x.lower().endswith('.cur') for x in df.loc[:, 'Filename']])
 
+    df['Datetime_UTC'] = np.repeat(pd.NaT, len(df))
+    for i in range(len(df)):
+        try:
+            df.loc[i, 'Datetime_UTC'] = df.loc[i, 'Datetime'].tz_localize('UTC')
+        except TypeError:
+            df.loc[i, 'Datetime_UTC'] = df.loc[i, 'Datetime'].tz_convert('UTC')
+
     units = ['C', 'PSS-78', 'mL/L']
-    y_axis_limits = [(4, 19), (26, 38), (0, 7.5)]
+
+    y_axis_limits = [(4, 19), (26, 38), (0, 7.5)]  # for T, S, O
+
+    # Fix issue with some early data getting cut off
+    x_axis_buffer = (pd.Timedelta('90 days')
+                     if df.loc[:, 'Datetime_UTC'].min().year < 2000
+                     else pd.Timedelta('30 days'))
+    x_axis_limits = (
+        df.loc[:, 'Datetime_UTC'].min() - x_axis_buffer,
+        df.loc[:, 'Datetime_UTC'].max() + pd.Timedelta('30 days')
+    )
+
     for depth in BIN_DEPTHS[station]:
         # Make a mask to capture data within 5 vertical meters of each bin depth
         depth_mask = ((df.loc[:, 'Depth'].to_numpy() >= depth - half_bin_size) &
@@ -245,6 +263,7 @@ def plot_raw_TS_by_inst(df: pd.DataFrame, output_dir: str, station: str, half_bi
                 ax[j].legend(loc='upper left', scatterpoints=3)
 
                 ax[j].set_ylim(y_axis_limits[i])
+                ax[j].set_xlim(x_axis_limits)
 
                 # Make ticks point inward and on all sides
                 ax[j].tick_params(which='major', direction='in',
@@ -252,9 +271,10 @@ def plot_raw_TS_by_inst(df: pd.DataFrame, output_dir: str, station: str, half_bi
 
             plt.suptitle(f'Station {station} - {depth} m')
             plt.tight_layout()
+            # todo remove the file name change
             plt.savefig(
                 os.path.join(output_dir,
-                             f'{station.lower()}_raw_{var}_{depth}m_cur_vs_ctd_bin{int(half_bin_size*2)}.png'))
+                             f'{station.lower()}_raw_{var}_{depth}m_cur_vs_ctd.png'))
             plt.close(fig)
     return
 
@@ -408,7 +428,7 @@ def plot_daily_means(unique_datetimes, daily_means_T, daily_means_S, output_dir:
                      station: str, add_cast_sst: bool = False):
     """
     Plot daily mean Temperature and Salinity data
-    :param add_cast_sst:
+    :param add_cast_sst: Add SST data from CTD casts to E01 35m temperature plot
     :param unique_datetimes:
     :param daily_means_T:
     :param daily_means_S:
@@ -417,6 +437,7 @@ def plot_daily_means(unique_datetimes, daily_means_T, daily_means_S, output_dir:
     :return:
     """
 
+    # Set up y axis limits for each of temperature and salinity
     if add_cast_sst:
         datetime_sst, sst, _ = get_cast_sst(station)
 
@@ -954,7 +975,15 @@ def run_plot(
     os.chdir(new_dir)
     output_dir = os.path.join(new_dir, 'figures')
 
-    half_bin_size = 5  # change this to a parameter?? default 5?
+    if station == 'E01':
+        half_bin_size = 5  # change this to a parameter?? default 5?
+    elif station == 'SCOTT2':
+        half_bin_size = 5  # change this to a parameter?? default 5?
+    elif station == 'A1':
+        half_bin_size = 10
+    else:
+        print('Station', station, 'not valid ! Exiting')
+        return
 
     # Files are too big to store in the GitHub project directory
     data_dir = f'E:\\charles\\mooring_data_page\\{station.lower()}\\csv_data\\'

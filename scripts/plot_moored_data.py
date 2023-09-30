@@ -10,13 +10,14 @@ import xarray as xr
 
 VARS = ['Temperature', 'Salinity', 'Oxygen:Dissolved:SBE']
 
-# todo populate, may need to expand search up to 10-15m around each bin depth
-BIN_DEPTHS = {'E01': [35, 75, 95],
-              'A1': [35, 100, 180, 300, 400, 490],
+# todo populate, may need to expand search up to 10-15m around each bin depth, add conditions for A1 bottom bin
+BIN_DEPTHS = {'E01': [35, 75, 92],
+              'A1': [35, 100, 180, 300, 400, 450],
               'SCOTT2': [40, 100, 150, 200, 280]}  # Bin the data to +/- 5m around each bin centre
 
 START_YEAR = 1979
 
+# Strictly for cast netCDF files which use BODC codes to name variables
 VAR_CODES = {'Temperature': {'codes': ['TEMPS901', 'TEMPS601'], 'units': 'C'},
              'Salinity': {'codes': [], 'units': 'PSS-78'}}
 
@@ -220,8 +221,26 @@ def plot_raw_TS_by_inst(df: pd.DataFrame, output_dir: str, station: str, half_bi
     ctd_mask = np.array([x.lower().endswith('.ctd') for x in df.loc[:, 'Filename']])
     cur_mask = np.array([x.lower().endswith('.cur') for x in df.loc[:, 'Filename']])
 
+    # df['Datetime_UTC'] = np.repeat(pd.NaT, len(df))
+    # for i in range(len(df)):
+    #     try:
+    #         df.loc[i, 'Datetime_UTC'] = df.loc[i, 'Datetime'].tz_localize('UTC')
+    #     except TypeError:
+    #         df.loc[i, 'Datetime_UTC'] = df.loc[i, 'Datetime'].tz_convert('UTC')
+
     units = ['C', 'PSS-78', 'mL/L']
-    y_axis_limits = [(4, 19), (26, 38), (0, 7.5)]
+
+    y_axis_limits = [(4, 19), (26, 38), (0, 7.5)]  # for T, S, O
+
+    # # Fix issue with some early data getting cut off
+    # x_axis_buffer = (pd.Timedelta('90 days')
+    #                  if df.loc[:, 'Datetime_UTC'].min().year < 2000
+    #                  else pd.Timedelta('30 days'))
+    # x_axis_limits = (
+    #     df.loc[:, 'Datetime_UTC'].min() - x_axis_buffer,
+    #     df.loc[:, 'Datetime_UTC'].max() + pd.Timedelta('30 days')
+    # )
+
     for depth in BIN_DEPTHS[station]:
         # Make a mask to capture data within 5 vertical meters of each bin depth
         depth_mask = ((df.loc[:, 'Depth'].to_numpy() >= depth - half_bin_size) &
@@ -235,9 +254,16 @@ def plot_raw_TS_by_inst(df: pd.DataFrame, output_dir: str, station: str, half_bi
             ax[0].scatter(df.loc[cur_mask & depth_mask, 'Datetime'].to_numpy(),
                           df.loc[cur_mask & depth_mask, var].to_numpy(),
                           marker='.', s=2, c='orange', label=f'CUR {var}')
+            xlim0 = ax[0].get_xlim()
+
             ax[1].scatter(df.loc[ctd_mask & depth_mask, 'Datetime'].to_numpy(),
                           df.loc[ctd_mask & depth_mask, var].to_numpy(),
                           marker='.', s=2, c='blue', label=f'CTD {var}')
+            xlim1 = ax[1].get_xlim()
+
+            # Ensure no data is getting cut off
+            final_xmin = xlim0[0] if xlim0[0] < xlim1[0] else xlim1[0]
+            final_xmax = xlim0[1] if xlim0[1] > xlim1[1] else xlim1[1]
 
             for j in [0, 1]:
                 ax[j].set_ylabel(f'{var} ({units[i]})')
@@ -245,6 +271,7 @@ def plot_raw_TS_by_inst(df: pd.DataFrame, output_dir: str, station: str, half_bi
                 ax[j].legend(loc='upper left', scatterpoints=3)
 
                 ax[j].set_ylim(y_axis_limits[i])
+                ax[j].set_xlim((final_xmin, final_xmax))
 
                 # Make ticks point inward and on all sides
                 ax[j].tick_params(which='major', direction='in',
@@ -254,7 +281,7 @@ def plot_raw_TS_by_inst(df: pd.DataFrame, output_dir: str, station: str, half_bi
             plt.tight_layout()
             plt.savefig(
                 os.path.join(output_dir,
-                             f'{station.lower()}_raw_{var}_{depth}m_cur_vs_ctd_bin{int(half_bin_size*2)}.png'))
+                             f'{station.lower()}_raw_{var}_{depth}m_cur_vs_ctd.png'))
             plt.close(fig)
     return
 
@@ -408,7 +435,7 @@ def plot_daily_means(unique_datetimes, daily_means_T, daily_means_S, output_dir:
                      station: str, add_cast_sst: bool = False):
     """
     Plot daily mean Temperature and Salinity data
-    :param add_cast_sst:
+    :param add_cast_sst: Add SST data from CTD casts to E01 35m temperature plot
     :param unique_datetimes:
     :param daily_means_T:
     :param daily_means_S:
@@ -417,6 +444,7 @@ def plot_daily_means(unique_datetimes, daily_means_T, daily_means_S, output_dir:
     :return:
     """
 
+    # Set up y axis limits for each of temperature and salinity
     if add_cast_sst:
         datetime_sst, sst, _ = get_cast_sst(station)
 
@@ -952,9 +980,18 @@ def run_plot(
         new_dir = os.path.join(old_dir, station.lower())
         old_dir = os.path.join(old_dir, 'scripts')
     os.chdir(new_dir)
-    output_dir = os.path.join(new_dir, 'figures')
+    figures_dir = os.path.join(new_dir, 'figures')
+    data_dir = os.path.join(new_dir, 'data')
 
-    half_bin_size = 5  # change this to a parameter?? default 5?
+    if station == 'E01':
+        half_bin_size = 5  # change this to a parameter?? default 5?
+    elif station == 'SCOTT2':
+        half_bin_size = 5  # change this to a parameter?? default 5?
+    elif station == 'A1':
+        half_bin_size = 10
+    else:
+        print('Station', station, 'not valid ! Exiting')
+        return
 
     # Files are too big to store in the GitHub project directory
     data_dir = f'E:\\charles\\mooring_data_page\\{station.lower()}\\csv_data\\'
@@ -998,12 +1035,12 @@ def run_plot(
     if do_monthly_avail:
         print('Plotting monthly data availability ...')
         for var in VARS:
-            plot_monthly_samp_freq(df_dt, var, output_dir, station)
+            plot_monthly_samp_freq(df_dt, var, figures_dir, station)
 
     if do_annual_avail:
         print('Plotting annual data availability ...')
         for var in VARS:
-            plot_annual_samp_freq(df_dt, var, output_dir, station)
+            plot_annual_samp_freq(df_dt, var, figures_dir, station)
 
     if do_raw_by_inst or do_raw:
         # Include current meter data after 2007!
@@ -1015,18 +1052,18 @@ def run_plot(
 
         if do_raw_by_inst:
             print('Plotting raw data by instrument ...')
-            plot_raw_TS_by_inst(df_dt, output_dir, station, half_bin_size)
+            plot_raw_TS_by_inst(df_dt, figures_dir, station, half_bin_size)
 
         if do_raw:
             print('Plotting raw data combining CTD and CUR data ...')
-            plot_raw_time_series(df_dt, output_dir, station, half_bin_size)
+            plot_raw_time_series(df_dt, figures_dir, station, half_bin_size)
 
     if do_daily_means:
         print('Plotting daily mean data ...')
-        daily_means_file = os.path.join(new_dir, 'data', f'{station.lower()}_daily_mean_TS_data.csv')
+        daily_means_file = os.path.join(data_dir, f'{station.lower()}_daily_mean_TS_data.csv')
         if not os.path.exists(daily_means_file) or recompute_daily_means:
             unique_datetimes, daily_means_T, daily_means_S = compute_daily_means(
-                df_dt, output_dir, station, half_bin_size
+                df_dt, data_dir, station, half_bin_size
             )
         else:
             df_daily_means = pd.read_csv(daily_means_file)
@@ -1040,7 +1077,7 @@ def run_plot(
             daily_means_T = df_daily_means.loc[:, T_columns].to_numpy().T
             daily_means_S = df_daily_means.loc[:, S_columns].to_numpy().T
 
-        plot_daily_means(unique_datetimes, daily_means_T, daily_means_S, output_dir, station,
+        plot_daily_means(unique_datetimes, daily_means_T, daily_means_S, figures_dir, station,
                          add_cast_sst)
 
     if any([do_daily_clim, do_daily_anom, do_monthly_means, do_monthly_clim, do_monthly_anom]):
@@ -1048,7 +1085,7 @@ def run_plot(
         daily_means_file = os.path.join(new_dir, 'data', f'{station.lower()}_daily_mean_TS_data.csv')
         if not os.path.exists(daily_means_file) or recompute_daily_means:
             unique_datetimes, daily_means_T, daily_means_S = compute_daily_means(
-                df_dt, output_dir, station, half_bin_size
+                df_dt, data_dir, station, half_bin_size
             )
         df_daily_means = pd.read_csv(daily_means_file)
         # Fix formatting, extract only YYYY-mm-dd, may be separated from HH:MM:SS by ' ' or 'T'
@@ -1059,23 +1096,23 @@ def run_plot(
 
         if do_daily_clim:
             print('Plotting daily T and S climatologies ...')
-            plot_daily_clim(df_daily_means, output_dir, station)
+            plot_daily_clim(df_daily_means, figures_dir, station)
 
         if do_daily_anom:
             print('Plotting daily T and S anomalies ...')
-            plot_daily_anom(df_daily_means, output_dir, station)
+            plot_daily_anom(df_daily_means, figures_dir, station)
 
         if do_monthly_means:
             print('Plotting monthly mean T and S data ...')
-            plot_monthly_means(df_daily_means, output_dir, station)
+            plot_monthly_means(df_daily_means, figures_dir, station)
 
         if do_monthly_clim:
             print('Plotting monthly T and S climatologies ...')
-            plot_monthly_clim(df_daily_means, output_dir, station)
+            plot_monthly_clim(df_daily_means, figures_dir, station)
 
         if do_monthly_anom:
             print('Plotting monthly mean T and S anomalies ...')
-            plot_monthly_anom(df_daily_means, output_dir, station)
+            plot_monthly_anom(df_daily_means, figures_dir, station)
 
     # Reset the current directory
     os.chdir(old_dir)
