@@ -56,6 +56,7 @@ def plot_annual_samp_freq(df: pd.DataFrame, var: str, output_dir: str, station: 
     # Get number of files - have both .CUR and .cur, and .CTD and .ctd file suffixes
     ctd_mask = [x.lower().endswith('.ctd') for x in df_masked.loc[:, 'Filename']]
     cur_mask = [x.lower().endswith('.cur') for x in df_masked.loc[:, 'Filename']]
+
     num_ctd_files = len(np.unique(df_masked.loc[ctd_mask, 'Filename']))
     num_cur_files = len(np.unique(df_masked.loc[cur_mask, 'Filename']))
 
@@ -207,6 +208,14 @@ def plot_monthly_samp_freq(df: pd.DataFrame, var: str, output_dir: str, station:
     return
 
 
+def standard_plot_title(station: str, depth: int):
+    if station == 'A1' and depth == 450:
+        plt.suptitle(f'Station {station} - below {depth} m')
+    else:
+        plt.suptitle(f'Station {station} - {depth} m')
+    return
+
+
 def plot_raw_TS_by_inst(df: pd.DataFrame, output_dir: str, station: str, half_bin_size: float):
     """
     Plot raw temperature and salinity time series by instru
@@ -242,9 +251,13 @@ def plot_raw_TS_by_inst(df: pd.DataFrame, output_dir: str, station: str, half_bi
     # )
 
     for depth in BIN_DEPTHS[station]:
-        # Make a mask to capture data within 5 vertical meters of each bin depth
-        depth_mask = ((df.loc[:, 'Depth'].to_numpy() >= depth - half_bin_size) &
-                      (df.loc[:, 'Depth'].to_numpy() <= depth + half_bin_size))
+        if station == 'A1' and depth == 450:
+            depth_mask = ((df.loc[:, 'Depth'].to_numpy() >= 450) &
+                          (df.loc[:, 'Depth'].to_numpy() <= 520))
+        else:
+            # Make a mask to capture data within 5 or 10 vertical meters of each bin depth
+            depth_mask = ((df.loc[:, 'Depth'].to_numpy() >= depth - half_bin_size) &
+                          (df.loc[:, 'Depth'].to_numpy() <= depth + half_bin_size))
 
         # only do temp and sal not oxy
         for i, var in enumerate(VARS[:2]):
@@ -277,7 +290,7 @@ def plot_raw_TS_by_inst(df: pd.DataFrame, output_dir: str, station: str, half_bi
                 ax[j].tick_params(which='major', direction='in',
                                   bottom=True, top=True, left=True, right=True)
 
-            plt.suptitle(f'Station {station} - {depth} m')
+            standard_plot_title(station, depth)
             plt.tight_layout()
             plt.savefig(
                 os.path.join(output_dir,
@@ -305,9 +318,14 @@ def plot_raw_time_series(df: pd.DataFrame, output_dir: str, station: str, half_b
     units = ['C', 'PSS-78', 'mL/L']
     y_axis_limits = [(4, 19), (26, 38), (0, 7.5)]
     for depth in BIN_DEPTHS[station]:
-        # Make a mask to capture data within 5 vertical meters of each bin depth
-        depth_mask = ((df.loc[:, 'Depth'].to_numpy() >= depth - half_bin_size) &
-                      (df.loc[:, 'Depth'].to_numpy() <= depth + half_bin_size))
+        if station == 'A1' and depth == 450:
+            depth_mask = ((df.loc[:, 'Depth'].to_numpy() >= 450) &
+                          (df.loc[:, 'Depth'].to_numpy() <= 520))
+        else:
+            # Make a mask to capture data within 5 or 10 vertical meters of each bin depth
+            depth_mask = ((df.loc[:, 'Depth'].to_numpy() >= depth - half_bin_size) &
+                          (df.loc[:, 'Depth'].to_numpy() <= depth + half_bin_size))
+
         if depth == 75:  # No oxygen at this level for all time
             num_subplots = 2
             figsize = (10, 7)
@@ -336,7 +354,7 @@ def plot_raw_time_series(df: pd.DataFrame, output_dir: str, station: str, half_b
             ax[i].tick_params(which='minor', direction='in',
                               bottom=True, top=True, left=True, right=True)
 
-        plt.suptitle(f'Station {station} - {depth} m')
+        standard_plot_title(station, depth)
         plt.tight_layout()
         plt.savefig(os.path.join(output_dir, f'{station.lower()}_raw_tso_{depth}m.png'))
         plt.close(fig)
@@ -369,9 +387,14 @@ def compute_daily_means(df: pd.DataFrame, output_dir: str, station: str, half_bi
     for i in range(len(BIN_DEPTHS[station])):
         depth = BIN_DEPTHS[station][i]
         print(depth)
-        # Make a mask to capture data within 5 vertical meters of each bin depth
-        depth_mask = ((df.loc[:, 'Depth'].to_numpy() >= depth - half_bin_size) &
-                      (df.loc[:, 'Depth'].to_numpy() <= depth + half_bin_size))
+        if station == 'A1' and depth == 450:
+            depth_mask = ((df.loc[:, 'Depth'].to_numpy() >= 450) &
+                          (df.loc[:, 'Depth'].to_numpy() <= 520))
+        else:
+            # Make a mask to capture data within 5 or 10 vertical meters of each bin depth
+            depth_mask = ((df.loc[:, 'Depth'].to_numpy() >= depth - half_bin_size) &
+                          (df.loc[:, 'Depth'].to_numpy() <= depth + half_bin_size))
+
         # Iterate through all the unique dates of observation
         for k in trange(len(unique_dates)):
             date = unique_dates[k]
@@ -488,7 +511,8 @@ def plot_daily_means(unique_datetimes, daily_means_T, daily_means_S, output_dir:
         ax[0].legend(loc='upper left', scatterpoints=3)
         ax[1].legend(loc='upper left', scatterpoints=3)
 
-        plt.suptitle(f'Station {station} - {depth} m')
+        standard_plot_title(station, depth)
+
         plt.tight_layout()
 
         if add_cast_sst and i == 0:
@@ -518,7 +542,7 @@ def compute_daily_clim(df_daily_mean: pd.DataFrame, station: str):
     if station == 'E01':
         start_year = 1990
         end_year = 2020
-    elif station == 'A1':  # todo
+    elif station == 'A1':  # todo, test 1991-2020 first and then evaluate
         # No shallow data in 2006, 2018, 2019, 2020
         start_year = 1991
         end_year = 2020
@@ -597,7 +621,8 @@ def plot_daily_clim(df_daily_mean: pd.DataFrame, output_dir: str, station: str):
                                  bottom=True, top=True, left=True, right=True)
 
         # Save figure
-        plt.suptitle(f'Station {station} - {depth} m')
+        standard_plot_title(station, depth)
+
         plt.tight_layout()
         plt.savefig(
             os.path.join(
@@ -700,7 +725,8 @@ def plot_daily_anom(df_daily_mean: pd.DataFrame, output_dir: str, station: str):
                                  bottom=True, top=True, left=True, right=True)
 
         # Save figure
-        plt.suptitle(f'Station {station} - {depth} m')
+        standard_plot_title(station, depth)
+
         plt.tight_layout()
         plt.savefig(os.path.join(output_dir, f'{station.lower()}_daily_anom_ts_{depth}m.png'))
         plt.close(fig)
@@ -786,7 +812,8 @@ def plot_monthly_means(df_daily_mean: pd.DataFrame, output_dir: str, station: st
                                  bottom=True, top=True, left=True, right=True)
 
         # Save figure
-        plt.suptitle(f'Station {station} - {depth} m')
+        standard_plot_title(station, depth)
+
         plt.tight_layout()
         plt.savefig(os.path.join(output_dir, f'{station.lower()}_monthly_mean_ts_{depth}m.png'))
         plt.close(fig)
@@ -861,7 +888,7 @@ def plot_monthly_clim(df_daily_mean: pd.DataFrame, output_dir: str, station: str
                                  bottom=True, top=True, left=True, right=True)
 
         # Save figure
-        plt.suptitle(f'Station {station} - {depth} m')
+        standard_plot_title(station, depth)
         plt.tight_layout()
         plt.savefig(os.path.join(output_dir, f'{station.lower()}_monthly_clim_ts_{depth}m.png'))
         plt.close(fig)
@@ -936,7 +963,7 @@ def plot_monthly_anom(df_daily_mean: pd.DataFrame, output_dir: str, station: str
                                  bottom=True, top=True, left=True, right=True)
 
         # Save figure
-        plt.suptitle(f'Station {station} - {depth} m')
+        standard_plot_title(station, depth)
         plt.tight_layout()
         plt.savefig(os.path.join(output_dir, f'{station.lower()}_monthly_anom_ts_{depth}m.png'))
         plt.close(fig)
@@ -981,7 +1008,7 @@ def run_plot(
         old_dir = os.path.join(old_dir, 'scripts')
     os.chdir(new_dir)
     figures_dir = os.path.join(new_dir, 'figures')
-    data_dir = os.path.join(new_dir, 'data')
+    avg_dir = os.path.join(new_dir, 'data')
 
     if station == 'E01':
         half_bin_size = 5  # change this to a parameter?? default 5?
@@ -1003,34 +1030,48 @@ def run_plot(
                      data_dir + f'{station.lower()}_ctd_data.csv']
 
         # Only keep current meter data before 2007 since 2008 is when CTD data start
-        cur_data = pd.read_csv(file_list[0])
-        cur_data_pre2007 = cur_data.loc[cur_data['Date'].to_numpy() < '2007', :]
-        df_all = pd.concat((cur_data_pre2007, pd.read_csv(file_list[1])))
+        cur_data_all = pd.read_csv(file_list[0])
+        cur_data_pre2007 = cur_data_all.loc[cur_data_all['Date'].to_numpy() < '2007', :]
+        df_merged = pd.concat((cur_data_pre2007, pd.read_csv(file_list[1])))
 
         # Reset the index in the dataframe
-        df_all.reset_index(drop=True, inplace=True)
+        df_merged.reset_index(drop=True, inplace=True)
+
+        if do_raw_by_inst or do_raw:
+            df_all = pd.concat((cur_data_all, pd.read_csv(file_list[1])))
+            df_all.reset_index(drop=True, inplace=True)
 
         # Option to add cast sst data
         add_cast_sst = True
+
     elif station == 'A1':
-        file_list = [data_dir + f'{station.lower()}_cur_data.csv', data_dir + f'{station.lower()}_ctd_data.csv']
-        cur_data = pd.read_csv(file_list[0])
+        file_list = [data_dir + f'{station.lower()}_cur_data.csv',
+                     data_dir + f'{station.lower()}_ctd_data.csv']
+        cur_data_all = pd.read_csv(file_list[0])
         # 2008-04-29 is when the next deployment starts containing the first CTD
-        cur_data_pre20080403 = cur_data.loc[cur_data['Date'].to_numpy() <= '2008-04-03']
-        df_all = pd.concat((cur_data_pre20080403, pd.read_csv(file_list[1])))
+        cur_data_pre20080403 = cur_data_all.loc[cur_data_all['Date'].to_numpy() <= '2008-04-03']
+        df_merged = pd.concat((cur_data_pre20080403, pd.read_csv(file_list[1])))
         # Reset the index in the dataframe
-        df_all.reset_index(drop=True, inplace=True)
+        df_merged.reset_index(drop=True, inplace=True)
+
+        if do_raw_by_inst or do_raw:
+            df_all = pd.concat((cur_data_all, pd.read_csv(file_list[1])))
+            df_all.reset_index(drop=True, inplace=True)
+
     elif station == 'SCOTT2':
         # Don't use any of the current meter data, as it covers the same time and
         # depths as the CTD data
         file_list = [data_dir + f'{station.lower()}_ctd_data.csv']
-        df_all = pd.read_csv(file_list[0])
+        df_merged = pd.read_csv(file_list[0])
+
+        if do_raw_by_inst or do_raw:
+            df_all = df_merged
     else:
         print('Station', station, 'not valid ! Exiting')
         return
 
     # Add datetime-format date for plotting ease
-    df_dt = add_datetime(df_all)
+    df_dt = add_datetime(df_merged)
 
     if do_monthly_avail:
         print('Plotting monthly data availability ...')
@@ -1043,27 +1084,26 @@ def run_plot(
             plot_annual_samp_freq(df_dt, var, figures_dir, station)
 
     if do_raw_by_inst or do_raw:
-        # Include current meter data after 2007!
-        df_all = pd.concat((pd.read_csv(file_list[0]), pd.read_csv(file_list[1])))
+        # Include any current meter data that overlaps with CTD data
+        # df_all = pd.concat((pd.read_csv(file_list[0]), pd.read_csv(file_list[1])))
         # Reset the index in the dataframe
-        df_all.reset_index(drop=True, inplace=True)
-        # Add datetime-format date for plotting ease
-        df_dt = add_datetime(df_all)
+
+        df_all_dt = add_datetime(df_all)
 
         if do_raw_by_inst:
             print('Plotting raw data by instrument ...')
-            plot_raw_TS_by_inst(df_dt, figures_dir, station, half_bin_size)
+            plot_raw_TS_by_inst(df_all_dt, figures_dir, station, half_bin_size)
 
         if do_raw:
             print('Plotting raw data combining CTD and CUR data ...')
-            plot_raw_time_series(df_dt, figures_dir, station, half_bin_size)
+            plot_raw_time_series(df_all_dt, figures_dir, station, half_bin_size)
 
     if do_daily_means:
         print('Plotting daily mean data ...')
         daily_means_file = os.path.join(data_dir, f'{station.lower()}_daily_mean_TS_data.csv')
         if not os.path.exists(daily_means_file) or recompute_daily_means:
             unique_datetimes, daily_means_T, daily_means_S = compute_daily_means(
-                df_dt, data_dir, station, half_bin_size
+                df_dt, avg_dir, station, half_bin_size
             )
         else:
             df_daily_means = pd.read_csv(daily_means_file)
@@ -1085,7 +1125,7 @@ def run_plot(
         daily_means_file = os.path.join(new_dir, 'data', f'{station.lower()}_daily_mean_TS_data.csv')
         if not os.path.exists(daily_means_file) or recompute_daily_means:
             unique_datetimes, daily_means_T, daily_means_S = compute_daily_means(
-                df_dt, data_dir, station, half_bin_size
+                df_dt, avg_dir, station, half_bin_size
             )
         df_daily_means = pd.read_csv(daily_means_file)
         # Fix formatting, extract only YYYY-mm-dd, may be separated from HH:MM:SS by ' ' or 'T'
