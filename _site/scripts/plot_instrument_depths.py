@@ -8,10 +8,13 @@ import numpy as np
 
 # Increase a1 max depth to account for case where mooring was hit and displaced to deep water
 station_dict = {
-    'e01': {'max_depth': 120, 'bin_depths': [35, 75, 95], 'bin_size': 10},
-    'a1': {'max_depth': 620, 'bin_depths': [35, 100, 180, 300, 400, 490], 'bin_size': 10},
+    'e01': {'max_depth': 110, 'bin_depths': [35, 75, 92], 'bin_size': 10},
+    'a1': {'max_depth': 620, 'bin_depths': [35, 100, 180, 300, 400, 450], 'bin_size': 10},
     'scott2': {'max_depth': 300, 'bin_depths': [40, 100, 150, 200, 280], 'bin_size': 20}
 }
+
+# Capture all data at A1 between 450m and 520m depth
+a1_bottom_bin_max_depth = 520
 
 old_dir = os.getcwd()
 parent_dir = os.path.dirname(old_dir)
@@ -35,22 +38,39 @@ for station in station_dict.keys():
     is_CTD = np.array([x.lower().endswith('.ctd') for x in files])
 
     fig, ax = plt.subplots()
-    ax.scatter(dep_years[is_CTD], depths[is_CTD], label='CTD', markercolor='blue')
-    ax.scatter(dep_years[~is_CTD], depths[~is_CTD], label='CUR', markercolor='orange')
-    ax.legend(loc='upper left', ncols=2)
+    ax.scatter(dep_years[is_CTD], depths[is_CTD], label='CTD', c='blue',
+               alpha=0.5, zorder=3.3)
+    ax.scatter(dep_years[~is_CTD], depths[~is_CTD], label='CUR', c='orange',
+               alpha=0.5, zorder=3.2)
+    ax.legend(loc='upper center', bbox_to_anchor=(0.5, 1.05), ncols=2)
+
+    # get xlim before filling bin depths so that bin depths span the whole plot width
+    xlim = ax.get_xlim()
 
     # Add horizontal lines to show bin size and location
     half_bin_size = station_dict[station]['bin_size'] / 2
     for sbin in station_dict[station]['bin_depths']:
-        ax.axhline(y=sbin - half_bin_size, color='lightgrey', linestyle='-', alpha=0.5)
-        ax.axhline(y=sbin + half_bin_size, color='lightgrey', linestyle='-', alpha=0.5)
+        if station == 'a1' and sbin == 450:
+            # For station A1, capture all data from 450 to 520m depth (exclude 613m data)
+            ax.fill_between(x=[min(dep_years) - 10, max(dep_years) + 10],
+                            y1=sbin,
+                            y2=a1_bottom_bin_max_depth, color='lightgrey', alpha=0.5,
+                            zorder=3.1)
+        else:
+            ax.fill_between(x=[min(dep_years) - 10, max(dep_years) + 10],
+                            y1=sbin - half_bin_size,
+                            y2=sbin + half_bin_size, color='lightgrey', alpha=0.5,
+                            zorder=3.1)
+        # ax.axhline(y=sbin - half_bin_size, color='lightgrey', alpha=0.5)
+        # ax.axhline(y=sbin + half_bin_size, color='lightgrey', alpha=0.5)
 
-    ax.set_ylim((ybot, 0))
+    ax.set_xlim(xlim)
+    ax.set_ylim((ybot, -10))
     ax.set_ylabel('Depth (m)')
     ax.tick_params(which='major', direction='in', bottom=True, top=True, left=True, right=True)
     plt.title(station.upper(), loc='left')
     plt.tight_layout()
-    plt.savefig(os.path.join(output_dir, f'{station}_cur_ctd_depths.png'))
+    plt.savefig(os.path.join(output_dir, f'{station}_cur_ctd_depths.png'), dpi=300)
     plt.close()
 
 os.chdir(old_dir)

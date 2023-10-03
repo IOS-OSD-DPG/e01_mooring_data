@@ -26,6 +26,10 @@
         SCOTT2
     </button>
     
+    <button class="station-tablinks" onclick="changeStation(event)" id="a1">
+        A1
+    </button>
+    
 </div>
 
 
@@ -35,6 +39,10 @@
 
 <p id="scott2-description" class="station-content scott2">
     Mooring data from station SCOTT2.
+</p>
+
+<p id="a1-description" class="station-content a1">
+    Mooring data from station A1.
 </p>
 
 
@@ -208,6 +216,18 @@
             
         </div>
         
+        <div id="annual-data-availability-a1" class="station-content a1">
+            
+            <a href="./a1/figures/a1_Temperature_annual_sampling_counts.png">
+                <img src="./a1/figures/a1_Temperature_annual_sampling_counts.png" loading="lazy">
+            </a>
+            
+            <a href="./a1/figures/a1_Salinity_annual_sampling_counts.png">
+                <img src="./a1/figures/a1_Salinity_annual_sampling_counts.png" loading="lazy">
+            </a>
+            
+        </div>
+        
     </div>
 
     <div id="monthly-data-availability-content" class="subtab-content">
@@ -241,6 +261,18 @@
             
         </div>
         
+        <div id="monthly-data-availability-a1" class="station-content a1">
+            
+            <a href="./a1/figures/a1_Temperature_monthly_sampling_counts.png">
+                <img src="./a1/figures/a1_Temperature_monthly_sampling_counts.png" loading="lazy">
+            </a>
+            
+            <a href="./a1/figures/a1_Salinity_monthly_sampling_counts.png">
+                <img src="./a1/figures/a1_Salinity_monthly_sampling_counts.png" loading="lazy">
+            </a>
+            
+        </div>
+        
     </div>
 
     <div id="instrument-depths-content" class="subtab-content">
@@ -260,6 +292,13 @@
         <div id="instrument-depths-scott2" class="station-content scott2">
             <a href="./scott2/figures/scott2_cur_ctd_depths.png">
                 <img src="./scott2/figures/scott2_cur_ctd_depths.png"
+                     loading="lazy" width="600" height="450">
+            </a>
+        </div>
+        
+        <div id="instrument-depths-a1" class="station-content a1">
+            <a href="./a1/figures/a1_cur_ctd_depths.png">
+                <img src="./a1/figures/a1_cur_ctd_depths.png"
                      loading="lazy" width="600" height="450">
             </a>
         </div>
@@ -301,12 +340,12 @@
                 
                 
                 
-                <a href="./e01/figures/e01_raw_Temperature_95m_cur_vs_ctd.png">
-                    <img src="./e01/figures/e01_raw_Temperature_95m_cur_vs_ctd.png" loading="lazy">
+                <a href="./e01/figures/e01_raw_Temperature_92m_cur_vs_ctd.png">
+                    <img src="./e01/figures/e01_raw_Temperature_92m_cur_vs_ctd.png" loading="lazy">
                 </a>
                 
-                <a href="./e01/figures/e01_raw_Salinity_95m_cur_vs_ctd.png">
-                    <img src="./e01/figures/e01_raw_Salinity_95m_cur_vs_ctd.png" loading="lazy">
+                <a href="./e01/figures/e01_raw_Salinity_92m_cur_vs_ctd.png">
+                    <img src="./e01/figures/e01_raw_Salinity_92m_cur_vs_ctd.png" loading="lazy">
                 </a>
                 
                 
@@ -371,6 +410,74 @@
             </div>
         </div>
         
+        <div id="raw-data-a1" class="station-content a1">
+            <div class="grouped-plots">
+                
+
+                
+                
+                <a href="./a1/figures/a1_raw_Temperature_35m_cur_vs_ctd.png">
+                    <img src="./a1/figures/a1_raw_Temperature_35m_cur_vs_ctd.png" loading="lazy">
+                </a>
+                
+                <a href="./a1/figures/a1_raw_Salinity_35m_cur_vs_ctd.png">
+                    <img src="./a1/figures/a1_raw_Salinity_35m_cur_vs_ctd.png" loading="lazy">
+                </a>
+                
+                
+                
+                <a href="./a1/figures/a1_raw_Temperature_100m_cur_vs_ctd.png">
+                    <img src="./a1/figures/a1_raw_Temperature_100m_cur_vs_ctd.png" loading="lazy">
+                </a>
+                
+                <a href="./a1/figures/a1_raw_Salinity_100m_cur_vs_ctd.png">
+                    <img src="./a1/figures/a1_raw_Salinity_100m_cur_vs_ctd.png" loading="lazy">
+                </a>
+                
+                
+                
+                <a href="./a1/figures/a1_raw_Temperature_180m_cur_vs_ctd.png">
+                    <img src="./a1/figures/a1_raw_Temperature_180m_cur_vs_ctd.png" loading="lazy">
+                </a>
+                
+                <a href="./a1/figures/a1_raw_Salinity_180m_cur_vs_ctd.png">
+                    <img src="./a1/figures/a1_raw_Salinity_180m_cur_vs_ctd.png" loading="lazy">
+                </a>
+                
+                
+                
+                <a href="./a1/figures/a1_raw_Temperature_300m_cur_vs_ctd.png">
+                    <img src="./a1/figures/a1_raw_Temperature_300m_cur_vs_ctd.png" loading="lazy">
+                </a>
+                
+                <a href="./a1/figures/a1_raw_Salinity_300m_cur_vs_ctd.png">
+                    <img src="./a1/figures/a1_raw_Salinity_300m_cur_vs_ctd.png" loading="lazy">
+                </a>
+                
+                
+                
+                <a href="./a1/figures/a1_raw_Temperature_400m_cur_vs_ctd.png">
+                    <img src="./a1/figures/a1_raw_Temperature_400m_cur_vs_ctd.png" loading="lazy">
+                </a>
+                
+                <a href="./a1/figures/a1_raw_Salinity_400m_cur_vs_ctd.png">
+                    <img src="./a1/figures/a1_raw_Salinity_400m_cur_vs_ctd.png" loading="lazy">
+                </a>
+                
+                
+                
+                <a href="./a1/figures/a1_raw_Temperature_450m_cur_vs_ctd.png">
+                    <img src="./a1/figures/a1_raw_Temperature_450m_cur_vs_ctd.png" loading="lazy">
+                </a>
+                
+                <a href="./a1/figures/a1_raw_Salinity_450m_cur_vs_ctd.png">
+                    <img src="./a1/figures/a1_raw_Salinity_450m_cur_vs_ctd.png" loading="lazy">
+                </a>
+                
+                
+            </div>
+        </div>
+        
     </div>
 
     <div id="daily-mean-data-content" class="subtab-content">
@@ -397,8 +504,8 @@
                 
                 
                 
-                <a href="./e01/figures/e01_daily_mean_ts_95m.png">
-                    <img src="./e01/figures/e01_daily_mean_ts_95m.png" loading="lazy">
+                <a href="./e01/figures/e01_daily_mean_ts_92m.png">
+                    <img src="./e01/figures/e01_daily_mean_ts_92m.png" loading="lazy">
                 </a>
                 
                 
@@ -443,6 +550,50 @@
             </div>
         </div>
         
+        <div id="daily-mean-data-a1" class="station-content a1">
+            <div class="grouped-plots">
+                
+
+                
+                
+                <a href="./a1/figures/a1_daily_mean_ts_35m.png">
+                    <img src="./a1/figures/a1_daily_mean_ts_35m.png" loading="lazy">
+                </a>
+                
+                
+                
+                <a href="./a1/figures/a1_daily_mean_ts_100m.png">
+                    <img src="./a1/figures/a1_daily_mean_ts_100m.png" loading="lazy">
+                </a>
+                
+                
+                
+                <a href="./a1/figures/a1_daily_mean_ts_180m.png">
+                    <img src="./a1/figures/a1_daily_mean_ts_180m.png" loading="lazy">
+                </a>
+                
+                
+                
+                <a href="./a1/figures/a1_daily_mean_ts_300m.png">
+                    <img src="./a1/figures/a1_daily_mean_ts_300m.png" loading="lazy">
+                </a>
+                
+                
+                
+                <a href="./a1/figures/a1_daily_mean_ts_400m.png">
+                    <img src="./a1/figures/a1_daily_mean_ts_400m.png" loading="lazy">
+                </a>
+                
+                
+                
+                <a href="./a1/figures/a1_daily_mean_ts_450m.png">
+                    <img src="./a1/figures/a1_daily_mean_ts_450m.png" loading="lazy">
+                </a>
+                
+                
+            </div>
+        </div>
+        
     </div>
 
     <div id="daily-climatologies-content" class="subtab-content">
@@ -463,8 +614,8 @@
                     <img src="./e01/figures/e01_climatology_1990-2020_ts_75m.png" loading="lazy">
                 </a>
                 
-                <a href="./e01/figures/e01_climatology_1990-2020_ts_95m.png">
-                    <img src="./e01/figures/e01_climatology_1990-2020_ts_95m.png" loading="lazy">
+                <a href="./e01/figures/e01_climatology_1990-2020_ts_92m.png">
+                    <img src="./e01/figures/e01_climatology_1990-2020_ts_92m.png" loading="lazy">
                 </a>
                 
             </div>
@@ -497,6 +648,37 @@
             </div>
         </div>
         
+        <div id="daily-climatologies-a1" class="station-content a1">
+            <div class="grouped-plots">
+                
+                
+                <a href="./a1/figures/a1_climatology_1991-2020_ts_35m.png">
+                    <img src="./a1/figures/a1_climatology_1991-2020_ts_35m.png" loading="lazy">
+                </a>
+                
+                <a href="./a1/figures/a1_climatology_1991-2020_ts_100m.png">
+                    <img src="./a1/figures/a1_climatology_1991-2020_ts_100m.png" loading="lazy">
+                </a>
+                
+                <a href="./a1/figures/a1_climatology_1991-2020_ts_180m.png">
+                    <img src="./a1/figures/a1_climatology_1991-2020_ts_180m.png" loading="lazy">
+                </a>
+                
+                <a href="./a1/figures/a1_climatology_1991-2020_ts_300m.png">
+                    <img src="./a1/figures/a1_climatology_1991-2020_ts_300m.png" loading="lazy">
+                </a>
+                
+                <a href="./a1/figures/a1_climatology_1991-2020_ts_400m.png">
+                    <img src="./a1/figures/a1_climatology_1991-2020_ts_400m.png" loading="lazy">
+                </a>
+                
+                <a href="./a1/figures/a1_climatology_1991-2020_ts_450m.png">
+                    <img src="./a1/figures/a1_climatology_1991-2020_ts_450m.png" loading="lazy">
+                </a>
+                
+            </div>
+        </div>
+        
     </div>
 
     <div id="daily-mean-anomalies-content" class="subtab-content">
@@ -517,8 +699,8 @@
                     <img src="./e01/figures/e01_daily_anom_ts_75m.png" loading="lazy">
                 </a>
                 
-                <a href="./e01/figures/e01_daily_anom_ts_95m.png">
-                    <img src="./e01/figures/e01_daily_anom_ts_95m.png" loading="lazy">
+                <a href="./e01/figures/e01_daily_anom_ts_92m.png">
+                    <img src="./e01/figures/e01_daily_anom_ts_92m.png" loading="lazy">
                 </a>
                 
             </div>
@@ -551,6 +733,37 @@
             </div>
         </div>
         
+        <div id="daily-mean-anomalies-a1" class="station-content a1">
+            <div class="grouped-plots">
+                
+                
+                <a href="./a1/figures/a1_daily_anom_ts_35m.png">
+                    <img src="./a1/figures/a1_daily_anom_ts_35m.png" loading="lazy">
+                </a>
+                
+                <a href="./a1/figures/a1_daily_anom_ts_100m.png">
+                    <img src="./a1/figures/a1_daily_anom_ts_100m.png" loading="lazy">
+                </a>
+                
+                <a href="./a1/figures/a1_daily_anom_ts_180m.png">
+                    <img src="./a1/figures/a1_daily_anom_ts_180m.png" loading="lazy">
+                </a>
+                
+                <a href="./a1/figures/a1_daily_anom_ts_300m.png">
+                    <img src="./a1/figures/a1_daily_anom_ts_300m.png" loading="lazy">
+                </a>
+                
+                <a href="./a1/figures/a1_daily_anom_ts_400m.png">
+                    <img src="./a1/figures/a1_daily_anom_ts_400m.png" loading="lazy">
+                </a>
+                
+                <a href="./a1/figures/a1_daily_anom_ts_450m.png">
+                    <img src="./a1/figures/a1_daily_anom_ts_450m.png" loading="lazy">
+                </a>
+                
+            </div>
+        </div>
+        
     </div>
 
     <div id="monthly-mean-data-content" class="subtab-content">
@@ -571,8 +784,8 @@
                     <img src="./e01/figures/e01_monthly_mean_ts_75m.png" loading="lazy">
                 </a>
                 
-                <a href="./e01/figures/e01_monthly_mean_ts_95m.png">
-                    <img src="./e01/figures/e01_monthly_mean_ts_95m.png" loading="lazy">
+                <a href="./e01/figures/e01_monthly_mean_ts_92m.png">
+                    <img src="./e01/figures/e01_monthly_mean_ts_92m.png" loading="lazy">
                 </a>
                 
             </div>
@@ -605,6 +818,37 @@
             </div>
         </div>
         
+        <div id="monthly-mean-data-a1" class="station-content a1">
+            <div class="grouped-plots">
+                
+                
+                <a href="./a1/figures/a1_monthly_mean_ts_35m.png">
+                    <img src="./a1/figures/a1_monthly_mean_ts_35m.png" loading="lazy">
+                </a>
+                
+                <a href="./a1/figures/a1_monthly_mean_ts_100m.png">
+                    <img src="./a1/figures/a1_monthly_mean_ts_100m.png" loading="lazy">
+                </a>
+                
+                <a href="./a1/figures/a1_monthly_mean_ts_180m.png">
+                    <img src="./a1/figures/a1_monthly_mean_ts_180m.png" loading="lazy">
+                </a>
+                
+                <a href="./a1/figures/a1_monthly_mean_ts_300m.png">
+                    <img src="./a1/figures/a1_monthly_mean_ts_300m.png" loading="lazy">
+                </a>
+                
+                <a href="./a1/figures/a1_monthly_mean_ts_400m.png">
+                    <img src="./a1/figures/a1_monthly_mean_ts_400m.png" loading="lazy">
+                </a>
+                
+                <a href="./a1/figures/a1_monthly_mean_ts_450m.png">
+                    <img src="./a1/figures/a1_monthly_mean_ts_450m.png" loading="lazy">
+                </a>
+                
+            </div>
+        </div>
+        
     </div>
 
     <div id="monthly-climatologies-content" class="subtab-content">
@@ -625,8 +869,8 @@
                     <img src="./e01/figures/e01_monthly_clim_ts_75m.png" loading="lazy">
                 </a>
                 
-                <a href="./e01/figures/e01_monthly_clim_ts_95m.png">
-                    <img src="./e01/figures/e01_monthly_clim_ts_95m.png" loading="lazy">
+                <a href="./e01/figures/e01_monthly_clim_ts_92m.png">
+                    <img src="./e01/figures/e01_monthly_clim_ts_92m.png" loading="lazy">
                 </a>
                 
             </div>
@@ -659,6 +903,37 @@
             </div>
         </div>
         
+        <div id="monthly-climatologies-a1" class="station-content a1">
+            <div class="grouped-plots">
+                
+                
+                <a href="./a1/figures/a1_monthly_clim_ts_35m.png">
+                    <img src="./a1/figures/a1_monthly_clim_ts_35m.png" loading="lazy">
+                </a>
+                
+                <a href="./a1/figures/a1_monthly_clim_ts_100m.png">
+                    <img src="./a1/figures/a1_monthly_clim_ts_100m.png" loading="lazy">
+                </a>
+                
+                <a href="./a1/figures/a1_monthly_clim_ts_180m.png">
+                    <img src="./a1/figures/a1_monthly_clim_ts_180m.png" loading="lazy">
+                </a>
+                
+                <a href="./a1/figures/a1_monthly_clim_ts_300m.png">
+                    <img src="./a1/figures/a1_monthly_clim_ts_300m.png" loading="lazy">
+                </a>
+                
+                <a href="./a1/figures/a1_monthly_clim_ts_400m.png">
+                    <img src="./a1/figures/a1_monthly_clim_ts_400m.png" loading="lazy">
+                </a>
+                
+                <a href="./a1/figures/a1_monthly_clim_ts_450m.png">
+                    <img src="./a1/figures/a1_monthly_clim_ts_450m.png" loading="lazy">
+                </a>
+                
+            </div>
+        </div>
+        
     </div>
 
     <div id="monthly-mean-anomalies-content" class="subtab-content">
@@ -680,8 +955,8 @@
                     <img src="./e01/figures/e01_monthly_anom_ts_75m.png" loading="lazy">
                 </a>
                 
-                <a href="./e01/figures/e01_monthly_anom_ts_95m.png">
-                    <img src="./e01/figures/e01_monthly_anom_ts_95m.png" loading="lazy">
+                <a href="./e01/figures/e01_monthly_anom_ts_92m.png">
+                    <img src="./e01/figures/e01_monthly_anom_ts_92m.png" loading="lazy">
                 </a>
                 
             </div>
@@ -709,6 +984,37 @@
                 
                 <a href="./scott2/figures/scott2_monthly_anom_ts_280m.png">
                     <img src="./scott2/figures/scott2_monthly_anom_ts_280m.png" loading="lazy">
+                </a>
+                
+            </div>
+        </div>
+        
+        <div id="monthly-mean-anomalies-a1" class="station-content a1">
+            <div class="grouped-plots">
+                
+                
+                <a href="./a1/figures/a1_monthly_anom_ts_35m.png">
+                    <img src="./a1/figures/a1_monthly_anom_ts_35m.png" loading="lazy">
+                </a>
+                
+                <a href="./a1/figures/a1_monthly_anom_ts_100m.png">
+                    <img src="./a1/figures/a1_monthly_anom_ts_100m.png" loading="lazy">
+                </a>
+                
+                <a href="./a1/figures/a1_monthly_anom_ts_180m.png">
+                    <img src="./a1/figures/a1_monthly_anom_ts_180m.png" loading="lazy">
+                </a>
+                
+                <a href="./a1/figures/a1_monthly_anom_ts_300m.png">
+                    <img src="./a1/figures/a1_monthly_anom_ts_300m.png" loading="lazy">
+                </a>
+                
+                <a href="./a1/figures/a1_monthly_anom_ts_400m.png">
+                    <img src="./a1/figures/a1_monthly_anom_ts_400m.png" loading="lazy">
+                </a>
+                
+                <a href="./a1/figures/a1_monthly_anom_ts_450m.png">
+                    <img src="./a1/figures/a1_monthly_anom_ts_450m.png" loading="lazy">
                 </a>
                 
             </div>
