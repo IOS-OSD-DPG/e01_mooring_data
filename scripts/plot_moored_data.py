@@ -687,7 +687,6 @@ def plot_daily_clim(df_daily_mean: pd.DataFrame, output_dir: str, station: str):
                                  bottom=True, top=True, left=True, right=True)
             ax[ax_j].tick_params(which='minor', direction='in',
                                  bottom=True, top=True, left=True, right=True)
-            ax[ax_j].set_xlim((PLOT_DATES[station][0], PLOT_DATES[station][1]))
 
         # Save figure
         standard_plot_title(station, depth)
@@ -976,8 +975,6 @@ def plot_monthly_clim(df_daily_mean: pd.DataFrame, output_dir: str, station: str
                                  bottom=True, top=True, left=True, right=True)
             ax[ax_j].tick_params(which='minor', direction='in',
                                  bottom=True, top=True, left=True, right=True)
-
-            ax[ax_j].set_xlim((PLOT_DATES[station][0], PLOT_DATES[station][1]))
 
         # Save figure
         standard_plot_title(station, depth)
