@@ -168,8 +168,8 @@ datatypes:
             <div class="grouped-plots">
 
                 {% for depth in station.depth_list %}
-                <a href="./{{ station.id }}/figures/{{ station.id }}_climatology_{{ station.climatology_years }}_ts_{{ depth }}m.png">
-                    <img src="./{{ station.id }}/figures/{{ station.id }}_climatology_{{ station.climatology_years }}_ts_{{ depth }}m.png" loading="lazy">
+                <a href="./{{ station.id }}/figures/{{ station.id }}_daily_clim_{{ station.climatology_years }}_ts_{{ depth }}m.png">
+                    <img src="./{{ station.id }}/figures/{{ station.id }}_daily_clim_{{ station.climatology_years }}_ts_{{ depth }}m.png" loading="lazy">
                 </a>
                 {% endfor %}
             </div>
@@ -225,8 +225,8 @@ datatypes:
             <div class="grouped-plots">
 
                 {% for depth in station.depth_list %}
-                <a href="./{{ station.id }}/figures/{{ station.id }}_monthly_clim_ts_{{ depth }}m.png">
-                    <img src="./{{ station.id }}/figures/{{ station.id }}_monthly_clim_ts_{{ depth }}m.png" loading="lazy">
+                <a href="./{{ station.id }}/figures/{{ station.id }}_monthly_clim_{{ station.climatology_years }}_ts_{{ depth }}m.png">
+                    <img src="./{{ station.id }}/figures/{{ station.id }}_monthly_clim_{{ station.climatology_years }}_ts_{{ depth }}m.png" loading="lazy">
                 </a>
                 {% endfor %}
             </div>

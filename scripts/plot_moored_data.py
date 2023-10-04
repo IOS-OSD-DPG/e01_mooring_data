@@ -555,6 +555,7 @@ def compute_daily_clim(df_daily_mean: pd.DataFrame, station: str):
         # Default, subject to change for other stations depending on data availability
         start_year = 1991
         end_year = 2020
+
     year_range_mask = np.array(
         [
             start_year <= x.year <= end_year for x in df_daily_mean.loc[:, 'Datetime']
@@ -629,7 +630,7 @@ def plot_daily_clim(df_daily_mean: pd.DataFrame, output_dir: str, station: str):
         plt.savefig(
             os.path.join(
                 output_dir,
-                f'{station.lower()}_climatology_{start_year}-{end_year}_ts_{depth}m.png'
+                f'{station.lower()}_daily_clim_{start_year}-{end_year}_ts_{depth}m.png'
             )
         )
         plt.close(fig)
@@ -838,7 +839,24 @@ def compute_monthly_clim(df_daily_mean: pd.DataFrame, station: str):
 
     months = np.arange(1, 12 + 1)
 
-    year_range_mask = np.array([1990 <= dt.year <= 2020 for dt in unique_months])
+    # Make mask for years 1990-2020 ONLY
+    if station == 'E01':
+        start_year = 1990
+        end_year = 2020
+    elif station == 'A1':
+        # No shallow data in 2006, 2018, 2019, 2020
+        start_year = 1991
+        end_year = 2020
+    elif station == 'SCOTT2':
+        start_year = 2016  # the year observations started
+        # Choose whichever is earlier
+        end_year = min([start_year + 30, df_daily_mean.loc[:, 'Datetime'].max().year])
+    else:
+        # Default, subject to change for other stations depending on data availability
+        start_year = 1991
+        end_year = 2020
+
+    year_range_mask = np.array([start_year <= dt.year <= end_year for dt in unique_months])
 
     # Initialize arrays to hold climatological values
     monthly_clim_T = np.zeros((len(BIN_DEPTHS[station]), len(months)))
@@ -849,7 +867,7 @@ def compute_monthly_clim(df_daily_mean: pd.DataFrame, station: str):
             monthly_clim_T[j, i] = np.nanmean(monthly_mean_T[j, (month_only == month) & year_range_mask])
             monthly_clim_S[j, i] = np.nanmean(monthly_mean_S[j, (month_only == month) & year_range_mask])
 
-    return months, monthly_clim_T, monthly_clim_S
+    return months, monthly_clim_T, monthly_clim_S, start_year, end_year
 
 
 def plot_monthly_clim(df_daily_mean: pd.DataFrame, output_dir: str, station: str):
@@ -862,7 +880,7 @@ def plot_monthly_clim(df_daily_mean: pd.DataFrame, output_dir: str, station: str
     """
     xtick_labels = ['Jan', 'Feb', 'Mar', 'Apr', 'May', 'Jun', 'Jul', 'Aug', 'Sep', 'Oct', 'Nov', 'Dec']
 
-    months, monthly_clim_T, monthly_clim_S = compute_monthly_clim(df_daily_mean, station)
+    months, monthly_clim_T, monthly_clim_S, start_year, end_year = compute_monthly_clim(df_daily_mean, station)
 
     range_T = (np.nanmin(monthly_clim_T) - 0.5, np.nanmax(monthly_clim_T) + 0.5)
     range_S = (np.nanmin(monthly_clim_S) - 0.5, np.nanmax(monthly_clim_S) + 0.5)
@@ -898,7 +916,9 @@ def plot_monthly_clim(df_daily_mean: pd.DataFrame, output_dir: str, station: str
         # Save figure
         standard_plot_title(station, depth)
         plt.tight_layout()
-        plt.savefig(os.path.join(output_dir, f'{station.lower()}_monthly_clim_ts_{depth}m.png'))
+        plt.savefig(
+            os.path.join(output_dir, f'{station.lower()}_monthly_clim_{start_year}-{end_year}_ts_{depth}m.png')
+        )
         plt.close(fig)
     return
 
