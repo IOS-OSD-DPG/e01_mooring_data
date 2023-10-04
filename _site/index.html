@@ -277,12 +277,11 @@
 
     <div id="instrument-depths-content" class="subtab-content">
         <h2>Instrument Depths</h2>
-        <p>
-            Plot showing the depths of CTDs and current meters on the mooring line for each deployment.
-            Each point represents a CTD or current meter.
-        </p>
+
         
         <div id="instrument-depths-e01" class="station-content e01">
+            <p>Plot showing the depths of CTDs and current meters on the mooring line for each deployment.  Each point represents a CTD or current meter.  The grey areas denote the coverage of each bin.  Bins are centered on the depths 35m, 75m, and 92m with size 10m.
+</p>
             <a href="./e01/figures/e01_cur_ctd_depths.png">
                 <img src="./e01/figures/e01_cur_ctd_depths.png"
                      loading="lazy" width="600" height="450">
@@ -290,6 +289,8 @@
         </div>
         
         <div id="instrument-depths-scott2" class="station-content scott2">
+            <p>Plot showing the depths of CTDs and current meters on the mooring line for each deployment.  Each point represents a CTD or current meter.  The grey areas denote the coverage of each bin.  Bins are centered on the depths 40m, 100m, 150m, 200m, and 280m with size 10m.
+</p>
             <a href="./scott2/figures/scott2_cur_ctd_depths.png">
                 <img src="./scott2/figures/scott2_cur_ctd_depths.png"
                      loading="lazy" width="600" height="450">
@@ -297,6 +298,8 @@
         </div>
         
         <div id="instrument-depths-a1" class="station-content a1">
+            <p>Plot showing the depths of CTDs and current meters on the mooring line for each deployment.  Each point represents a CTD or current meter.  The grey areas denote the coverage of each bin.  Bins are centered on the depths 35m, 100m, 180m, 300m, and 400m with size 20m, with one bottom bin containing data between 450m and 520m; i.e., not from moorings displaced into significantly deeper water by boat strikes.
+</p>
             <a href="./a1/figures/a1_cur_ctd_depths.png">
                 <img src="./a1/figures/a1_cur_ctd_depths.png"
                      loading="lazy" width="600" height="450">
@@ -307,16 +310,12 @@
 
     <div id="raw-data-content" class="subtab-content">
         <h2>Raw Data</h2>
-        <p>
-            The data were binned into 10m bins centred on the standard instrument depths
-            for each station to make these plots. Not all the available data fit into these
-            bins. Data are separated by instrument (current meter or CTD) and variable
-            (temperature or salinity).
-        </p>
         
+
         <div id="raw-data-e01" class="station-content e01">
+            <p>The data were binned into 10m bins centered on the depths 35m, 75m, and 92m to make these plots.  Not all data from station E01 fit into these bins, particularly data from earlier years.  Data are separated by instrument (current meter or CTD) and variable (temperature or salinity).
+</p>
             <div class="grouped-plots">
-                
 
                 
                 
@@ -352,9 +351,11 @@
             </div>
         </div>
         
+
         <div id="raw-data-scott2" class="station-content scott2">
+            <p>The data were binned into 10m bins centered on the depths 40m, 100m, 150m, 200m, and 280m to make these plots.  All data from station SCOTT2 fit into these bins.  Data are separated by instrument (current meter or CTD) and variable (temperature or salinity).
+</p>
             <div class="grouped-plots">
-                
 
                 
                 
@@ -410,9 +411,11 @@
             </div>
         </div>
         
+
         <div id="raw-data-a1" class="station-content a1">
+            <p>With one exception, the data were binned into 20m bins centered on the depths 35m, 100m, 180m, 300m, and 400m to make these plots.  A bottom bin containing data below 450m was also used, excluding data from moorings displaced into significantly deeper water by boat strikes. Not all data from station E01 fit into these bins, particularly data from earlier years.  Data are separated by instrument (current meter or CTD) and variable (temperature or salinity).
+</p>
             <div class="grouped-plots">
-                
 
                 
                 
@@ -482,18 +485,17 @@
 
     <div id="daily-mean-data-content" class="subtab-content">
         <h2>Daily Mean Data</h2>
-        <p>
-            Filler
-        </p>
         
+
         <div id="daily-mean-data-e01" class="station-content e01">
+            <p>Current meter data from before 2007 and CTD data from after 2007 were combined and presented in these plots.  The data were binned into 10m bins centred on the depths 35m, 75m, and 95m to make these plots.  Daily means were computed for each day that temperature or salinity data were present. SST from cast CTD data is included in the plot for 35m temperature, in black.  The cast SST data contain the first observation from each cast and are not averaged.  The majority of the cast SST data are from the top 10m of the water column.
+</p>
             <div class="grouped-plots">
-                
 
                 
                 
-                <a href="./e01/figures/e01_daily_mean_ts_35m_SST.png">
-                    <img src="./e01/figures/e01_daily_mean_ts_35m_SST.png" loading="lazy">
+                <a href="./e01/figures/e01_daily_mean_ts_35m.png">
+                    <img src="./e01/figures/e01_daily_mean_ts_35m.png" loading="lazy">
                 </a>
                 
                 
@@ -512,9 +514,11 @@
             </div>
         </div>
         
+
         <div id="daily-mean-data-scott2" class="station-content scott2">
+            <p>Only CTD data were used, given that all available current meter data overlapped with the CTD data.   The data were binned into 10m bins centered on the depths 40m, 100m, 150m, 200m, and 280m to make these plots.
+</p>
             <div class="grouped-plots">
-                
 
                 
                 
@@ -550,9 +554,11 @@
             </div>
         </div>
         
+
         <div id="daily-mean-data-a1" class="station-content a1">
+            <p>Current meter data from before 2008-04-03 and CTD data from after this date were combined and presented in these plots.  The data were binned into 20m bins centered on the depths 35m, 100m, 180m, 300m, and 400m, with a 450m-and-below bottom bin, to make these plots.
+</p>
             <div class="grouped-plots">
-                
 
                 
                 
@@ -598,13 +604,14 @@
 
     <div id="daily-climatologies-content" class="subtab-content">
         <h2>Daily Climatologies</h2>
-        <p>
-            Filler
-        </p>
+
         
+
         <div id="daily-climatologies-e01" class="station-content e01">
+            <p>The daily climatologies were computed from the daily mean data by taking the average for each day of the year over the years 1990-2020.  This is a 30-year climatology due to the year 2007 having no temperature or salinity observations.
+</p>
             <div class="grouped-plots">
-                
+
                 
                 <a href="./e01/figures/e01_climatology_1990-2020_ts_35m.png">
                     <img src="./e01/figures/e01_climatology_1990-2020_ts_35m.png" loading="lazy">
@@ -621,9 +628,12 @@
             </div>
         </div>
         
+
         <div id="daily-climatologies-scott2" class="station-content scott2">
+            <p>The daily climatologies were computed from the daily mean data by taking the average for each day of the year over the years 2016-2022.
+</p>
             <div class="grouped-plots">
-                
+
                 
                 <a href="./scott2/figures/scott2_climatology_2016-2022_ts_40m.png">
                     <img src="./scott2/figures/scott2_climatology_2016-2022_ts_40m.png" loading="lazy">
@@ -648,9 +658,12 @@
             </div>
         </div>
         
+
         <div id="daily-climatologies-a1" class="station-content a1">
+            <p>The daily climatologies were computed from the daily mean data by taking the average for each day of the year over the years 1991-2020.
+</p>
             <div class="grouped-plots">
-                
+
                 
                 <a href="./a1/figures/a1_climatology_1991-2020_ts_35m.png">
                     <img src="./a1/figures/a1_climatology_1991-2020_ts_35m.png" loading="lazy">
@@ -683,13 +696,14 @@
 
     <div id="daily-mean-anomalies-content" class="subtab-content">
         <h2>Daily Mean Anomalies</h2>
-        <p>
-            Filler
-        </p>
+
         
+
         <div id="daily-mean-anomalies-e01" class="station-content e01">
+            <p>The daily mean anomalies were computed by subtracting the daily climatologies for the period 1990-2020 from the daily mean data.
+</p>
             <div class="grouped-plots">
-                
+
                 
                 <a href="./e01/figures/e01_daily_anom_ts_35m.png">
                     <img src="./e01/figures/e01_daily_anom_ts_35m.png" loading="lazy">
@@ -706,9 +720,12 @@
             </div>
         </div>
         
+
         <div id="daily-mean-anomalies-scott2" class="station-content scott2">
+            <p>The daily mean anomalies were computed by subtracting the daily climatologies for the period 2016-2022 from the daily mean data.
+</p>
             <div class="grouped-plots">
-                
+
                 
                 <a href="./scott2/figures/scott2_daily_anom_ts_40m.png">
                     <img src="./scott2/figures/scott2_daily_anom_ts_40m.png" loading="lazy">
@@ -733,9 +750,12 @@
             </div>
         </div>
         
+
         <div id="daily-mean-anomalies-a1" class="station-content a1">
+            <p>Daily mean anomalies were computed by subtracting the daily climatologies for the period 1991-2020 from the daily mean data.
+</p>
             <div class="grouped-plots">
-                
+
                 
                 <a href="./a1/figures/a1_daily_anom_ts_35m.png">
                     <img src="./a1/figures/a1_daily_anom_ts_35m.png" loading="lazy">
@@ -768,13 +788,14 @@
 
     <div id="monthly-mean-data-content" class="subtab-content">
         <h2>Monthly Mean Data</h2>
-        <p>
-            Monthly mean data were computed from daily mean data.
-        </p>
+
         
+
         <div id="monthly-mean-data-e01" class="station-content e01">
+            <p>The monthly mean data were computed from daily mean data.
+</p>
             <div class="grouped-plots">
-                
+
                 
                 <a href="./e01/figures/e01_monthly_mean_ts_35m.png">
                     <img src="./e01/figures/e01_monthly_mean_ts_35m.png" loading="lazy">
@@ -791,9 +812,12 @@
             </div>
         </div>
         
+
         <div id="monthly-mean-data-scott2" class="station-content scott2">
+            <p>The monthly mean data were computed from daily mean data.
+</p>
             <div class="grouped-plots">
-                
+
                 
                 <a href="./scott2/figures/scott2_monthly_mean_ts_40m.png">
                     <img src="./scott2/figures/scott2_monthly_mean_ts_40m.png" loading="lazy">
@@ -818,9 +842,12 @@
             </div>
         </div>
         
+
         <div id="monthly-mean-data-a1" class="station-content a1">
+            <p>Monthly mean data were computed from daily mean data.
+</p>
             <div class="grouped-plots">
-                
+
                 
                 <a href="./a1/figures/a1_monthly_mean_ts_35m.png">
                     <img src="./a1/figures/a1_monthly_mean_ts_35m.png" loading="lazy">
@@ -853,13 +880,14 @@
 
     <div id="monthly-climatologies-content" class="subtab-content">
         <h2>Monthly Climatologies</h2>
-        <p>
-            Filler
-        </p>
+
         
+
         <div id="monthly-climatologies-e01" class="station-content e01">
+            <p>The monthly climatologies were computed from the monthly mean data by taking the average for each month of the year over the years 1990-2020.  This is a 30-year climatology due to the year 2007 having no temperature or salinity observations.
+</p>
             <div class="grouped-plots">
-                
+
                 
                 <a href="./e01/figures/e01_monthly_clim_ts_35m.png">
                     <img src="./e01/figures/e01_monthly_clim_ts_35m.png" loading="lazy">
@@ -876,9 +904,12 @@
             </div>
         </div>
         
+
         <div id="monthly-climatologies-scott2" class="station-content scott2">
+            <p>The monthly climatologies were computed from the monthly mean data by taking the average for each month of the year over the years 2016-2022.
+</p>
             <div class="grouped-plots">
-                
+
                 
                 <a href="./scott2/figures/scott2_monthly_clim_ts_40m.png">
                     <img src="./scott2/figures/scott2_monthly_clim_ts_40m.png" loading="lazy">
@@ -903,9 +934,12 @@
             </div>
         </div>
         
+
         <div id="monthly-climatologies-a1" class="station-content a1">
+            <p>The monthly climatologies were computed from the monthly mean data by taking the average for each month of the year over the years 1991-2020.
+</p>
             <div class="grouped-plots">
-                
+
                 
                 <a href="./a1/figures/a1_monthly_clim_ts_35m.png">
                     <img src="./a1/figures/a1_monthly_clim_ts_35m.png" loading="lazy">
@@ -938,14 +972,14 @@
 
     <div id="monthly-mean-anomalies-content" class="subtab-content">
         <h2>Monthly Mean Anomalies</h2>
-        <p>
-            The monthly mean anomalies are the difference between the monthly
-            mean values and the monthly climatological values.
-        </p>
+
         
+
         <div id="monthly-mean-anomalies-e01" class="station-content e01">
+            <p>The monthly mean anomalies were computed by subtracting the monthly climatologies for the period 1990-2020 from the monthly mean data.
+</p>
             <div class="grouped-plots">
-                
+
                 
                 <a href="./e01/figures/e01_monthly_anom_ts_35m.png">
                     <img src="./e01/figures/e01_monthly_anom_ts_35m.png" loading="lazy">
@@ -962,9 +996,12 @@
             </div>
         </div>
         
+
         <div id="monthly-mean-anomalies-scott2" class="station-content scott2">
+            <p>The monthly mean anomalies were computed by subtracting the monthly climatologies for the period 2016-2022 from the monthly mean data.
+</p>
             <div class="grouped-plots">
-                
+
                 
                 <a href="./scott2/figures/scott2_monthly_anom_ts_40m.png">
                     <img src="./scott2/figures/scott2_monthly_anom_ts_40m.png" loading="lazy">
@@ -989,9 +1026,11 @@
             </div>
         </div>
         
+
         <div id="monthly-mean-anomalies-a1" class="station-content a1">
+            <p>The monthly mean anomalies were computed by subtracting the monthly climatologies for the period 1991-2020 from the monthly mean data.</p>
             <div class="grouped-plots">
-                
+
                 
                 <a href="./a1/figures/a1_monthly_anom_ts_35m.png">
                     <img src="./a1/figures/a1_monthly_anom_ts_35m.png" loading="lazy">
