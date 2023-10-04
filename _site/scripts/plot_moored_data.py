@@ -10,9 +10,14 @@ import xarray as xr
 
 VARS = ['Temperature', 'Salinity', 'Oxygen:Dissolved:SBE']
 
-BIN_DEPTHS = {'E01': [35, 75, 92],
-              'A1': [35, 100, 180, 300, 400, 450],
-              'SCOTT2': [40, 100, 150, 200, 280]}  # Bin the data to +/- 5m around each bin centre
+BIN_INFO = {
+    'E01': {'max_depth': 110, 'bin_depths': [35, 75, 92], 'bin_size': 10},
+    'A1': {'max_depth': 620, 'bin_depths': [35, 100, 180, 300, 400, 450], 'bin_size': 10},
+    'SCOTT2': {'max_depth': 300, 'bin_depths': [40, 100, 150, 200, 280], 'bin_size': 20}
+}
+
+# Capture all data at A1 between 450m and 520m depth
+A1_BOTTOM_BIN_MAX = 520
 
 CURRENT_YEAR = datetime.datetime.now().year
 
@@ -24,6 +29,67 @@ PLOT_DATES = {'E01': [pd.to_datetime(x) for x in ['1979-01-01', f'{CURRENT_YEAR}
 # SSS (sea surface salinity) not used yet
 VAR_CODES = {'Temperature': {'codes': ['TEMPS901', 'TEMPS601'], 'units': 'C'},
              'Salinity': {'codes': [], 'units': 'PSS-78'}}
+
+
+def plot_instrument_depths(shell_data_dir: str, output_dir: str, station: str):
+    """
+    Visually inspect where the "standard" instrument depths are overall for each station
+    :param shell_data_dir:
+    :param output_dir:
+    :param station:
+    :return:
+    """
+    ybot = BIN_INFO[station]['max_depth']
+
+    files = glob.glob(shell_data_dir + '*.*')
+    depths = np.array(
+        [int(os.path.basename(x).split('_')[3].split('.')[0][:-1]) for x in files]
+    )
+    dep_years = np.array(
+        [int(os.path.basename(x).split('_')[1][:4]) for x in files]
+    )
+
+    # Make masks for CUR vs CTD data
+    # Capture both .ctd and .CTD if existing
+    is_CTD = np.array([x.lower().endswith('.ctd') for x in files])
+
+    fig, ax = plt.subplots()
+    ax.scatter(dep_years[is_CTD], depths[is_CTD], label='CTD', c='blue',
+               alpha=0.5, zorder=3.3)
+    ax.scatter(dep_years[~is_CTD], depths[~is_CTD], label='CUR', c='orange',
+               alpha=0.5, zorder=3.2)
+    ax.legend(loc='upper center', bbox_to_anchor=(0.5, 1.05), ncols=2)
+
+    # get xlim before filling bin depths so that bin depths span the whole plot width
+    xlim = ax.get_xlim()
+
+    # Add horizontal lines to show bin size and location
+    half_bin_size = BIN_INFO[station]['bin_size'] / 2
+    for sbin in BIN_INFO[station]['bin_depths']:
+        if station == 'a1' and sbin == 450:
+            # For station A1, capture all data from 450 to 520m depth (exclude 613m data)
+            ax.fill_between(x=[min(dep_years) - 10, max(dep_years) + 10],
+                            y1=sbin,
+                            y2=A1_BOTTOM_BIN_MAX, color='lightgrey', alpha=0.5,
+                            zorder=0.1)
+        else:
+            ax.fill_between(x=[min(dep_years) - 10, max(dep_years) + 10],
+                            y1=sbin - half_bin_size,
+                            y2=sbin + half_bin_size, color='lightgrey', alpha=0.5,
+                            zorder=0.1)
+        # ax.axhline(y=sbin - half_bin_size, color='lightgrey', alpha=0.5)
+        # ax.axhline(y=sbin + half_bin_size, color='lightgrey', alpha=0.5)
+
+    ax.set_xlim(xlim)
+    ax.set_ylim((ybot, -10))  # add buffer to top of plot for legend space
+    ax.set_ylabel('Depth (m)')
+    ax.tick_params(which='major', direction='in', bottom=True, top=True, left=True, right=True)
+    plt.title(station.upper(), loc='left')
+    plt.tight_layout()
+    plt.savefig(os.path.join(output_dir, f'{station}_cur_ctd_depths.png'), dpi=300)
+    plt.close()
+
+    return
 
 
 def add_datetime(df: pd.DataFrame):
@@ -254,7 +320,7 @@ def plot_raw_TS_by_inst(df: pd.DataFrame, output_dir: str, station: str, half_bi
     #     df.loc[:, 'Datetime_UTC'].max() + pd.Timedelta('30 days')
     # )
 
-    for depth in BIN_DEPTHS[station]:
+    for depth in BIN_INFO[station]['bin_depths']:
         if station == 'A1' and depth == 450:
             depth_mask = ((df.loc[:, 'Depth'].to_numpy() >= 450) &
                           (df.loc[:, 'Depth'].to_numpy() <= 520))
@@ -315,7 +381,7 @@ def plot_raw_time_series(df: pd.DataFrame, output_dir: str, station: str, half_b
 
     units = ['C', 'PSS-78', 'mL/L']
     y_axis_limits = [(4, 19), (26, 38), (0, 7.5)]
-    for depth in BIN_DEPTHS[station]:
+    for depth in BIN_INFO[station]['bin_depths']:
         if station == 'A1' and depth == 450:
             depth_mask = ((df.loc[:, 'Depth'].to_numpy() >= 450) &
                           (df.loc[:, 'Depth'].to_numpy() <= 520))
@@ -376,15 +442,15 @@ def compute_daily_means(df: pd.DataFrame, output_dir: str, station: str, half_bi
     # obs_days_of_year = np.array([x.timetuple().tm_yday for x in df.loc[indices, 'Datetime']])
 
     # Initialize an array to hold the daily means for each of the three binned depths
-    daily_means_T = np.zeros((len(BIN_DEPTHS[station]), len(unique_dates)))
-    daily_means_S = np.zeros((len(BIN_DEPTHS[station]), len(unique_dates)))
+    daily_means_T = np.zeros((len(BIN_INFO[station]['bin_depths']), len(unique_dates)))
+    daily_means_S = np.zeros((len(BIN_INFO[station]['bin_depths']), len(unique_dates)))
 
     # Initialize data dictionary to pass to a csv file later
     data_dict = {'Datetime': unique_datetimes}
 
     # Iterate through the depths 35, 75, 95m
-    for i in range(len(BIN_DEPTHS[station])):
-        depth = BIN_DEPTHS[station][i]
+    for i in range(len(BIN_INFO[station]['bin_depths'])):
+        depth = BIN_INFO[station]['bin_depths'][i]
         print(depth)
         if station == 'A1' and depth == 450:
             depth_mask = ((df.loc[:, 'Depth'].to_numpy() >= 450) &
@@ -481,7 +547,7 @@ def plot_daily_means(unique_datetimes, daily_means_T, daily_means_S, output_dir:
     range_S = (np.nanmin(daily_means_S) - 0.5, np.nanmax(daily_means_S) + 0.5)
 
     # Plot the data
-    for i, depth in enumerate(BIN_DEPTHS[station]):
+    for i, depth in enumerate(BIN_INFO[station]['bin_depths']):
         fig, ax = plt.subplots(2, figsize=(10, 7), sharex=True)
 
         ax[0].scatter(unique_datetimes, daily_means_T[i], c='tab:red', marker='.', s=2,
@@ -563,11 +629,11 @@ def compute_daily_clim(df_daily_mean: pd.DataFrame, station: str):
     )
 
     # Initialize arrays for containing temperature and salinity climatological values
-    daily_clim_T = np.zeros((len(BIN_DEPTHS[station]), len(days_of_year)))
-    daily_clim_S = np.zeros((len(BIN_DEPTHS[station]), len(days_of_year)))
+    daily_clim_T = np.zeros((len(BIN_INFO[station]['bin_depths']), len(days_of_year)))
+    daily_clim_S = np.zeros((len(BIN_INFO[station]['bin_depths']), len(days_of_year)))
 
     # Populate the daily climatology array
-    for i, depth in enumerate(BIN_DEPTHS[station]):
+    for i, depth in enumerate(BIN_INFO[station]['bin_depths']):
         for day_num in days_of_year:
             day_num_mask = df_daily_mean.loc[:, 'Day_of_year'].to_numpy() == day_num
 
@@ -596,7 +662,7 @@ def plot_daily_clim(df_daily_mean: pd.DataFrame, output_dir: str, station: str):
     range_T = (np.nanmin(daily_clim_T) - 0.5, np.nanmax(daily_clim_T) + 0.5)
     range_S = (np.nanmin(daily_clim_S) - 0.5, np.nanmax(daily_clim_S) + 0.5)
 
-    for i, depth in enumerate(BIN_DEPTHS[station]):
+    for i, depth in enumerate(BIN_INFO[station]['bin_depths']):
         fig, ax = plt.subplots(2, figsize=(10, 7), sharex=True)
 
         ax[0].plot(days_of_year, daily_clim_T[i, :], c='tab:red',
@@ -663,7 +729,7 @@ def compute_daily_anom(df_daily_mean: pd.DataFrame, station: str):
             df_anom.loc[:, col] = np.repeat(np.nan, len(df_anom))
 
     # Subtract the daily climatologies from the daily mean data
-    for i, depth in enumerate(BIN_DEPTHS[station]):
+    for i, depth in enumerate(BIN_INFO[station]['bin_depths']):
         # Iterate through the days of year in 1-365
         for day_num in days_of_year:
             # Create a mask for the day of year
@@ -689,8 +755,8 @@ def plot_daily_anom(df_daily_mean: pd.DataFrame, output_dir: str, station: str):
     # Make plots for separate depths
 
     # Make the ranges centred on zero
-    T_columns = [f'Temperature_{d}m' for d in BIN_DEPTHS[station]]
-    S_columns = [f'Salinity_{d}m' for d in BIN_DEPTHS[station]]
+    T_columns = [f'Temperature_{d}m' for d in BIN_INFO[station]['bin_depths']]
+    S_columns = [f'Salinity_{d}m' for d in BIN_INFO[station]['bin_depths']]
     abs_max_T = np.nanmax(
         df_anom.loc[:, T_columns].abs()
     )
@@ -700,7 +766,7 @@ def plot_daily_anom(df_daily_mean: pd.DataFrame, output_dir: str, station: str):
     range_T = (-abs_max_T - 0.5, abs_max_T + 0.5)
     range_S = (-abs_max_S - 0.5, abs_max_S + 0.5)
 
-    for i, depth in enumerate(BIN_DEPTHS[station]):
+    for i, depth in enumerate(BIN_INFO[station]['bin_depths']):
         fig, ax = plt.subplots(2, figsize=(10, 7), sharex=True)
 
         ax[0].scatter(df_anom.loc[:, 'Datetime'], df_anom.loc[:, f'Temperature_{depth}m'],
@@ -753,8 +819,8 @@ def compute_monthly_means(df_daily_mean: pd.DataFrame, station: str) -> tuple:
     unique_years.sort()
 
     # Initialize array to hold the monthly mean data
-    monthly_mean_T = np.zeros((len(BIN_DEPTHS[station]), len(unique_years) * len(months)))
-    monthly_mean_S = np.zeros((len(BIN_DEPTHS[station]), len(unique_years) * len(months)))
+    monthly_mean_T = np.zeros((len(BIN_INFO[station]['bin_depths']), len(unique_years) * len(months)))
+    monthly_mean_S = np.zeros((len(BIN_INFO[station]['bin_depths']), len(unique_years) * len(months)))
 
     init_dt_value = df_daily_mean.loc[0, 'Datetime']
     unique_months = np.repeat(init_dt_value, len(unique_years) * len(months))
@@ -765,7 +831,7 @@ def compute_monthly_means(df_daily_mean: pd.DataFrame, station: str) -> tuple:
                 '{}-{:02d}-01'.format(year, month)
             )
             # Iterate through the set depths
-            for i, depth in enumerate(BIN_DEPTHS[station]):
+            for i, depth in enumerate(BIN_INFO[station]['bin_depths']):
                 month_mask = [
                     (dt.year == year) & (dt.month == month) for dt in df_daily_mean.loc[:, 'Datetime']
                 ]
@@ -793,7 +859,7 @@ def plot_monthly_means(df_daily_mean: pd.DataFrame, output_dir: str, station: st
     range_S = (np.nanmin(monthly_mean_S) - 0.5, np.nanmax(monthly_mean_S) + 0.5)
 
     # Iterate through the binned depths
-    for i, depth in enumerate(BIN_DEPTHS[station]):
+    for i, depth in enumerate(BIN_INFO[station]['bin_depths']):
         fig, ax = plt.subplots(2, figsize=(10, 7), sharex=True)
 
         ax[0].plot(unique_months, monthly_mean_T[i, :], c='tab:red', marker='o', markersize=2,
@@ -859,11 +925,11 @@ def compute_monthly_clim(df_daily_mean: pd.DataFrame, station: str):
     year_range_mask = np.array([start_year <= dt.year <= end_year for dt in unique_months])
 
     # Initialize arrays to hold climatological values
-    monthly_clim_T = np.zeros((len(BIN_DEPTHS[station]), len(months)))
-    monthly_clim_S = np.zeros((len(BIN_DEPTHS[station]), len(months)))
+    monthly_clim_T = np.zeros((len(BIN_INFO[station]['bin_depths']), len(months)))
+    monthly_clim_S = np.zeros((len(BIN_INFO[station]['bin_depths']), len(months)))
 
     for i, month in enumerate(months):
-        for j, depth in enumerate(BIN_DEPTHS[station]):
+        for j, depth in enumerate(BIN_INFO[station]['bin_depths']):
             monthly_clim_T[j, i] = np.nanmean(monthly_mean_T[j, (month_only == month) & year_range_mask])
             monthly_clim_S[j, i] = np.nanmean(monthly_mean_S[j, (month_only == month) & year_range_mask])
 
@@ -886,7 +952,7 @@ def plot_monthly_clim(df_daily_mean: pd.DataFrame, output_dir: str, station: str
     range_S = (np.nanmin(monthly_clim_S) - 0.5, np.nanmax(monthly_clim_S) + 0.5)
 
     # Iterate through the binned depths
-    for i, depth in enumerate(BIN_DEPTHS[station]):
+    for i, depth in enumerate(BIN_INFO[station]['bin_depths']):
         fig, ax = plt.subplots(2, figsize=(10, 7), sharex=True)
 
         ax[0].plot(months, monthly_clim_T[i, :], c='tab:red',
@@ -938,10 +1004,10 @@ def compute_monthly_anom(df_daily_mean: pd.DataFrame, station: str):
     months, monthly_clim_T, monthly_clim_S = compute_monthly_clim(df_daily_mean, station)
 
     # Initialize array to hold the monthly mean data
-    monthly_anom_T = np.zeros((len(BIN_DEPTHS[station]), len(unique_months)))
-    monthly_anom_S = np.zeros((len(BIN_DEPTHS[station]), len(unique_months)))
+    monthly_anom_T = np.zeros((len(BIN_INFO[station]['bin_depths']), len(unique_months)))
+    monthly_anom_S = np.zeros((len(BIN_INFO[station]['bin_depths']), len(unique_months)))
 
-    for i, depth in enumerate(BIN_DEPTHS[station]):
+    for i, depth in enumerate(BIN_INFO[station]['bin_depths']):
         for j, month in enumerate(months):
             month_mask = month_only == month
             monthly_anom_T[i, month_mask] = monthly_mean_T[i, month_mask] - monthly_clim_T[i, j]
@@ -967,7 +1033,7 @@ def plot_monthly_anom(df_daily_mean: pd.DataFrame, output_dir: str, station: str
     range_S = (-abs_max_S - 0.5, abs_max_S + 0.5)
 
     # Iterate through the binned depths
-    for i, depth in enumerate(BIN_DEPTHS[station]):
+    for i, depth in enumerate(BIN_INFO[station]['bin_depths']):
         fig, ax = plt.subplots(2, figsize=(10, 7), sharex=True)
 
         ax[0].plot(unique_months, monthly_anom_T[i, :], c='tab:red', marker='o', markersize=2,
@@ -1056,6 +1122,7 @@ def get_raw_data(data_dir: str, station: str):
 
 def run_plot(
         station: str,
+        do_instrument_depths: bool = False,
         do_monthly_avail: bool = False,
         do_annual_avail: bool = False,
         do_raw_by_inst: bool = False,
@@ -1071,6 +1138,7 @@ def run_plot(
     """
     Main function to make plots of temperature, salinity, and oxygen
     :param station:
+    :param do_instrument_depths:
     :param do_monthly_avail: Plot monthly observation counts
     :param do_annual_avail: Plot annual observation counts
     :param do_raw_by_inst: plot raw data separated by instrument type, ctd or current meter
@@ -1110,6 +1178,10 @@ def run_plot(
     # Files are too big to store in the GitHub project directory so host them
     # locally
     raw_data_dir = f'E:\\charles\\mooring_data_page\\{station.lower()}\\csv_data\\'
+
+    if do_instrument_depths:
+        shell_data_dir = raw_data_dir.replace('csv_data', 'ios_shell_data')
+        plot_instrument_depths(shell_data_dir, figures_dir, station)
 
     if any([do_monthly_avail, do_annual_avail, do_raw_by_inst, do_raw]):
         # Get the raw data
@@ -1152,8 +1224,8 @@ def run_plot(
             unique_datetimes = [
                 datetime.datetime.fromisoformat(x.split(' ')[0]) for x in unique_datetimes
             ]
-            T_columns = [f'Temperature_{d}m' for d in BIN_DEPTHS[station]]
-            S_columns = [f'Salinity_{d}m' for d in BIN_DEPTHS[station]]
+            T_columns = [f'Temperature_{d}m' for d in BIN_INFO[station]['bin_depths']]
+            S_columns = [f'Salinity_{d}m' for d in BIN_INFO[station]['bin_depths']]
             daily_means_T = df_daily_means.loc[:, T_columns].to_numpy().T
             daily_means_S = df_daily_means.loc[:, S_columns].to_numpy().T
 
