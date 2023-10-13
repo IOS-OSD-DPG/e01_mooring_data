@@ -51,7 +51,7 @@ datatypes:
 </p>
 {% endfor %}
 
-<div class="station-content e01 scott2 a1">
+<div class="station-content e01 scott2 a1 hak1 srn1">
 <!--    Make subtab button for each station-->
     <div id="subtab-choice" class="tab">
         {% for type in page.plot_types %}
@@ -72,7 +72,7 @@ datatypes:
         <p>
             The following plots count how many measurements are available
             for each year of the data record. Separate plots are provided
-            for each of temperature, salinity, and oxygen.
+            for each of temperature and salinity.
         </p>
         {% for station in site.data.stations %}
         <div id="annual-data-availability-{{ station.id }}" class="station-content {{ station.id }}">
@@ -89,7 +89,7 @@ datatypes:
         <h2>Monthly Data Availability</h2>
         <p>
             The following plots count how many measurements are available for each month of the data record.
-            Separate plots are provided for each of temperature, salinity, and oxygen.
+            Separate plots are provided for each of temperature and salinity.
         </p>
         {% for station in site.data.stations %}
         <div id="monthly-data-availability-{{ station.id }}" class="station-content {{ station.id }}">
