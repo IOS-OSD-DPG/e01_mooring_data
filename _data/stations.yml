@@ -157,7 +157,7 @@
     - >
       The monthly mean anomalies were computed by subtracting the monthly climatologies for the period 2016-2022 from the monthly mean data.
 
-- id: SRN1
+- id: srn1
   depth_list:
     - 15
     - 45
