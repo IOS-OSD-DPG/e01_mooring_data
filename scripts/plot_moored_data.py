@@ -198,7 +198,7 @@ def plot_annual_samp_freq(df: pd.DataFrame, var: str, output_dir: str, station: 
                    f'Number of CTD files: {num_ctd_files}'],
             color=['orange', 'b'])
 
-    ax.set_xlim((1986, 2024))
+    ax.set_xlim((1978, max_year + 1))
     var = var.split(':')[0]  # Remove colons from oxygen
     ax.minorticks_on()
     ax.set_ylabel('Number of Measurements')
@@ -244,7 +244,7 @@ def plot_monthly_samp_freq(df: pd.DataFrame, var: str, output_dir: str, station:
     # Access datetime.datetime properties
     df_masked['Month'] = [x.month for x in df_masked.loc[:, 'Datetime'].copy()]
     df_masked['Year'] = [x.year for x in df_masked.loc[:, 'Datetime'].copy()]
-    min_year = PLOT_DATES[station][0].year  # START_YEAR  # df_masked['Year'].min() Make the same for all of T, S, O
+    min_year = 1979  # PLOT_DATES[station][0].year  # START_YEAR  # df_masked['Year'].min()
     max_year = df_masked['Year'].max()
     year_range = max_year - min_year + 1
 
@@ -257,7 +257,8 @@ def plot_monthly_samp_freq(df: pd.DataFrame, var: str, output_dir: str, station:
         for j in range(len(months)):
             monthly_counts[i, j] = sum(
                 (df_masked['Year'].values == min_year + i) &
-                (df_masked['Month'].values == j + 1))
+                (df_masked['Month'].values == j + 1)
+            )
 
     # Max counts for setting limit of plot colour bar
     max_counts = np.max(monthly_counts)
