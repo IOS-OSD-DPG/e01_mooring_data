@@ -30,6 +30,14 @@
         A1
     </button>
     
+    <button class="station-tablinks" onclick="changeStation(event)" id="hak1">
+        HAK1
+    </button>
+    
+    <button class="station-tablinks" onclick="changeStation(event)" id="SRN1">
+        SRN1
+    </button>
+    
 </div>
 
 
@@ -43,6 +51,14 @@
 
 <p id="a1-description" class="station-content a1">
     Mooring data from station A1.
+</p>
+
+<p id="hak1-description" class="station-content hak1">
+    Mooring data from station HAK1.
+</p>
+
+<p id="SRN1-description" class="station-content SRN1">
+    Mooring data from station SRN1.
 </p>
 
 
@@ -228,6 +244,30 @@
             
         </div>
         
+        <div id="annual-data-availability-hak1" class="station-content hak1">
+            
+            <a href="./hak1/figures/hak1_Temperature_annual_sampling_counts.png">
+                <img src="./hak1/figures/hak1_Temperature_annual_sampling_counts.png" loading="lazy">
+            </a>
+            
+            <a href="./hak1/figures/hak1_Salinity_annual_sampling_counts.png">
+                <img src="./hak1/figures/hak1_Salinity_annual_sampling_counts.png" loading="lazy">
+            </a>
+            
+        </div>
+        
+        <div id="annual-data-availability-SRN1" class="station-content SRN1">
+            
+            <a href="./SRN1/figures/SRN1_Temperature_annual_sampling_counts.png">
+                <img src="./SRN1/figures/SRN1_Temperature_annual_sampling_counts.png" loading="lazy">
+            </a>
+            
+            <a href="./SRN1/figures/SRN1_Salinity_annual_sampling_counts.png">
+                <img src="./SRN1/figures/SRN1_Salinity_annual_sampling_counts.png" loading="lazy">
+            </a>
+            
+        </div>
+        
     </div>
 
     <div id="monthly-data-availability-content" class="subtab-content">
@@ -273,6 +313,30 @@
             
         </div>
         
+        <div id="monthly-data-availability-hak1" class="station-content hak1">
+            
+            <a href="./hak1/figures/hak1_Temperature_monthly_sampling_counts.png">
+                <img src="./hak1/figures/hak1_Temperature_monthly_sampling_counts.png" loading="lazy">
+            </a>
+            
+            <a href="./hak1/figures/hak1_Salinity_monthly_sampling_counts.png">
+                <img src="./hak1/figures/hak1_Salinity_monthly_sampling_counts.png" loading="lazy">
+            </a>
+            
+        </div>
+        
+        <div id="monthly-data-availability-SRN1" class="station-content SRN1">
+            
+            <a href="./SRN1/figures/SRN1_Temperature_monthly_sampling_counts.png">
+                <img src="./SRN1/figures/SRN1_Temperature_monthly_sampling_counts.png" loading="lazy">
+            </a>
+            
+            <a href="./SRN1/figures/SRN1_Salinity_monthly_sampling_counts.png">
+                <img src="./SRN1/figures/SRN1_Salinity_monthly_sampling_counts.png" loading="lazy">
+            </a>
+            
+        </div>
+        
     </div>
 
     <div id="instrument-depths-content" class="subtab-content">
@@ -302,6 +366,24 @@
 </p>
             <a href="./a1/figures/a1_cur_ctd_depths.png">
                 <img src="./a1/figures/a1_cur_ctd_depths.png"
+                     loading="lazy" width="600" height="450">
+            </a>
+        </div>
+        
+        <div id="instrument-depths-hak1" class="station-content hak1">
+            <p>Plot showing the depths of CTDs and current meters on the mooring line for each deployment.  Each point represents a CTD or current meter.  The grey areas denote the coverage of each bin.  Bins are centered on the depths 40m, 75m, and 130m, with size 10m.
+</p>
+            <a href="./hak1/figures/hak1_cur_ctd_depths.png">
+                <img src="./hak1/figures/hak1_cur_ctd_depths.png"
+                     loading="lazy" width="600" height="450">
+            </a>
+        </div>
+        
+        <div id="instrument-depths-SRN1" class="station-content SRN1">
+            <p>Plot showing the depths of CTDs and current meters on the mooring line for each deployment.  Each point represents a CTD or current meter.  The grey areas denote the coverage of each bin.  Bins are centered on the depths 15m, 40m, 100m, and 185m, with size 10m.
+</p>
+            <a href="./SRN1/figures/SRN1_cur_ctd_depths.png">
+                <img src="./SRN1/figures/SRN1_cur_ctd_depths.png"
                      loading="lazy" width="600" height="450">
             </a>
         </div>
@@ -481,6 +563,96 @@
             </div>
         </div>
         
+
+        <div id="raw-data-hak1" class="station-content hak1">
+            <p>The data were binned into 10m bins centered on the depths 40m, 75m, and 130m to make these plots.  Most data from station HAK1 fit into these bins.  Data are separated by instrument (current meter or CTD) and variable (temperature or salinity).
+</p>
+            <div class="grouped-plots">
+
+                
+                
+                <a href="./hak1/figures/hak1_raw_Temperature_40m_cur_vs_ctd.png">
+                    <img src="./hak1/figures/hak1_raw_Temperature_40m_cur_vs_ctd.png" loading="lazy">
+                </a>
+                
+                <a href="./hak1/figures/hak1_raw_Salinity_40m_cur_vs_ctd.png">
+                    <img src="./hak1/figures/hak1_raw_Salinity_40m_cur_vs_ctd.png" loading="lazy">
+                </a>
+                
+                
+                
+                <a href="./hak1/figures/hak1_raw_Temperature_75m_cur_vs_ctd.png">
+                    <img src="./hak1/figures/hak1_raw_Temperature_75m_cur_vs_ctd.png" loading="lazy">
+                </a>
+                
+                <a href="./hak1/figures/hak1_raw_Salinity_75m_cur_vs_ctd.png">
+                    <img src="./hak1/figures/hak1_raw_Salinity_75m_cur_vs_ctd.png" loading="lazy">
+                </a>
+                
+                
+                
+                <a href="./hak1/figures/hak1_raw_Temperature_130m_cur_vs_ctd.png">
+                    <img src="./hak1/figures/hak1_raw_Temperature_130m_cur_vs_ctd.png" loading="lazy">
+                </a>
+                
+                <a href="./hak1/figures/hak1_raw_Salinity_130m_cur_vs_ctd.png">
+                    <img src="./hak1/figures/hak1_raw_Salinity_130m_cur_vs_ctd.png" loading="lazy">
+                </a>
+                
+                
+            </div>
+        </div>
+        
+
+        <div id="raw-data-SRN1" class="station-content SRN1">
+            <p>The data were binned into 10m bins centered on the depths 15m, 40m, 100m, and 185m to make these plots.  Most data from station SRN1 fit into these bins.  Data are separated by instrument (current meter or CTD) and variable (temperature or salinity).
+</p>
+            <div class="grouped-plots">
+
+                
+                
+                <a href="./SRN1/figures/SRN1_raw_Temperature_15m_cur_vs_ctd.png">
+                    <img src="./SRN1/figures/SRN1_raw_Temperature_15m_cur_vs_ctd.png" loading="lazy">
+                </a>
+                
+                <a href="./SRN1/figures/SRN1_raw_Salinity_15m_cur_vs_ctd.png">
+                    <img src="./SRN1/figures/SRN1_raw_Salinity_15m_cur_vs_ctd.png" loading="lazy">
+                </a>
+                
+                
+                
+                <a href="./SRN1/figures/SRN1_raw_Temperature_45m_cur_vs_ctd.png">
+                    <img src="./SRN1/figures/SRN1_raw_Temperature_45m_cur_vs_ctd.png" loading="lazy">
+                </a>
+                
+                <a href="./SRN1/figures/SRN1_raw_Salinity_45m_cur_vs_ctd.png">
+                    <img src="./SRN1/figures/SRN1_raw_Salinity_45m_cur_vs_ctd.png" loading="lazy">
+                </a>
+                
+                
+                
+                <a href="./SRN1/figures/SRN1_raw_Temperature_100m_cur_vs_ctd.png">
+                    <img src="./SRN1/figures/SRN1_raw_Temperature_100m_cur_vs_ctd.png" loading="lazy">
+                </a>
+                
+                <a href="./SRN1/figures/SRN1_raw_Salinity_100m_cur_vs_ctd.png">
+                    <img src="./SRN1/figures/SRN1_raw_Salinity_100m_cur_vs_ctd.png" loading="lazy">
+                </a>
+                
+                
+                
+                <a href="./SRN1/figures/SRN1_raw_Temperature_185m_cur_vs_ctd.png">
+                    <img src="./SRN1/figures/SRN1_raw_Temperature_185m_cur_vs_ctd.png" loading="lazy">
+                </a>
+                
+                <a href="./SRN1/figures/SRN1_raw_Salinity_185m_cur_vs_ctd.png">
+                    <img src="./SRN1/figures/SRN1_raw_Salinity_185m_cur_vs_ctd.png" loading="lazy">
+                </a>
+                
+                
+            </div>
+        </div>
+        
     </div>
 
     <div id="daily-mean-data-content" class="subtab-content">
@@ -600,6 +772,68 @@
             </div>
         </div>
         
+
+        <div id="daily-mean-data-hak1" class="station-content hak1">
+            <p>Only CTD data were used, given that all available current meter data overlapped with the CTD data.   The data were binned into 10m bins centered on the depths 40m, 75m, and 130m to make these plots.
+</p>
+            <div class="grouped-plots">
+
+                
+                
+                <a href="./hak1/figures/hak1_daily_mean_ts_40m.png">
+                    <img src="./hak1/figures/hak1_daily_mean_ts_40m.png" loading="lazy">
+                </a>
+                
+                
+                
+                <a href="./hak1/figures/hak1_daily_mean_ts_75m.png">
+                    <img src="./hak1/figures/hak1_daily_mean_ts_75m.png" loading="lazy">
+                </a>
+                
+                
+                
+                <a href="./hak1/figures/hak1_daily_mean_ts_130m.png">
+                    <img src="./hak1/figures/hak1_daily_mean_ts_130m.png" loading="lazy">
+                </a>
+                
+                
+            </div>
+        </div>
+        
+
+        <div id="daily-mean-data-SRN1" class="station-content SRN1">
+            <p>Only CTD data were used, given that all available current meter data overlapped with the CTD data.   The data were binned into 10m bins centered on the depths 15m, 40m, 100m, and 185m to make these plots.
+</p>
+            <div class="grouped-plots">
+
+                
+                
+                <a href="./SRN1/figures/SRN1_daily_mean_ts_15m.png">
+                    <img src="./SRN1/figures/SRN1_daily_mean_ts_15m.png" loading="lazy">
+                </a>
+                
+                
+                
+                <a href="./SRN1/figures/SRN1_daily_mean_ts_45m.png">
+                    <img src="./SRN1/figures/SRN1_daily_mean_ts_45m.png" loading="lazy">
+                </a>
+                
+                
+                
+                <a href="./SRN1/figures/SRN1_daily_mean_ts_100m.png">
+                    <img src="./SRN1/figures/SRN1_daily_mean_ts_100m.png" loading="lazy">
+                </a>
+                
+                
+                
+                <a href="./SRN1/figures/SRN1_daily_mean_ts_185m.png">
+                    <img src="./SRN1/figures/SRN1_daily_mean_ts_185m.png" loading="lazy">
+                </a>
+                
+                
+            </div>
+        </div>
+        
     </div>
 
     <div id="daily-climatologies-content" class="subtab-content">
@@ -687,6 +921,54 @@
                 
                 <a href="./a1/figures/a1_daily_clim_1991-2020_ts_450m.png">
                     <img src="./a1/figures/a1_daily_clim_1991-2020_ts_450m.png" loading="lazy">
+                </a>
+                
+            </div>
+        </div>
+        
+
+        <div id="daily-climatologies-hak1" class="station-content hak1">
+            <p>The daily climatologies were computed from the daily mean data by taking the average for each day of the year over the years 2016-2022.
+</p>
+            <div class="grouped-plots">
+
+                
+                <a href="./hak1/figures/hak1_daily_clim_2016-2022_ts_40m.png">
+                    <img src="./hak1/figures/hak1_daily_clim_2016-2022_ts_40m.png" loading="lazy">
+                </a>
+                
+                <a href="./hak1/figures/hak1_daily_clim_2016-2022_ts_75m.png">
+                    <img src="./hak1/figures/hak1_daily_clim_2016-2022_ts_75m.png" loading="lazy">
+                </a>
+                
+                <a href="./hak1/figures/hak1_daily_clim_2016-2022_ts_130m.png">
+                    <img src="./hak1/figures/hak1_daily_clim_2016-2022_ts_130m.png" loading="lazy">
+                </a>
+                
+            </div>
+        </div>
+        
+
+        <div id="daily-climatologies-SRN1" class="station-content SRN1">
+            <p>The daily climatologies were computed from the daily mean data by taking the average for each day of the year over the years 2017-2022.
+</p>
+            <div class="grouped-plots">
+
+                
+                <a href="./SRN1/figures/SRN1_daily_clim_2017-2022_ts_15m.png">
+                    <img src="./SRN1/figures/SRN1_daily_clim_2017-2022_ts_15m.png" loading="lazy">
+                </a>
+                
+                <a href="./SRN1/figures/SRN1_daily_clim_2017-2022_ts_45m.png">
+                    <img src="./SRN1/figures/SRN1_daily_clim_2017-2022_ts_45m.png" loading="lazy">
+                </a>
+                
+                <a href="./SRN1/figures/SRN1_daily_clim_2017-2022_ts_100m.png">
+                    <img src="./SRN1/figures/SRN1_daily_clim_2017-2022_ts_100m.png" loading="lazy">
+                </a>
+                
+                <a href="./SRN1/figures/SRN1_daily_clim_2017-2022_ts_185m.png">
+                    <img src="./SRN1/figures/SRN1_daily_clim_2017-2022_ts_185m.png" loading="lazy">
                 </a>
                 
             </div>
@@ -784,6 +1066,54 @@
             </div>
         </div>
         
+
+        <div id="daily-mean-anomalies-hak1" class="station-content hak1">
+            <p>The daily mean anomalies were computed by subtracting the daily climatologies for the period 2016-2022 from the daily mean data.
+</p>
+            <div class="grouped-plots">
+
+                
+                <a href="./hak1/figures/hak1_daily_anom_ts_40m.png">
+                    <img src="./hak1/figures/hak1_daily_anom_ts_40m.png" loading="lazy">
+                </a>
+                
+                <a href="./hak1/figures/hak1_daily_anom_ts_75m.png">
+                    <img src="./hak1/figures/hak1_daily_anom_ts_75m.png" loading="lazy">
+                </a>
+                
+                <a href="./hak1/figures/hak1_daily_anom_ts_130m.png">
+                    <img src="./hak1/figures/hak1_daily_anom_ts_130m.png" loading="lazy">
+                </a>
+                
+            </div>
+        </div>
+        
+
+        <div id="daily-mean-anomalies-SRN1" class="station-content SRN1">
+            <p>The daily mean anomalies were computed by subtracting the daily climatologies for the period 2017-2022 from the daily mean data.
+</p>
+            <div class="grouped-plots">
+
+                
+                <a href="./SRN1/figures/SRN1_daily_anom_ts_15m.png">
+                    <img src="./SRN1/figures/SRN1_daily_anom_ts_15m.png" loading="lazy">
+                </a>
+                
+                <a href="./SRN1/figures/SRN1_daily_anom_ts_45m.png">
+                    <img src="./SRN1/figures/SRN1_daily_anom_ts_45m.png" loading="lazy">
+                </a>
+                
+                <a href="./SRN1/figures/SRN1_daily_anom_ts_100m.png">
+                    <img src="./SRN1/figures/SRN1_daily_anom_ts_100m.png" loading="lazy">
+                </a>
+                
+                <a href="./SRN1/figures/SRN1_daily_anom_ts_185m.png">
+                    <img src="./SRN1/figures/SRN1_daily_anom_ts_185m.png" loading="lazy">
+                </a>
+                
+            </div>
+        </div>
+        
     </div>
 
     <div id="monthly-mean-data-content" class="subtab-content">
@@ -871,6 +1201,54 @@
                 
                 <a href="./a1/figures/a1_monthly_mean_ts_450m.png">
                     <img src="./a1/figures/a1_monthly_mean_ts_450m.png" loading="lazy">
+                </a>
+                
+            </div>
+        </div>
+        
+
+        <div id="monthly-mean-data-hak1" class="station-content hak1">
+            <p>The monthly mean data were computed from daily mean data.
+</p>
+            <div class="grouped-plots">
+
+                
+                <a href="./hak1/figures/hak1_monthly_mean_ts_40m.png">
+                    <img src="./hak1/figures/hak1_monthly_mean_ts_40m.png" loading="lazy">
+                </a>
+                
+                <a href="./hak1/figures/hak1_monthly_mean_ts_75m.png">
+                    <img src="./hak1/figures/hak1_monthly_mean_ts_75m.png" loading="lazy">
+                </a>
+                
+                <a href="./hak1/figures/hak1_monthly_mean_ts_130m.png">
+                    <img src="./hak1/figures/hak1_monthly_mean_ts_130m.png" loading="lazy">
+                </a>
+                
+            </div>
+        </div>
+        
+
+        <div id="monthly-mean-data-SRN1" class="station-content SRN1">
+            <p>The monthly mean data were computed from daily mean data.
+</p>
+            <div class="grouped-plots">
+
+                
+                <a href="./SRN1/figures/SRN1_monthly_mean_ts_15m.png">
+                    <img src="./SRN1/figures/SRN1_monthly_mean_ts_15m.png" loading="lazy">
+                </a>
+                
+                <a href="./SRN1/figures/SRN1_monthly_mean_ts_45m.png">
+                    <img src="./SRN1/figures/SRN1_monthly_mean_ts_45m.png" loading="lazy">
+                </a>
+                
+                <a href="./SRN1/figures/SRN1_monthly_mean_ts_100m.png">
+                    <img src="./SRN1/figures/SRN1_monthly_mean_ts_100m.png" loading="lazy">
+                </a>
+                
+                <a href="./SRN1/figures/SRN1_monthly_mean_ts_185m.png">
+                    <img src="./SRN1/figures/SRN1_monthly_mean_ts_185m.png" loading="lazy">
                 </a>
                 
             </div>
@@ -968,6 +1346,54 @@
             </div>
         </div>
         
+
+        <div id="monthly-climatologies-hak1" class="station-content hak1">
+            <p>The monthly climatologies were computed from the monthly mean data by taking the average for each month of the year over the years 2016-2022.
+</p>
+            <div class="grouped-plots">
+
+                
+                <a href="./hak1/figures/hak1_monthly_clim_2016-2022_ts_40m.png">
+                    <img src="./hak1/figures/hak1_monthly_clim_2016-2022_ts_40m.png" loading="lazy">
+                </a>
+                
+                <a href="./hak1/figures/hak1_monthly_clim_2016-2022_ts_75m.png">
+                    <img src="./hak1/figures/hak1_monthly_clim_2016-2022_ts_75m.png" loading="lazy">
+                </a>
+                
+                <a href="./hak1/figures/hak1_monthly_clim_2016-2022_ts_130m.png">
+                    <img src="./hak1/figures/hak1_monthly_clim_2016-2022_ts_130m.png" loading="lazy">
+                </a>
+                
+            </div>
+        </div>
+        
+
+        <div id="monthly-climatologies-SRN1" class="station-content SRN1">
+            <p>The monthly climatologies were computed from the monthly mean data by taking the average for each month of the year over the years 2017-2022.
+</p>
+            <div class="grouped-plots">
+
+                
+                <a href="./SRN1/figures/SRN1_monthly_clim_2017-2022_ts_15m.png">
+                    <img src="./SRN1/figures/SRN1_monthly_clim_2017-2022_ts_15m.png" loading="lazy">
+                </a>
+                
+                <a href="./SRN1/figures/SRN1_monthly_clim_2017-2022_ts_45m.png">
+                    <img src="./SRN1/figures/SRN1_monthly_clim_2017-2022_ts_45m.png" loading="lazy">
+                </a>
+                
+                <a href="./SRN1/figures/SRN1_monthly_clim_2017-2022_ts_100m.png">
+                    <img src="./SRN1/figures/SRN1_monthly_clim_2017-2022_ts_100m.png" loading="lazy">
+                </a>
+                
+                <a href="./SRN1/figures/SRN1_monthly_clim_2017-2022_ts_185m.png">
+                    <img src="./SRN1/figures/SRN1_monthly_clim_2017-2022_ts_185m.png" loading="lazy">
+                </a>
+                
+            </div>
+        </div>
+        
     </div>
 
     <div id="monthly-mean-anomalies-content" class="subtab-content">
@@ -1028,7 +1454,8 @@
         
 
         <div id="monthly-mean-anomalies-a1" class="station-content a1">
-            <p>The monthly mean anomalies were computed by subtracting the monthly climatologies for the period 1991-2020 from the monthly mean data.</p>
+            <p>The monthly mean anomalies were computed by subtracting the monthly climatologies for the period 1991-2020 from the monthly mean data.
+</p>
             <div class="grouped-plots">
 
                 
@@ -1054,6 +1481,54 @@
                 
                 <a href="./a1/figures/a1_monthly_anom_ts_450m.png">
                     <img src="./a1/figures/a1_monthly_anom_ts_450m.png" loading="lazy">
+                </a>
+                
+            </div>
+        </div>
+        
+
+        <div id="monthly-mean-anomalies-hak1" class="station-content hak1">
+            <p>The monthly mean anomalies were computed by subtracting the monthly climatologies for the period 2016-2022 from the monthly mean data.
+</p>
+            <div class="grouped-plots">
+
+                
+                <a href="./hak1/figures/hak1_monthly_anom_ts_40m.png">
+                    <img src="./hak1/figures/hak1_monthly_anom_ts_40m.png" loading="lazy">
+                </a>
+                
+                <a href="./hak1/figures/hak1_monthly_anom_ts_75m.png">
+                    <img src="./hak1/figures/hak1_monthly_anom_ts_75m.png" loading="lazy">
+                </a>
+                
+                <a href="./hak1/figures/hak1_monthly_anom_ts_130m.png">
+                    <img src="./hak1/figures/hak1_monthly_anom_ts_130m.png" loading="lazy">
+                </a>
+                
+            </div>
+        </div>
+        
+
+        <div id="monthly-mean-anomalies-SRN1" class="station-content SRN1">
+            <p>The monthly mean anomalies were computed by subtracting the monthly climatologies for the period 2017-2022 from the monthly mean data.
+</p>
+            <div class="grouped-plots">
+
+                
+                <a href="./SRN1/figures/SRN1_monthly_anom_ts_15m.png">
+                    <img src="./SRN1/figures/SRN1_monthly_anom_ts_15m.png" loading="lazy">
+                </a>
+                
+                <a href="./SRN1/figures/SRN1_monthly_anom_ts_45m.png">
+                    <img src="./SRN1/figures/SRN1_monthly_anom_ts_45m.png" loading="lazy">
+                </a>
+                
+                <a href="./SRN1/figures/SRN1_monthly_anom_ts_100m.png">
+                    <img src="./SRN1/figures/SRN1_monthly_anom_ts_100m.png" loading="lazy">
+                </a>
+                
+                <a href="./SRN1/figures/SRN1_monthly_anom_ts_185m.png">
+                    <img src="./SRN1/figures/SRN1_monthly_anom_ts_185m.png" loading="lazy">
                 </a>
                 
             </div>

@@ -1,4 +1,3 @@
-import os
 import ios_shell
 import glob
 import pandas as pd
@@ -10,11 +9,15 @@ from gsw import z_from_p
 Convert IOS shell format files to csv files using ios_shell and pandas
 """
 
-list_of_stations = ['e01', 'a1', 'scott2']
+list_of_stations = ['e01', 'a1', 'scott2', 'hak1', 'srn1']
 
-for k in range(1, len(list_of_stations)):
-    station = list_of_stations[k]
 
+def do_conversion(station: str):
+    """
+    Convert CUR and CTD ios shell files to csv format and merge them
+    :param station:
+    :return:
+    """
     data_dir = f'E:\\charles\\mooring_data_page\\{station}\\ios_shell_data\\'
     output_dir = data_dir.replace('ios_shell_data', 'csv_data')
 
@@ -165,5 +168,7 @@ for k in range(1, len(list_of_stations)):
 
     # save list of static pressure files to csv
     derived_depth_files.to_csv(output_dir + f'{station}_cur_ctd_derived_depth.csv', index=False)
+    return
+
 
 # os.chdir(old_dir)
