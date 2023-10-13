@@ -1,28 +1,24 @@
 # osd_mooring_data
 Data page for DFO mooring stations E01, SCOTT2, and A1 in BC. This site is under construction and all figures are provisional.
-The webpage can be found [here](https://ios-osd-dpg.github.io/e01_mooring_data/), or by navigating to Deployments > github-pages.
+The webpage can be found [here](https://ios-osd-dpg.github.io/mooring_data_page/), or by navigating to Deployments > github-pages.
 
-The following types of plots of temperature (T), salinity (S) and oxygen (O) data are presented:
-* Histograms of yearly measurement counts
-* Tables of monthly measurement counts
-* Instrument depths for all deployments
-* Raw time series
-* Daily mean time series
-* Daily climatologies for the 30-year period 1990-2020 (no data from 2007)
-* Daily mean anomaly time series
-* Monthly mean time series (underway)
-* Monthly climatologies for the 30-year period 1990-2020 (underway)
-* Monthly mean anomaly time series (underway)
+The following quantities are plotted:
+* Instrument depths over time
+* Yearly & monthly measurement counts
+* Raw time series separated by instrument type (CTD and current meter)
+* Daily & monthly mean time series
+* Daily & monthly climatologies
+* Daily & monthly mean anomaly time series
 
 ### Information for updating the webpage
 
 The raw data were obtained from [Water Properties](https://www.waterproperties.ca/) in IOS Shell-type format or netCDF format. The search criteria used were:
 * filename = "e01*"
-* file suffixes = "ctd", "cur"
+* file suffixes = "ctd", "cur" ("cur" searches for files with *.CUR and *.cur suffixes)
 
 A netCDF-format file was only used for one case where the corresponding IOS Shell file could not be parsed using the ios_shell Python package. 
 
-The raw data were too large to save within this repository.
+The raw data were too large to save within this repository, so they were stored locally. Only daily mean data are saved within this repository.
 
 #### Scripts
 count_nc_files.py: Compare the number of IOS Shell-format files with the number of netCDF file versions available from the "wget" CSV file download lists from Water Properties. This showed that there were two IOS Shell files without a netCDF version.
