@@ -38,6 +38,14 @@
         SRN1
     </button>
     
+    <button class="station-tablinks" onclick="changeStation(event)" id="chat3">
+        CHAT3
+    </button>
+    
+    <button class="station-tablinks" onclick="changeStation(event)" id="juan2">
+        JUAN2
+    </button>
+    
 </div>
 
 
@@ -61,8 +69,16 @@
     Mooring data from station SRN1.
 </p>
 
+<p id="chat3-description" class="station-content chat3">
+    Mooring data from station CHAT3.
+</p>
 
-<div class="station-content e01 scott2 a1 hak1 srn1">
+<p id="juan2-description" class="station-content juan2">
+    Mooring data from station JUAN2.
+</p>
+
+
+<div class="station-content e01 scott2 a1 hak1 srn1 chat3 juan2">
 <!--    Make subtab button for each station-->
     <div id="subtab-choice" class="tab">
         
@@ -268,6 +284,30 @@
             
         </div>
         
+        <div id="annual-data-availability-chat3" class="station-content chat3">
+            
+            <a href="./chat3/figures/chat3_Temperature_annual_sampling_counts.png">
+                <img src="./chat3/figures/chat3_Temperature_annual_sampling_counts.png" loading="lazy">
+            </a>
+            
+            <a href="./chat3/figures/chat3_Salinity_annual_sampling_counts.png">
+                <img src="./chat3/figures/chat3_Salinity_annual_sampling_counts.png" loading="lazy">
+            </a>
+            
+        </div>
+        
+        <div id="annual-data-availability-juan2" class="station-content juan2">
+            
+            <a href="./juan2/figures/juan2_Temperature_annual_sampling_counts.png">
+                <img src="./juan2/figures/juan2_Temperature_annual_sampling_counts.png" loading="lazy">
+            </a>
+            
+            <a href="./juan2/figures/juan2_Salinity_annual_sampling_counts.png">
+                <img src="./juan2/figures/juan2_Salinity_annual_sampling_counts.png" loading="lazy">
+            </a>
+            
+        </div>
+        
     </div>
 
     <div id="monthly-data-availability-content" class="subtab-content">
@@ -337,6 +377,30 @@
             
         </div>
         
+        <div id="monthly-data-availability-chat3" class="station-content chat3">
+            
+            <a href="./chat3/figures/chat3_Temperature_monthly_sampling_counts.png">
+                <img src="./chat3/figures/chat3_Temperature_monthly_sampling_counts.png" loading="lazy">
+            </a>
+            
+            <a href="./chat3/figures/chat3_Salinity_monthly_sampling_counts.png">
+                <img src="./chat3/figures/chat3_Salinity_monthly_sampling_counts.png" loading="lazy">
+            </a>
+            
+        </div>
+        
+        <div id="monthly-data-availability-juan2" class="station-content juan2">
+            
+            <a href="./juan2/figures/juan2_Temperature_monthly_sampling_counts.png">
+                <img src="./juan2/figures/juan2_Temperature_monthly_sampling_counts.png" loading="lazy">
+            </a>
+            
+            <a href="./juan2/figures/juan2_Salinity_monthly_sampling_counts.png">
+                <img src="./juan2/figures/juan2_Salinity_monthly_sampling_counts.png" loading="lazy">
+            </a>
+            
+        </div>
+        
     </div>
 
     <div id="instrument-depths-content" class="subtab-content">
@@ -384,6 +448,24 @@
 </p>
             <a href="./srn1/figures/srn1_cur_ctd_depths.png">
                 <img src="./srn1/figures/srn1_cur_ctd_depths.png"
+                     loading="lazy" width="600" height="450">
+            </a>
+        </div>
+        
+        <div id="instrument-depths-chat3" class="station-content chat3">
+            <p>Plot showing the depths of CTDs and current meters on the mooring line for each deployment.  Each point represents a CTD or current meter.  The grey areas denote the coverage of each bin.  Bins are centered on the depths 15m, 40m, 100m, and 185m, with size 10m.
+</p>
+            <a href="./chat3/figures/chat3_cur_ctd_depths.png">
+                <img src="./chat3/figures/chat3_cur_ctd_depths.png"
+                     loading="lazy" width="600" height="450">
+            </a>
+        </div>
+        
+        <div id="instrument-depths-juan2" class="station-content juan2">
+            <p>Plot showing the depths of CTDs and current meters on the mooring line for each deployment.  Each point represents a CTD or current meter.  The grey areas denote the coverage of each bin.  Bins are centered on the depths 15m, 100m, and 210m, with size 10m.
+</p>
+            <a href="./juan2/figures/juan2_cur_ctd_depths.png">
+                <img src="./juan2/figures/juan2_cur_ctd_depths.png"
                      loading="lazy" width="600" height="450">
             </a>
         </div>
@@ -653,6 +735,96 @@
             </div>
         </div>
         
+
+        <div id="raw-data-chat3" class="station-content chat3">
+            <p>The data were binned into 10m bins centered on the depths 15m, 40m, 75m, and 150m to make these plots.  All data from station CHAT3 fit into these bins.  Data are separated by instrument (current meter or CTD) and variable (temperature or salinity).
+</p>
+            <div class="grouped-plots">
+
+                
+                
+                <a href="./chat3/figures/chat3_raw_Temperature_15m_cur_vs_ctd.png">
+                    <img src="./chat3/figures/chat3_raw_Temperature_15m_cur_vs_ctd.png" loading="lazy">
+                </a>
+                
+                <a href="./chat3/figures/chat3_raw_Salinity_15m_cur_vs_ctd.png">
+                    <img src="./chat3/figures/chat3_raw_Salinity_15m_cur_vs_ctd.png" loading="lazy">
+                </a>
+                
+                
+                
+                <a href="./chat3/figures/chat3_raw_Temperature_40m_cur_vs_ctd.png">
+                    <img src="./chat3/figures/chat3_raw_Temperature_40m_cur_vs_ctd.png" loading="lazy">
+                </a>
+                
+                <a href="./chat3/figures/chat3_raw_Salinity_40m_cur_vs_ctd.png">
+                    <img src="./chat3/figures/chat3_raw_Salinity_40m_cur_vs_ctd.png" loading="lazy">
+                </a>
+                
+                
+                
+                <a href="./chat3/figures/chat3_raw_Temperature_75m_cur_vs_ctd.png">
+                    <img src="./chat3/figures/chat3_raw_Temperature_75m_cur_vs_ctd.png" loading="lazy">
+                </a>
+                
+                <a href="./chat3/figures/chat3_raw_Salinity_75m_cur_vs_ctd.png">
+                    <img src="./chat3/figures/chat3_raw_Salinity_75m_cur_vs_ctd.png" loading="lazy">
+                </a>
+                
+                
+                
+                <a href="./chat3/figures/chat3_raw_Temperature_150m_cur_vs_ctd.png">
+                    <img src="./chat3/figures/chat3_raw_Temperature_150m_cur_vs_ctd.png" loading="lazy">
+                </a>
+                
+                <a href="./chat3/figures/chat3_raw_Salinity_150m_cur_vs_ctd.png">
+                    <img src="./chat3/figures/chat3_raw_Salinity_150m_cur_vs_ctd.png" loading="lazy">
+                </a>
+                
+                
+            </div>
+        </div>
+        
+
+        <div id="raw-data-juan2" class="station-content juan2">
+            <p>The data were binned into 10m bins centered on the depths 15m, 100m, and 210m to make these plots.  Most data from station SRN1 fit into these bins.  Data are separated by instrument (current meter or CTD) and variable (temperature or salinity).
+</p>
+            <div class="grouped-plots">
+
+                
+                
+                <a href="./juan2/figures/juan2_raw_Temperature_15m_cur_vs_ctd.png">
+                    <img src="./juan2/figures/juan2_raw_Temperature_15m_cur_vs_ctd.png" loading="lazy">
+                </a>
+                
+                <a href="./juan2/figures/juan2_raw_Salinity_15m_cur_vs_ctd.png">
+                    <img src="./juan2/figures/juan2_raw_Salinity_15m_cur_vs_ctd.png" loading="lazy">
+                </a>
+                
+                
+                
+                <a href="./juan2/figures/juan2_raw_Temperature_100m_cur_vs_ctd.png">
+                    <img src="./juan2/figures/juan2_raw_Temperature_100m_cur_vs_ctd.png" loading="lazy">
+                </a>
+                
+                <a href="./juan2/figures/juan2_raw_Salinity_100m_cur_vs_ctd.png">
+                    <img src="./juan2/figures/juan2_raw_Salinity_100m_cur_vs_ctd.png" loading="lazy">
+                </a>
+                
+                
+                
+                <a href="./juan2/figures/juan2_raw_Temperature_210m_cur_vs_ctd.png">
+                    <img src="./juan2/figures/juan2_raw_Temperature_210m_cur_vs_ctd.png" loading="lazy">
+                </a>
+                
+                <a href="./juan2/figures/juan2_raw_Salinity_210m_cur_vs_ctd.png">
+                    <img src="./juan2/figures/juan2_raw_Salinity_210m_cur_vs_ctd.png" loading="lazy">
+                </a>
+                
+                
+            </div>
+        </div>
+        
     </div>
 
     <div id="daily-mean-data-content" class="subtab-content">
@@ -834,6 +1006,68 @@
             </div>
         </div>
         
+
+        <div id="daily-mean-data-chat3" class="station-content chat3">
+            <p>Only CTD data were used, given that all available current meter data overlapped with the CTD data.   The data were binned into 10m bins centered on the depths 15m, 40m, 75m, and 150m to make these plots.
+</p>
+            <div class="grouped-plots">
+
+                
+                
+                <a href="./chat3/figures/chat3_daily_mean_ts_15m.png">
+                    <img src="./chat3/figures/chat3_daily_mean_ts_15m.png" loading="lazy">
+                </a>
+                
+                
+                
+                <a href="./chat3/figures/chat3_daily_mean_ts_40m.png">
+                    <img src="./chat3/figures/chat3_daily_mean_ts_40m.png" loading="lazy">
+                </a>
+                
+                
+                
+                <a href="./chat3/figures/chat3_daily_mean_ts_75m.png">
+                    <img src="./chat3/figures/chat3_daily_mean_ts_75m.png" loading="lazy">
+                </a>
+                
+                
+                
+                <a href="./chat3/figures/chat3_daily_mean_ts_150m.png">
+                    <img src="./chat3/figures/chat3_daily_mean_ts_150m.png" loading="lazy">
+                </a>
+                
+                
+            </div>
+        </div>
+        
+
+        <div id="daily-mean-data-juan2" class="station-content juan2">
+            <p>Only CTD data were used, given that all available current meter data overlapped with the CTD data.   The data were binned into 10m bins centered on the depths 15m, 100m, and 210m to make these plots.
+</p>
+            <div class="grouped-plots">
+
+                
+                
+                <a href="./juan2/figures/juan2_daily_mean_ts_15m.png">
+                    <img src="./juan2/figures/juan2_daily_mean_ts_15m.png" loading="lazy">
+                </a>
+                
+                
+                
+                <a href="./juan2/figures/juan2_daily_mean_ts_100m.png">
+                    <img src="./juan2/figures/juan2_daily_mean_ts_100m.png" loading="lazy">
+                </a>
+                
+                
+                
+                <a href="./juan2/figures/juan2_daily_mean_ts_210m.png">
+                    <img src="./juan2/figures/juan2_daily_mean_ts_210m.png" loading="lazy">
+                </a>
+                
+                
+            </div>
+        </div>
+        
     </div>
 
     <div id="daily-climatologies-content" class="subtab-content">
@@ -969,6 +1203,54 @@
                 
                 <a href="./srn1/figures/srn1_daily_clim_2017-2022_ts_185m.png">
                     <img src="./srn1/figures/srn1_daily_clim_2017-2022_ts_185m.png" loading="lazy">
+                </a>
+                
+            </div>
+        </div>
+        
+
+        <div id="daily-climatologies-chat3" class="station-content chat3">
+            <p>The daily climatologies were computed from the daily mean data by taking the average for each day of the year over the years 2019-2022.
+</p>
+            <div class="grouped-plots">
+
+                
+                <a href="./chat3/figures/chat3_daily_clim_2019-2022_ts_15m.png">
+                    <img src="./chat3/figures/chat3_daily_clim_2019-2022_ts_15m.png" loading="lazy">
+                </a>
+                
+                <a href="./chat3/figures/chat3_daily_clim_2019-2022_ts_40m.png">
+                    <img src="./chat3/figures/chat3_daily_clim_2019-2022_ts_40m.png" loading="lazy">
+                </a>
+                
+                <a href="./chat3/figures/chat3_daily_clim_2019-2022_ts_75m.png">
+                    <img src="./chat3/figures/chat3_daily_clim_2019-2022_ts_75m.png" loading="lazy">
+                </a>
+                
+                <a href="./chat3/figures/chat3_daily_clim_2019-2022_ts_150m.png">
+                    <img src="./chat3/figures/chat3_daily_clim_2019-2022_ts_150m.png" loading="lazy">
+                </a>
+                
+            </div>
+        </div>
+        
+
+        <div id="daily-climatologies-juan2" class="station-content juan2">
+            <p>The daily climatologies were computed from the daily mean data by taking the average for each day of the year over the years 2019-2022.
+</p>
+            <div class="grouped-plots">
+
+                
+                <a href="./juan2/figures/juan2_daily_clim_2019-2022_ts_15m.png">
+                    <img src="./juan2/figures/juan2_daily_clim_2019-2022_ts_15m.png" loading="lazy">
+                </a>
+                
+                <a href="./juan2/figures/juan2_daily_clim_2019-2022_ts_100m.png">
+                    <img src="./juan2/figures/juan2_daily_clim_2019-2022_ts_100m.png" loading="lazy">
+                </a>
+                
+                <a href="./juan2/figures/juan2_daily_clim_2019-2022_ts_210m.png">
+                    <img src="./juan2/figures/juan2_daily_clim_2019-2022_ts_210m.png" loading="lazy">
                 </a>
                 
             </div>
@@ -1114,6 +1396,54 @@
             </div>
         </div>
         
+
+        <div id="daily-mean-anomalies-chat3" class="station-content chat3">
+            <p>The daily mean anomalies were computed by subtracting the daily climatologies for the period 2019-2022 from the daily mean data.
+</p>
+            <div class="grouped-plots">
+
+                
+                <a href="./chat3/figures/chat3_daily_anom_ts_15m.png">
+                    <img src="./chat3/figures/chat3_daily_anom_ts_15m.png" loading="lazy">
+                </a>
+                
+                <a href="./chat3/figures/chat3_daily_anom_ts_40m.png">
+                    <img src="./chat3/figures/chat3_daily_anom_ts_40m.png" loading="lazy">
+                </a>
+                
+                <a href="./chat3/figures/chat3_daily_anom_ts_75m.png">
+                    <img src="./chat3/figures/chat3_daily_anom_ts_75m.png" loading="lazy">
+                </a>
+                
+                <a href="./chat3/figures/chat3_daily_anom_ts_150m.png">
+                    <img src="./chat3/figures/chat3_daily_anom_ts_150m.png" loading="lazy">
+                </a>
+                
+            </div>
+        </div>
+        
+
+        <div id="daily-mean-anomalies-juan2" class="station-content juan2">
+            <p>The daily mean anomalies were computed by subtracting the daily climatologies for the period 2019-2022 from the daily mean data.
+</p>
+            <div class="grouped-plots">
+
+                
+                <a href="./juan2/figures/juan2_daily_anom_ts_15m.png">
+                    <img src="./juan2/figures/juan2_daily_anom_ts_15m.png" loading="lazy">
+                </a>
+                
+                <a href="./juan2/figures/juan2_daily_anom_ts_100m.png">
+                    <img src="./juan2/figures/juan2_daily_anom_ts_100m.png" loading="lazy">
+                </a>
+                
+                <a href="./juan2/figures/juan2_daily_anom_ts_210m.png">
+                    <img src="./juan2/figures/juan2_daily_anom_ts_210m.png" loading="lazy">
+                </a>
+                
+            </div>
+        </div>
+        
     </div>
 
     <div id="monthly-mean-data-content" class="subtab-content">
@@ -1249,6 +1579,54 @@
                 
                 <a href="./srn1/figures/srn1_monthly_mean_ts_185m.png">
                     <img src="./srn1/figures/srn1_monthly_mean_ts_185m.png" loading="lazy">
+                </a>
+                
+            </div>
+        </div>
+        
+
+        <div id="monthly-mean-data-chat3" class="station-content chat3">
+            <p>The monthly mean data were computed from daily mean data.
+</p>
+            <div class="grouped-plots">
+
+                
+                <a href="./chat3/figures/chat3_monthly_mean_ts_15m.png">
+                    <img src="./chat3/figures/chat3_monthly_mean_ts_15m.png" loading="lazy">
+                </a>
+                
+                <a href="./chat3/figures/chat3_monthly_mean_ts_40m.png">
+                    <img src="./chat3/figures/chat3_monthly_mean_ts_40m.png" loading="lazy">
+                </a>
+                
+                <a href="./chat3/figures/chat3_monthly_mean_ts_75m.png">
+                    <img src="./chat3/figures/chat3_monthly_mean_ts_75m.png" loading="lazy">
+                </a>
+                
+                <a href="./chat3/figures/chat3_monthly_mean_ts_150m.png">
+                    <img src="./chat3/figures/chat3_monthly_mean_ts_150m.png" loading="lazy">
+                </a>
+                
+            </div>
+        </div>
+        
+
+        <div id="monthly-mean-data-juan2" class="station-content juan2">
+            <p>The monthly mean data were computed from daily mean data.
+</p>
+            <div class="grouped-plots">
+
+                
+                <a href="./juan2/figures/juan2_monthly_mean_ts_15m.png">
+                    <img src="./juan2/figures/juan2_monthly_mean_ts_15m.png" loading="lazy">
+                </a>
+                
+                <a href="./juan2/figures/juan2_monthly_mean_ts_100m.png">
+                    <img src="./juan2/figures/juan2_monthly_mean_ts_100m.png" loading="lazy">
+                </a>
+                
+                <a href="./juan2/figures/juan2_monthly_mean_ts_210m.png">
+                    <img src="./juan2/figures/juan2_monthly_mean_ts_210m.png" loading="lazy">
                 </a>
                 
             </div>
@@ -1394,6 +1772,54 @@
             </div>
         </div>
         
+
+        <div id="monthly-climatologies-chat3" class="station-content chat3">
+            <p>The monthly climatologies were computed from the monthly mean data by taking the average for each month of the year over the years 2019-2022.
+</p>
+            <div class="grouped-plots">
+
+                
+                <a href="./chat3/figures/chat3_monthly_clim_2019-2022_ts_15m.png">
+                    <img src="./chat3/figures/chat3_monthly_clim_2019-2022_ts_15m.png" loading="lazy">
+                </a>
+                
+                <a href="./chat3/figures/chat3_monthly_clim_2019-2022_ts_40m.png">
+                    <img src="./chat3/figures/chat3_monthly_clim_2019-2022_ts_40m.png" loading="lazy">
+                </a>
+                
+                <a href="./chat3/figures/chat3_monthly_clim_2019-2022_ts_75m.png">
+                    <img src="./chat3/figures/chat3_monthly_clim_2019-2022_ts_75m.png" loading="lazy">
+                </a>
+                
+                <a href="./chat3/figures/chat3_monthly_clim_2019-2022_ts_150m.png">
+                    <img src="./chat3/figures/chat3_monthly_clim_2019-2022_ts_150m.png" loading="lazy">
+                </a>
+                
+            </div>
+        </div>
+        
+
+        <div id="monthly-climatologies-juan2" class="station-content juan2">
+            <p>The monthly climatologies were computed from the monthly mean data by taking the average for each month of the year over the years 2019-2022.
+</p>
+            <div class="grouped-plots">
+
+                
+                <a href="./juan2/figures/juan2_monthly_clim_2019-2022_ts_15m.png">
+                    <img src="./juan2/figures/juan2_monthly_clim_2019-2022_ts_15m.png" loading="lazy">
+                </a>
+                
+                <a href="./juan2/figures/juan2_monthly_clim_2019-2022_ts_100m.png">
+                    <img src="./juan2/figures/juan2_monthly_clim_2019-2022_ts_100m.png" loading="lazy">
+                </a>
+                
+                <a href="./juan2/figures/juan2_monthly_clim_2019-2022_ts_210m.png">
+                    <img src="./juan2/figures/juan2_monthly_clim_2019-2022_ts_210m.png" loading="lazy">
+                </a>
+                
+            </div>
+        </div>
+        
     </div>
 
     <div id="monthly-mean-anomalies-content" class="subtab-content">
@@ -1529,6 +1955,54 @@
                 
                 <a href="./srn1/figures/srn1_monthly_anom_ts_185m.png">
                     <img src="./srn1/figures/srn1_monthly_anom_ts_185m.png" loading="lazy">
+                </a>
+                
+            </div>
+        </div>
+        
+
+        <div id="monthly-mean-anomalies-chat3" class="station-content chat3">
+            <p>The monthly mean anomalies were computed by subtracting the monthly climatologies for the period 2019-2022 from the monthly mean data.
+</p>
+            <div class="grouped-plots">
+
+                
+                <a href="./chat3/figures/chat3_monthly_anom_ts_15m.png">
+                    <img src="./chat3/figures/chat3_monthly_anom_ts_15m.png" loading="lazy">
+                </a>
+                
+                <a href="./chat3/figures/chat3_monthly_anom_ts_40m.png">
+                    <img src="./chat3/figures/chat3_monthly_anom_ts_40m.png" loading="lazy">
+                </a>
+                
+                <a href="./chat3/figures/chat3_monthly_anom_ts_75m.png">
+                    <img src="./chat3/figures/chat3_monthly_anom_ts_75m.png" loading="lazy">
+                </a>
+                
+                <a href="./chat3/figures/chat3_monthly_anom_ts_150m.png">
+                    <img src="./chat3/figures/chat3_monthly_anom_ts_150m.png" loading="lazy">
+                </a>
+                
+            </div>
+        </div>
+        
+
+        <div id="monthly-mean-anomalies-juan2" class="station-content juan2">
+            <p>The monthly mean anomalies were computed by subtracting the monthly climatologies for the period 2019-2022 from the monthly mean data.
+</p>
+            <div class="grouped-plots">
+
+                
+                <a href="./juan2/figures/juan2_monthly_anom_ts_15m.png">
+                    <img src="./juan2/figures/juan2_monthly_anom_ts_15m.png" loading="lazy">
+                </a>
+                
+                <a href="./juan2/figures/juan2_monthly_anom_ts_100m.png">
+                    <img src="./juan2/figures/juan2_monthly_anom_ts_100m.png" loading="lazy">
+                </a>
+                
+                <a href="./juan2/figures/juan2_monthly_anom_ts_210m.png">
+                    <img src="./juan2/figures/juan2_monthly_anom_ts_210m.png" loading="lazy">
                 </a>
                 
             </div>
