@@ -17,7 +17,7 @@ coordinates_df = pd.read_csv(nominal_coordinates_file, index_col=[0])
 fig, ax = plt.subplots()
 
 # Set up basemap
-left_lon, bot_lat, right_lon, top_lat = [-133, 47, -120, 54.5]
+left_lon, bot_lat, right_lon, top_lat = [-133, 47, -120, 55]
 
 m = Basemap(llcrnrlon=left_lon, llcrnrlat=bot_lat,
             urcrnrlon=right_lon, urcrnrlat=top_lat,
