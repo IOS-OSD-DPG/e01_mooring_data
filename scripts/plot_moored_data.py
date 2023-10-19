@@ -21,6 +21,8 @@ BIN_INFO = {
     'SOGN2': {'max_depth': 360, 'bin_depths': [50, 320], 'bin_size': 10},
     'FOC1': {'max_depth': 375, 'bin_depths': [15, 50, 150], 'bin_size': 10},
     'EF04': {'max_depth': 120, 'bin_depths': [34, 74, 102], 'bin_size': 10},
+    'CHAT3': {'max_depth': 160, 'bin_depths': [15, 40, 75, 150], 'bin_size': 10},
+    'JUAN2': {'max_depth': 220, 'bin_depths': [15, 100, 210], 'bin_size': 10}
 }
 
 # Capture all data at A1 between 450m and 520m depth
@@ -38,15 +40,19 @@ PLOT_DATES = {
     'SRN1': [pd.to_datetime(x) for x in ['2016-01-01', f'{CURRENT_YEAR}-12-31']],
     'SOGN2': [pd.to_datetime(x) for x in ['2016-01-01', f'{CURRENT_YEAR}-12-31']],
     'FOC1': [pd.to_datetime(x) for x in ['2013-01-01', f'{CURRENT_YEAR}-12-31']],
-    'EF04': [pd.to_datetime(x) for x in ['2008-01-01', f'{CURRENT_YEAR}-12-31']]
+    'EF04': [pd.to_datetime(x) for x in ['2008-01-01', f'{CURRENT_YEAR}-12-31']],
+    'CHAT3': [pd.to_datetime(x) for x in ['2019-01-01', f'{CURRENT_YEAR}-12-31']],
+    'JUAN2': [pd.to_datetime(x) for x in ['2019-01-01', f'{CURRENT_YEAR}-12-31']]
 }
 
 CLIM_YEARS = {
     'E01': (1990, 2020),
     'A1': (1991, 2020),
-    'SCOTT2': (2016, 2022),
+    'SCOTT2': (2016, 2022),  # Update end year to 2023 when the 2023 data are published
     'HAK1': (2016, 2022),
-    'SRN1': (2017, 2022)
+    'SRN1': (2017, 2022),
+    'CHAT3': (2019, 2022),
+    'JUAN2': (2019, 2022)
 }
 
 # Strictly for cast netCDF files which use BODC codes to name variables
@@ -1079,6 +1085,7 @@ def get_raw_data(data_dir: str, station: str):
     """
 
     if station == 'E01':
+        # Special case
         file_list = [data_dir + f'{station.lower()}_cur_data_all.csv',
                      data_dir + f'{station.lower()}_ctd_data.csv']
 
@@ -1094,6 +1101,7 @@ def get_raw_data(data_dir: str, station: str):
         df_all.reset_index(drop=True, inplace=True)
 
     elif station == 'A1':
+        # Special case
         file_list = [data_dir + f'{station.lower()}_cur_data.csv',
                      data_dir + f'{station.lower()}_ctd_data.csv']
         cur_data_all = pd.read_csv(file_list[0])
@@ -1106,28 +1114,7 @@ def get_raw_data(data_dir: str, station: str):
         df_all = pd.concat((cur_data_all, pd.read_csv(file_list[1])))
         df_all.reset_index(drop=True, inplace=True)
 
-    elif station == 'SCOTT2':
-        # Don't use any of the current meter data, as it covers the same time and
-        # depths as the CTD data
-        file_list = [data_dir + f'{station.lower()}_cur_data.csv',
-                     data_dir + f'{station.lower()}_ctd_data.csv']
-        df_merged = pd.read_csv(file_list[1])
-
-        df_all = pd.concat((pd.read_csv(file_list[0]), df_merged))
-    elif station == 'E03':
-        file_list = [data_dir + f'{station.lower()}_cur_data.csv',
-                     data_dir + f'{station.lower()}_ctd_data.csv']
-        df_merged = pd.concat((pd.read_csv(file_list[0]), pd.read_csv(file_list[1])))
-        df_all = df_merged
-    elif station == 'HAK1':
-        # Don't use any of the current meter data, as it covers the same time and
-        # depths as the CTD data
-        file_list = [data_dir + f'{station.lower()}_cur_data.csv',
-                     data_dir + f'{station.lower()}_ctd_data.csv']
-        df_merged = pd.read_csv(file_list[1])
-
-        df_all = pd.concat((pd.read_csv(file_list[0]), df_merged))
-    elif station == 'SRN1':
+    elif station in ['SCOTT2', 'HAK1', 'SRN1', 'CHAT3', 'JUAN2']:
         # Don't use any of the current meter data, as it covers the same time and
         # depths as the CTD data
         file_list = [data_dir + f'{station.lower()}_cur_data.csv',
@@ -1136,7 +1123,7 @@ def get_raw_data(data_dir: str, station: str):
 
         df_all = pd.concat((pd.read_csv(file_list[0]), df_merged))
     else:
-        print('Station', station, 'not valid ! Exiting')
+        print('Station', station, 'not supported in get_raw_data() ! Exiting')
         return
 
     # Add datetime-format date for plotting ease
@@ -1173,7 +1160,7 @@ def run_plot(
     :param do_raw_by_inst: plot raw data separated by instrument type, ctd or current meter
     :param do_raw: plot raw data
     :param do_daily_means: plot daily mean data
-    :param do_daily_clim: plot daily mean climatologies for 1991-2020-ish
+    :param do_daily_clim: plot daily mean climatologies
     :param do_daily_anom: plot daily mean anomalies
     :param do_monthly_anom: plot monthly mean anomalies
     :param do_monthly_clim: plot monthly mean climatologies
@@ -1302,6 +1289,9 @@ def test():
     run_plot('A1', do_raw_by_inst=True, do_daily_means=True, do_daily_clim=True,
              do_daily_anom=True, do_monthly_means=True, do_monthly_clim=True, do_monthly_anom=True)
 
-    run_plot('HAK1', do_raw_by_inst=True, do_daily_means=True, do_daily_clim=True,
+    run_plot('JUAN2', do_raw_by_inst=True, do_daily_means=True, do_daily_clim=True,
+             do_daily_anom=True, do_monthly_means=True, do_monthly_clim=True, do_monthly_anom=True)
+
+    run_plot('CHAT3', do_raw_by_inst=True, do_daily_means=True, do_daily_clim=True,
              do_daily_anom=True, do_monthly_means=True, do_monthly_clim=True, do_monthly_anom=True)
     return
