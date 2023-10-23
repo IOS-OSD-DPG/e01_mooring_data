@@ -13,7 +13,3 @@ def get_files(station: str):
     for i in trange(address.size):
         wget.download('https://' + address[i], out=path + 'ios_shell_data\\')
     return
-
-
-get_files('chat3')
-get_files('juan2')
