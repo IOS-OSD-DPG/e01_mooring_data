@@ -23,8 +23,9 @@ mooring_dir = 'Y:\\Mooring_Data\\'
 
 # output_df_name = ('C:\\Users\\HourstonH\\Documents\\mooring_tracking\\'
 #                   'mooring_station_inventory_2015-present.csv')
-output_df_name = ('C:\\Users\\HourstonH\\Documents\\mooring_tracking\\'
-                  'mooring_station_inventory_all.csv')
+# output_df_name = ('C:\\Users\\HourstonH\\Documents\\mooring_tracking\\'
+#                   'mooring_station_inventory_all.csv')
+output_df_name = 'mooring_station_inventory_all.csv'
 
 # subdirs don't exist for 2016 and 2017
 subdirs_new = [mooring_dir + f'{x}-recoveries\\' for x in np.arange(2015, 2024)]
