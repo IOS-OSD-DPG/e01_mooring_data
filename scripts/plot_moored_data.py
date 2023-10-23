@@ -502,7 +502,7 @@ def compute_daily_means(df: pd.DataFrame, output_dir: str, station: str):
     # Initialize data dictionary to pass to a csv file later
     data_dict = {'Datetime': unique_datetimes}
 
-    # Iterate through the depths 35, 75, 95m
+    # Iterate through the depths
     for i in range(len(BIN_INFO[station]['bin_depths'])):
         depth = BIN_INFO[station]['bin_depths'][i]
         print(depth)
@@ -1127,11 +1127,13 @@ def get_raw_data(data_dir: str, station: str):
         df_merged = pd.read_csv(file_list[1])
 
         df_all = pd.concat((pd.read_csv(file_list[0]), df_merged))
+        df_all.reset_index(drop=True, inplace=True)
     elif station in ['BP1', 'E03']:
         # Use all cur and ctd data since they don't overlap
         file_list = [data_dir + f'{station.lower()}_cur_data.csv',
                      data_dir + f'{station.lower()}_ctd_data.csv']
         df_merged = pd.concat((pd.read_csv(file_list[0]), pd.read_csv(file_list[1])))
+        df_merged.reset_index(drop=True, inplace=True)
 
         df_all = df_merged.copy()
     else:
