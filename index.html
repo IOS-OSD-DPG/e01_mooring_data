@@ -13,6 +13,9 @@ stations:
   - srn1
   - chat3
   - juan2
+  - bp1
+  - e03
+  - scott3
 plot_types:
   - annual-data-availability
   - monthly-data-availability
@@ -53,7 +56,7 @@ datatypes:
 </p>
 {% endfor %}
 
-<div class="station-content e01 scott2 a1 hak1 srn1 chat3 juan2">
+<div class="station-content e01 scott2 a1 hak1 srn1 chat3 juan2 bp1 e03 scott3">
 <!--    Make subtab button for each station-->
     <div id="subtab-choice" class="tab">
         {% for type in page.plot_types %}
@@ -169,6 +172,8 @@ datatypes:
 
         <div id="daily-climatologies-{{ station.id }}" class="station-content {{ station.id }}">
             <p>{{ station.daily_climatologies }}</p>
+
+            {% if station.climatology_years %}
             <div class="grouped-plots">
 
                 {% for depth in station.depth_list %}
@@ -177,6 +182,7 @@ datatypes:
                 </a>
                 {% endfor %}
             </div>
+            {% endif %}
         </div>
         {% endfor %}
     </div>
@@ -188,6 +194,8 @@ datatypes:
 
         <div id="daily-mean-anomalies-{{ station.id }}" class="station-content {{ station.id }}">
             <p>{{ station.daily_anomalies }}</p>
+
+            {% if station.climatology_years %}
             <div class="grouped-plots">
 
                 {% for depth in station.depth_list %}
@@ -196,6 +204,7 @@ datatypes:
                 </a>
                 {% endfor %}
             </div>
+            {% endif %}
         </div>
         {% endfor %}
     </div>
@@ -226,6 +235,8 @@ datatypes:
 
         <div id="monthly-climatologies-{{ station.id }}" class="station-content {{ station.id }}">
             <p>{{ station.monthly_climatologies }}</p>
+
+            {% if station.climatology_years %}
             <div class="grouped-plots">
 
                 {% for depth in station.depth_list %}
@@ -234,6 +245,7 @@ datatypes:
                 </a>
                 {% endfor %}
             </div>
+            {% endif %}
         </div>
         {% endfor %}
     </div>
@@ -245,6 +257,8 @@ datatypes:
 
         <div id="monthly-mean-anomalies-{{ station.id }}" class="station-content {{ station.id }}">
             <p>{{ station.monthly_anomalies }}</p>
+
+            {% if station.climatology_years %}
             <div class="grouped-plots">
 
                 {% for depth in station.depth_list %}
@@ -253,6 +267,7 @@ datatypes:
                 </a>
                 {% endfor %}
             </div>
+            {% endif %}
         </div>
         {% endfor %}
     </div>

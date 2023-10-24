@@ -269,3 +269,95 @@
   monthly_anomalies:
     - >
       The monthly mean anomalies were computed by subtracting the monthly climatologies for the period 2019-2022 from the monthly mean data.
+
+- id: bp1
+  depth_list:
+    - 35
+    - 75
+    - 100
+  raw:
+    - >
+      The data were binned into 10m bins centered on the depths 35m, 75m, and 100m to make these plots. 
+      Most data from station BP1 fit into these bins. 
+      Data are separated by instrument (current meter or CTD) and variable (temperature or salinity).
+  daily_means:
+    - >
+      All available current meter and CTD data were used, since these do not overlap in time.  
+      The data were binned into 10m bins centered on the depths 35m, 75m, and 100m to make these plots.
+  daily_climatologies:
+    - >
+      Daily climatologies were not computed due to the sparsity of the dataset.
+  daily_anomalies:
+    - >
+      Daily mean anomalies were not computed due to the sparsity of the dataset.
+  monthly_means:
+    - >
+      The monthly mean data were computed from daily mean data.
+  monthly_climatologies:
+    - >
+      Monthly climatologies were not computed due to the sparsity of the dataset.
+  monthly_anomalies:
+    - >
+      Monthly mean anomalies were not computed due to the sparsity of the dataset.
+
+- id: e03
+  depth_list:
+    - 35
+    - 100
+    - 175
+    - 350
+    - 400
+  raw:
+    - >
+      The data were binned into 20m bins centered on the depths 35m, 100m, 175m, 350m, and 400m to make these plots. 
+      Most data from station E03 fit into these bins. 
+      Data are separated by instrument (current meter or CTD) and variable (temperature or salinity).
+  daily_means:
+    - >
+      All available current meter and CTD data were used, since these do not overlap in time.  
+      The data were binned into 20m bins centered on the depths 35m, 100m, 175m, 350m, and 400m to make these plots.
+  daily_climatologies:
+    - >
+      Daily climatologies were not computed due to the sparsity of the dataset.
+  daily_anomalies:
+    - >
+      Daily mean anomalies were not computed due to the sparsity of the dataset.
+  monthly_means:
+    - >
+      The monthly mean data were computed from daily mean data.
+  monthly_climatologies:
+    - >
+      Monthly climatologies were not computed due to the sparsity of the dataset.
+  monthly_anomalies:
+    - >
+      Monthly mean anomalies were not computed due to the sparsity of the dataset.
+
+- id: scott3
+  depth_list:
+    - 40
+    - 150
+    - 225
+  raw:
+    - >
+      The data were binned into 10m bins centered on the depths 40m, 150m, and 225m to make these plots. 
+      All data from station SCOTT3 fit into these bins. 
+      Data are separated by instrument (current meter or CTD) and variable (temperature or salinity).
+  daily_means:
+    - >
+      Only CTD data were used, given that all available current meter data overlapped with the CTD data.  
+      The data were binned into 10m bins centered on the depths 40m, 150m, and 225m to make these plots.
+  daily_climatologies:
+    - >
+      Daily climatologies were not computed due to the sparsity of the dataset.
+  daily_anomalies:
+    - >
+      Daily mean anomalies were not computed due to the sparsity of the dataset.
+  monthly_means:
+    - >
+      The monthly mean data were computed from daily mean data.
+  monthly_climatologies:
+    - >
+      Monthly climatologies were not computed due to the sparsity of the dataset.
+  monthly_anomalies:
+    - >
+      Monthly mean anomalies were not computed due to the sparsity of the dataset.
