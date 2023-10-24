@@ -4,12 +4,11 @@ import pandas as pd
 import numpy as np
 from tqdm import trange
 from gsw import z_from_p
+import os
 
 """
 Convert IOS shell format files to csv files using ios_shell and pandas
 """
-
-list_of_stations = ['e01', 'a1', 'scott2', 'hak1', 'srn1']
 
 
 def do_conversion(station: str):
@@ -18,8 +17,12 @@ def do_conversion(station: str):
     :param station:
     :return:
     """
+    station = station.lower()
     data_dir = f'E:\\charles\\mooring_data_page\\{station}\\ios_shell_data\\'
     output_dir = data_dir.replace('ios_shell_data', 'csv_data')
+
+    if not os.path.exists(output_dir):
+        os.mkdir(output_dir)
 
     # test_file = data_dir + 'E01A_19800507_19800913_0015m_L2.CUR'
     # par = ios_shell.ShellFile.fromfile(test_file)
@@ -162,7 +165,7 @@ def do_conversion(station: str):
             # Append the data to one big dataframe?
             inst_df = pd.concat((inst_df, obs_df), ignore_index=True)
 
-        # Save ctd dataframe to csv file
+        # Save dataframe to csv file
         inst_df.to_csv(output_dir + f'{station}_{inst}_data.csv', index=False)
         print(f'{station}_{inst}_data.csv')
 

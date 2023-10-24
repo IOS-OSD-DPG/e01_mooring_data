@@ -46,6 +46,18 @@
         JUAN2
     </button>
     
+    <button class="station-tablinks" onclick="changeStation(event)" id="bp1">
+        BP1
+    </button>
+    
+    <button class="station-tablinks" onclick="changeStation(event)" id="e03">
+        E03
+    </button>
+    
+    <button class="station-tablinks" onclick="changeStation(event)" id="scott3">
+        SCOTT3
+    </button>
+    
 </div>
 
 
@@ -77,8 +89,20 @@
     Mooring data from station JUAN2.
 </p>
 
+<p id="bp1-description" class="station-content bp1">
+    Mooring data from station BP1.
+</p>
 
-<div class="station-content e01 scott2 a1 hak1 srn1 chat3 juan2">
+<p id="e03-description" class="station-content e03">
+    Mooring data from station E03.
+</p>
+
+<p id="scott3-description" class="station-content scott3">
+    Mooring data from station SCOTT3.
+</p>
+
+
+<div class="station-content e01 scott2 a1 hak1 srn1 chat3 juan2 bp1 e03 scott3">
 <!--    Make subtab button for each station-->
     <div id="subtab-choice" class="tab">
         
@@ -308,6 +332,42 @@
             
         </div>
         
+        <div id="annual-data-availability-bp1" class="station-content bp1">
+            
+            <a href="./bp1/figures/bp1_Temperature_annual_sampling_counts.png">
+                <img src="./bp1/figures/bp1_Temperature_annual_sampling_counts.png" loading="lazy">
+            </a>
+            
+            <a href="./bp1/figures/bp1_Salinity_annual_sampling_counts.png">
+                <img src="./bp1/figures/bp1_Salinity_annual_sampling_counts.png" loading="lazy">
+            </a>
+            
+        </div>
+        
+        <div id="annual-data-availability-e03" class="station-content e03">
+            
+            <a href="./e03/figures/e03_Temperature_annual_sampling_counts.png">
+                <img src="./e03/figures/e03_Temperature_annual_sampling_counts.png" loading="lazy">
+            </a>
+            
+            <a href="./e03/figures/e03_Salinity_annual_sampling_counts.png">
+                <img src="./e03/figures/e03_Salinity_annual_sampling_counts.png" loading="lazy">
+            </a>
+            
+        </div>
+        
+        <div id="annual-data-availability-scott3" class="station-content scott3">
+            
+            <a href="./scott3/figures/scott3_Temperature_annual_sampling_counts.png">
+                <img src="./scott3/figures/scott3_Temperature_annual_sampling_counts.png" loading="lazy">
+            </a>
+            
+            <a href="./scott3/figures/scott3_Salinity_annual_sampling_counts.png">
+                <img src="./scott3/figures/scott3_Salinity_annual_sampling_counts.png" loading="lazy">
+            </a>
+            
+        </div>
+        
     </div>
 
     <div id="monthly-data-availability-content" class="subtab-content">
@@ -401,6 +461,42 @@
             
         </div>
         
+        <div id="monthly-data-availability-bp1" class="station-content bp1">
+            
+            <a href="./bp1/figures/bp1_Temperature_monthly_sampling_counts.png">
+                <img src="./bp1/figures/bp1_Temperature_monthly_sampling_counts.png" loading="lazy">
+            </a>
+            
+            <a href="./bp1/figures/bp1_Salinity_monthly_sampling_counts.png">
+                <img src="./bp1/figures/bp1_Salinity_monthly_sampling_counts.png" loading="lazy">
+            </a>
+            
+        </div>
+        
+        <div id="monthly-data-availability-e03" class="station-content e03">
+            
+            <a href="./e03/figures/e03_Temperature_monthly_sampling_counts.png">
+                <img src="./e03/figures/e03_Temperature_monthly_sampling_counts.png" loading="lazy">
+            </a>
+            
+            <a href="./e03/figures/e03_Salinity_monthly_sampling_counts.png">
+                <img src="./e03/figures/e03_Salinity_monthly_sampling_counts.png" loading="lazy">
+            </a>
+            
+        </div>
+        
+        <div id="monthly-data-availability-scott3" class="station-content scott3">
+            
+            <a href="./scott3/figures/scott3_Temperature_monthly_sampling_counts.png">
+                <img src="./scott3/figures/scott3_Temperature_monthly_sampling_counts.png" loading="lazy">
+            </a>
+            
+            <a href="./scott3/figures/scott3_Salinity_monthly_sampling_counts.png">
+                <img src="./scott3/figures/scott3_Salinity_monthly_sampling_counts.png" loading="lazy">
+            </a>
+            
+        </div>
+        
     </div>
 
     <div id="instrument-depths-content" class="subtab-content">
@@ -466,6 +562,30 @@
 </p>
             <a href="./juan2/figures/juan2_cur_ctd_depths.png">
                 <img src="./juan2/figures/juan2_cur_ctd_depths.png"
+                     loading="lazy" width="600" height="450">
+            </a>
+        </div>
+        
+        <div id="instrument-depths-bp1" class="station-content bp1">
+            <p></p>
+            <a href="./bp1/figures/bp1_cur_ctd_depths.png">
+                <img src="./bp1/figures/bp1_cur_ctd_depths.png"
+                     loading="lazy" width="600" height="450">
+            </a>
+        </div>
+        
+        <div id="instrument-depths-e03" class="station-content e03">
+            <p></p>
+            <a href="./e03/figures/e03_cur_ctd_depths.png">
+                <img src="./e03/figures/e03_cur_ctd_depths.png"
+                     loading="lazy" width="600" height="450">
+            </a>
+        </div>
+        
+        <div id="instrument-depths-scott3" class="station-content scott3">
+            <p></p>
+            <a href="./scott3/figures/scott3_cur_ctd_depths.png">
+                <img src="./scott3/figures/scott3_cur_ctd_depths.png"
                      loading="lazy" width="600" height="450">
             </a>
         </div>
@@ -825,6 +945,146 @@
             </div>
         </div>
         
+
+        <div id="raw-data-bp1" class="station-content bp1">
+            <p>The data were binned into 10m bins centered on the depths 35m, 75m, and 100m to make these plots.  Most data from station BP1 fit into these bins.  Data are separated by instrument (current meter or CTD) and variable (temperature or salinity).
+</p>
+            <div class="grouped-plots">
+
+                
+                
+                <a href="./bp1/figures/bp1_raw_Temperature_35m_cur_vs_ctd.png">
+                    <img src="./bp1/figures/bp1_raw_Temperature_35m_cur_vs_ctd.png" loading="lazy">
+                </a>
+                
+                <a href="./bp1/figures/bp1_raw_Salinity_35m_cur_vs_ctd.png">
+                    <img src="./bp1/figures/bp1_raw_Salinity_35m_cur_vs_ctd.png" loading="lazy">
+                </a>
+                
+                
+                
+                <a href="./bp1/figures/bp1_raw_Temperature_75m_cur_vs_ctd.png">
+                    <img src="./bp1/figures/bp1_raw_Temperature_75m_cur_vs_ctd.png" loading="lazy">
+                </a>
+                
+                <a href="./bp1/figures/bp1_raw_Salinity_75m_cur_vs_ctd.png">
+                    <img src="./bp1/figures/bp1_raw_Salinity_75m_cur_vs_ctd.png" loading="lazy">
+                </a>
+                
+                
+                
+                <a href="./bp1/figures/bp1_raw_Temperature_100m_cur_vs_ctd.png">
+                    <img src="./bp1/figures/bp1_raw_Temperature_100m_cur_vs_ctd.png" loading="lazy">
+                </a>
+                
+                <a href="./bp1/figures/bp1_raw_Salinity_100m_cur_vs_ctd.png">
+                    <img src="./bp1/figures/bp1_raw_Salinity_100m_cur_vs_ctd.png" loading="lazy">
+                </a>
+                
+                
+            </div>
+        </div>
+        
+
+        <div id="raw-data-e03" class="station-content e03">
+            <p>The data were binned into 20m bins centered on the depths 35m, 100m, 175m, 350m, and 400m to make these plots.  Most data from station E03 fit into these bins.  Data are separated by instrument (current meter or CTD) and variable (temperature or salinity).
+</p>
+            <div class="grouped-plots">
+
+                
+                
+                <a href="./e03/figures/e03_raw_Temperature_35m_cur_vs_ctd.png">
+                    <img src="./e03/figures/e03_raw_Temperature_35m_cur_vs_ctd.png" loading="lazy">
+                </a>
+                
+                <a href="./e03/figures/e03_raw_Salinity_35m_cur_vs_ctd.png">
+                    <img src="./e03/figures/e03_raw_Salinity_35m_cur_vs_ctd.png" loading="lazy">
+                </a>
+                
+                
+                
+                <a href="./e03/figures/e03_raw_Temperature_100m_cur_vs_ctd.png">
+                    <img src="./e03/figures/e03_raw_Temperature_100m_cur_vs_ctd.png" loading="lazy">
+                </a>
+                
+                <a href="./e03/figures/e03_raw_Salinity_100m_cur_vs_ctd.png">
+                    <img src="./e03/figures/e03_raw_Salinity_100m_cur_vs_ctd.png" loading="lazy">
+                </a>
+                
+                
+                
+                <a href="./e03/figures/e03_raw_Temperature_175m_cur_vs_ctd.png">
+                    <img src="./e03/figures/e03_raw_Temperature_175m_cur_vs_ctd.png" loading="lazy">
+                </a>
+                
+                <a href="./e03/figures/e03_raw_Salinity_175m_cur_vs_ctd.png">
+                    <img src="./e03/figures/e03_raw_Salinity_175m_cur_vs_ctd.png" loading="lazy">
+                </a>
+                
+                
+                
+                <a href="./e03/figures/e03_raw_Temperature_350m_cur_vs_ctd.png">
+                    <img src="./e03/figures/e03_raw_Temperature_350m_cur_vs_ctd.png" loading="lazy">
+                </a>
+                
+                <a href="./e03/figures/e03_raw_Salinity_350m_cur_vs_ctd.png">
+                    <img src="./e03/figures/e03_raw_Salinity_350m_cur_vs_ctd.png" loading="lazy">
+                </a>
+                
+                
+                
+                <a href="./e03/figures/e03_raw_Temperature_400m_cur_vs_ctd.png">
+                    <img src="./e03/figures/e03_raw_Temperature_400m_cur_vs_ctd.png" loading="lazy">
+                </a>
+                
+                <a href="./e03/figures/e03_raw_Salinity_400m_cur_vs_ctd.png">
+                    <img src="./e03/figures/e03_raw_Salinity_400m_cur_vs_ctd.png" loading="lazy">
+                </a>
+                
+                
+            </div>
+        </div>
+        
+
+        <div id="raw-data-scott3" class="station-content scott3">
+            <p>The data were binned into 10m bins centered on the depths 40m, 150m, and 225m to make these plots.  All data from station SCOTT3 fit into these bins.  Data are separated by instrument (current meter or CTD) and variable (temperature or salinity).
+</p>
+            <div class="grouped-plots">
+
+                
+                
+                <a href="./scott3/figures/scott3_raw_Temperature_40m_cur_vs_ctd.png">
+                    <img src="./scott3/figures/scott3_raw_Temperature_40m_cur_vs_ctd.png" loading="lazy">
+                </a>
+                
+                <a href="./scott3/figures/scott3_raw_Salinity_40m_cur_vs_ctd.png">
+                    <img src="./scott3/figures/scott3_raw_Salinity_40m_cur_vs_ctd.png" loading="lazy">
+                </a>
+                
+                
+                
+                <a href="./scott3/figures/scott3_raw_Temperature_150m_cur_vs_ctd.png">
+                    <img src="./scott3/figures/scott3_raw_Temperature_150m_cur_vs_ctd.png" loading="lazy">
+                </a>
+                
+                <a href="./scott3/figures/scott3_raw_Salinity_150m_cur_vs_ctd.png">
+                    <img src="./scott3/figures/scott3_raw_Salinity_150m_cur_vs_ctd.png" loading="lazy">
+                </a>
+                
+                
+                
+                <a href="./scott3/figures/scott3_raw_Temperature_225m_cur_vs_ctd.png">
+                    <img src="./scott3/figures/scott3_raw_Temperature_225m_cur_vs_ctd.png" loading="lazy">
+                </a>
+                
+                <a href="./scott3/figures/scott3_raw_Salinity_225m_cur_vs_ctd.png">
+                    <img src="./scott3/figures/scott3_raw_Salinity_225m_cur_vs_ctd.png" loading="lazy">
+                </a>
+                
+                
+            </div>
+        </div>
+        
     </div>
 
     <div id="daily-mean-data-content" class="subtab-content">
@@ -1068,6 +1328,102 @@
             </div>
         </div>
         
+
+        <div id="daily-mean-data-bp1" class="station-content bp1">
+            <p>All available current meter and CTD data were used, since these do not overlap in time.   The data were binned into 10m bins centered on the depths 35m, 75m, and 100m to make these plots.
+</p>
+            <div class="grouped-plots">
+
+                
+                
+                <a href="./bp1/figures/bp1_daily_mean_ts_35m.png">
+                    <img src="./bp1/figures/bp1_daily_mean_ts_35m.png" loading="lazy">
+                </a>
+                
+                
+                
+                <a href="./bp1/figures/bp1_daily_mean_ts_75m.png">
+                    <img src="./bp1/figures/bp1_daily_mean_ts_75m.png" loading="lazy">
+                </a>
+                
+                
+                
+                <a href="./bp1/figures/bp1_daily_mean_ts_100m.png">
+                    <img src="./bp1/figures/bp1_daily_mean_ts_100m.png" loading="lazy">
+                </a>
+                
+                
+            </div>
+        </div>
+        
+
+        <div id="daily-mean-data-e03" class="station-content e03">
+            <p>All available current meter and CTD data were used, since these do not overlap in time.   The data were binned into 20m bins centered on the depths 35m, 100m, 175m, 350m, and 400m to make these plots.
+</p>
+            <div class="grouped-plots">
+
+                
+                
+                <a href="./e03/figures/e03_daily_mean_ts_35m.png">
+                    <img src="./e03/figures/e03_daily_mean_ts_35m.png" loading="lazy">
+                </a>
+                
+                
+                
+                <a href="./e03/figures/e03_daily_mean_ts_100m.png">
+                    <img src="./e03/figures/e03_daily_mean_ts_100m.png" loading="lazy">
+                </a>
+                
+                
+                
+                <a href="./e03/figures/e03_daily_mean_ts_175m.png">
+                    <img src="./e03/figures/e03_daily_mean_ts_175m.png" loading="lazy">
+                </a>
+                
+                
+                
+                <a href="./e03/figures/e03_daily_mean_ts_350m.png">
+                    <img src="./e03/figures/e03_daily_mean_ts_350m.png" loading="lazy">
+                </a>
+                
+                
+                
+                <a href="./e03/figures/e03_daily_mean_ts_400m.png">
+                    <img src="./e03/figures/e03_daily_mean_ts_400m.png" loading="lazy">
+                </a>
+                
+                
+            </div>
+        </div>
+        
+
+        <div id="daily-mean-data-scott3" class="station-content scott3">
+            <p>Only CTD data were used, given that all available current meter data overlapped with the CTD data.   The data were binned into 10m bins centered on the depths 40m, 150m, and 225m to make these plots.
+</p>
+            <div class="grouped-plots">
+
+                
+                
+                <a href="./scott3/figures/scott3_daily_mean_ts_40m.png">
+                    <img src="./scott3/figures/scott3_daily_mean_ts_40m.png" loading="lazy">
+                </a>
+                
+                
+                
+                <a href="./scott3/figures/scott3_daily_mean_ts_150m.png">
+                    <img src="./scott3/figures/scott3_daily_mean_ts_150m.png" loading="lazy">
+                </a>
+                
+                
+                
+                <a href="./scott3/figures/scott3_daily_mean_ts_225m.png">
+                    <img src="./scott3/figures/scott3_daily_mean_ts_225m.png" loading="lazy">
+                </a>
+                
+                
+            </div>
+        </div>
+        
     </div>
 
     <div id="daily-climatologies-content" class="subtab-content">
@@ -1078,6 +1434,8 @@
         <div id="daily-climatologies-e01" class="station-content e01">
             <p>The daily climatologies were computed from the daily mean data by taking the average for each day of the year over the years 1990-2020.  This is a 30-year climatology due to the year 2007 having no temperature or salinity observations.
 </p>
+
+            
             <div class="grouped-plots">
 
                 
@@ -1094,12 +1452,15 @@
                 </a>
                 
             </div>
+            
         </div>
         
 
         <div id="daily-climatologies-scott2" class="station-content scott2">
             <p>The daily climatologies were computed from the daily mean data by taking the average for each day of the year over the years 2016-2022.
 </p>
+
+            
             <div class="grouped-plots">
 
                 
@@ -1124,12 +1485,15 @@
                 </a>
                 
             </div>
+            
         </div>
         
 
         <div id="daily-climatologies-a1" class="station-content a1">
             <p>The daily climatologies were computed from the daily mean data by taking the average for each day of the year over the years 1991-2020.
 </p>
+
+            
             <div class="grouped-plots">
 
                 
@@ -1158,12 +1522,15 @@
                 </a>
                 
             </div>
+            
         </div>
         
 
         <div id="daily-climatologies-hak1" class="station-content hak1">
             <p>The daily climatologies were computed from the daily mean data by taking the average for each day of the year over the years 2016-2022.
 </p>
+
+            
             <div class="grouped-plots">
 
                 
@@ -1180,12 +1547,15 @@
                 </a>
                 
             </div>
+            
         </div>
         
 
         <div id="daily-climatologies-srn1" class="station-content srn1">
             <p>The daily climatologies were computed from the daily mean data by taking the average for each day of the year over the years 2017-2022.
 </p>
+
+            
             <div class="grouped-plots">
 
                 
@@ -1206,12 +1576,15 @@
                 </a>
                 
             </div>
+            
         </div>
         
 
         <div id="daily-climatologies-chat3" class="station-content chat3">
             <p>The daily climatologies were computed from the daily mean data by taking the average for each day of the year over the years 2019-2022.
 </p>
+
+            
             <div class="grouped-plots">
 
                 
@@ -1232,12 +1605,15 @@
                 </a>
                 
             </div>
+            
         </div>
         
 
         <div id="daily-climatologies-juan2" class="station-content juan2">
             <p>The daily climatologies were computed from the daily mean data by taking the average for each day of the year over the years 2019-2022.
 </p>
+
+            
             <div class="grouped-plots">
 
                 
@@ -1254,6 +1630,31 @@
                 </a>
                 
             </div>
+            
+        </div>
+        
+
+        <div id="daily-climatologies-bp1" class="station-content bp1">
+            <p>Daily climatologies were not computed due to the sparsity of the dataset.
+</p>
+
+            
+        </div>
+        
+
+        <div id="daily-climatologies-e03" class="station-content e03">
+            <p>Daily climatologies were not computed due to the sparsity of the dataset.
+</p>
+
+            
+        </div>
+        
+
+        <div id="daily-climatologies-scott3" class="station-content scott3">
+            <p>Daily climatologies were not computed due to the sparsity of the dataset.
+</p>
+
+            
         </div>
         
     </div>
@@ -1266,6 +1667,8 @@
         <div id="daily-mean-anomalies-e01" class="station-content e01">
             <p>The daily mean anomalies were computed by subtracting the daily climatologies for the period 1990-2020 from the daily mean data.
 </p>
+
+            
             <div class="grouped-plots">
 
                 
@@ -1282,12 +1685,15 @@
                 </a>
                 
             </div>
+            
         </div>
         
 
         <div id="daily-mean-anomalies-scott2" class="station-content scott2">
             <p>The daily mean anomalies were computed by subtracting the daily climatologies for the period 2016-2022 from the daily mean data.
 </p>
+
+            
             <div class="grouped-plots">
 
                 
@@ -1312,12 +1718,15 @@
                 </a>
                 
             </div>
+            
         </div>
         
 
         <div id="daily-mean-anomalies-a1" class="station-content a1">
             <p>Daily mean anomalies were computed by subtracting the daily climatologies for the period 1991-2020 from the daily mean data.
 </p>
+
+            
             <div class="grouped-plots">
 
                 
@@ -1346,12 +1755,15 @@
                 </a>
                 
             </div>
+            
         </div>
         
 
         <div id="daily-mean-anomalies-hak1" class="station-content hak1">
             <p>The daily mean anomalies were computed by subtracting the daily climatologies for the period 2016-2022 from the daily mean data.
 </p>
+
+            
             <div class="grouped-plots">
 
                 
@@ -1368,12 +1780,15 @@
                 </a>
                 
             </div>
+            
         </div>
         
 
         <div id="daily-mean-anomalies-srn1" class="station-content srn1">
             <p>The daily mean anomalies were computed by subtracting the daily climatologies for the period 2017-2022 from the daily mean data.
 </p>
+
+            
             <div class="grouped-plots">
 
                 
@@ -1394,12 +1809,15 @@
                 </a>
                 
             </div>
+            
         </div>
         
 
         <div id="daily-mean-anomalies-chat3" class="station-content chat3">
             <p>The daily mean anomalies were computed by subtracting the daily climatologies for the period 2019-2022 from the daily mean data.
 </p>
+
+            
             <div class="grouped-plots">
 
                 
@@ -1420,12 +1838,15 @@
                 </a>
                 
             </div>
+            
         </div>
         
 
         <div id="daily-mean-anomalies-juan2" class="station-content juan2">
             <p>The daily mean anomalies were computed by subtracting the daily climatologies for the period 2019-2022 from the daily mean data.
 </p>
+
+            
             <div class="grouped-plots">
 
                 
@@ -1442,6 +1863,31 @@
                 </a>
                 
             </div>
+            
+        </div>
+        
+
+        <div id="daily-mean-anomalies-bp1" class="station-content bp1">
+            <p>Daily mean anomalies were not computed due to the sparsity of the dataset.
+</p>
+
+            
+        </div>
+        
+
+        <div id="daily-mean-anomalies-e03" class="station-content e03">
+            <p>Daily mean anomalies were not computed due to the sparsity of the dataset.
+</p>
+
+            
+        </div>
+        
+
+        <div id="daily-mean-anomalies-scott3" class="station-content scott3">
+            <p>Daily mean anomalies were not computed due to the sparsity of the dataset.
+</p>
+
+            
         </div>
         
     </div>
@@ -1632,6 +2078,80 @@
             </div>
         </div>
         
+
+        <div id="monthly-mean-data-bp1" class="station-content bp1">
+            <p>The monthly mean data were computed from daily mean data.
+</p>
+            <div class="grouped-plots">
+
+                
+                <a href="./bp1/figures/bp1_monthly_mean_ts_35m.png">
+                    <img src="./bp1/figures/bp1_monthly_mean_ts_35m.png" loading="lazy">
+                </a>
+                
+                <a href="./bp1/figures/bp1_monthly_mean_ts_75m.png">
+                    <img src="./bp1/figures/bp1_monthly_mean_ts_75m.png" loading="lazy">
+                </a>
+                
+                <a href="./bp1/figures/bp1_monthly_mean_ts_100m.png">
+                    <img src="./bp1/figures/bp1_monthly_mean_ts_100m.png" loading="lazy">
+                </a>
+                
+            </div>
+        </div>
+        
+
+        <div id="monthly-mean-data-e03" class="station-content e03">
+            <p>The monthly mean data were computed from daily mean data.
+</p>
+            <div class="grouped-plots">
+
+                
+                <a href="./e03/figures/e03_monthly_mean_ts_35m.png">
+                    <img src="./e03/figures/e03_monthly_mean_ts_35m.png" loading="lazy">
+                </a>
+                
+                <a href="./e03/figures/e03_monthly_mean_ts_100m.png">
+                    <img src="./e03/figures/e03_monthly_mean_ts_100m.png" loading="lazy">
+                </a>
+                
+                <a href="./e03/figures/e03_monthly_mean_ts_175m.png">
+                    <img src="./e03/figures/e03_monthly_mean_ts_175m.png" loading="lazy">
+                </a>
+                
+                <a href="./e03/figures/e03_monthly_mean_ts_350m.png">
+                    <img src="./e03/figures/e03_monthly_mean_ts_350m.png" loading="lazy">
+                </a>
+                
+                <a href="./e03/figures/e03_monthly_mean_ts_400m.png">
+                    <img src="./e03/figures/e03_monthly_mean_ts_400m.png" loading="lazy">
+                </a>
+                
+            </div>
+        </div>
+        
+
+        <div id="monthly-mean-data-scott3" class="station-content scott3">
+            <p>The monthly mean data were computed from daily mean data.
+</p>
+            <div class="grouped-plots">
+
+                
+                <a href="./scott3/figures/scott3_monthly_mean_ts_40m.png">
+                    <img src="./scott3/figures/scott3_monthly_mean_ts_40m.png" loading="lazy">
+                </a>
+                
+                <a href="./scott3/figures/scott3_monthly_mean_ts_150m.png">
+                    <img src="./scott3/figures/scott3_monthly_mean_ts_150m.png" loading="lazy">
+                </a>
+                
+                <a href="./scott3/figures/scott3_monthly_mean_ts_225m.png">
+                    <img src="./scott3/figures/scott3_monthly_mean_ts_225m.png" loading="lazy">
+                </a>
+                
+            </div>
+        </div>
+        
     </div>
 
     <div id="monthly-climatologies-content" class="subtab-content">
@@ -1642,6 +2162,8 @@
         <div id="monthly-climatologies-e01" class="station-content e01">
             <p>The monthly climatologies were computed from the monthly mean data by taking the average for each month of the year over the years 1990-2020.  This is a 30-year climatology due to the year 2007 having no temperature or salinity observations.
 </p>
+
+            
             <div class="grouped-plots">
 
                 
@@ -1658,12 +2180,15 @@
                 </a>
                 
             </div>
+            
         </div>
         
 
         <div id="monthly-climatologies-scott2" class="station-content scott2">
             <p>The monthly climatologies were computed from the monthly mean data by taking the average for each month of the year over the years 2016-2022.
 </p>
+
+            
             <div class="grouped-plots">
 
                 
@@ -1688,12 +2213,15 @@
                 </a>
                 
             </div>
+            
         </div>
         
 
         <div id="monthly-climatologies-a1" class="station-content a1">
             <p>The monthly climatologies were computed from the monthly mean data by taking the average for each month of the year over the years 1991-2020.
 </p>
+
+            
             <div class="grouped-plots">
 
                 
@@ -1722,12 +2250,15 @@
                 </a>
                 
             </div>
+            
         </div>
         
 
         <div id="monthly-climatologies-hak1" class="station-content hak1">
             <p>The monthly climatologies were computed from the monthly mean data by taking the average for each month of the year over the years 2016-2022.
 </p>
+
+            
             <div class="grouped-plots">
 
                 
@@ -1744,12 +2275,15 @@
                 </a>
                 
             </div>
+            
         </div>
         
 
         <div id="monthly-climatologies-srn1" class="station-content srn1">
             <p>The monthly climatologies were computed from the monthly mean data by taking the average for each month of the year over the years 2017-2022.
 </p>
+
+            
             <div class="grouped-plots">
 
                 
@@ -1770,12 +2304,15 @@
                 </a>
                 
             </div>
+            
         </div>
         
 
         <div id="monthly-climatologies-chat3" class="station-content chat3">
             <p>The monthly climatologies were computed from the monthly mean data by taking the average for each month of the year over the years 2019-2022.
 </p>
+
+            
             <div class="grouped-plots">
 
                 
@@ -1796,12 +2333,15 @@
                 </a>
                 
             </div>
+            
         </div>
         
 
         <div id="monthly-climatologies-juan2" class="station-content juan2">
             <p>The monthly climatologies were computed from the monthly mean data by taking the average for each month of the year over the years 2019-2022.
 </p>
+
+            
             <div class="grouped-plots">
 
                 
@@ -1818,6 +2358,31 @@
                 </a>
                 
             </div>
+            
+        </div>
+        
+
+        <div id="monthly-climatologies-bp1" class="station-content bp1">
+            <p>Monthly climatologies were not computed due to the sparsity of the dataset.
+</p>
+
+            
+        </div>
+        
+
+        <div id="monthly-climatologies-e03" class="station-content e03">
+            <p>Monthly climatologies were not computed due to the sparsity of the dataset.
+</p>
+
+            
+        </div>
+        
+
+        <div id="monthly-climatologies-scott3" class="station-content scott3">
+            <p>Monthly climatologies were not computed due to the sparsity of the dataset.
+</p>
+
+            
         </div>
         
     </div>
@@ -1830,6 +2395,8 @@
         <div id="monthly-mean-anomalies-e01" class="station-content e01">
             <p>The monthly mean anomalies were computed by subtracting the monthly climatologies for the period 1990-2020 from the monthly mean data.
 </p>
+
+            
             <div class="grouped-plots">
 
                 
@@ -1846,12 +2413,15 @@
                 </a>
                 
             </div>
+            
         </div>
         
 
         <div id="monthly-mean-anomalies-scott2" class="station-content scott2">
             <p>The monthly mean anomalies were computed by subtracting the monthly climatologies for the period 2016-2022 from the monthly mean data.
 </p>
+
+            
             <div class="grouped-plots">
 
                 
@@ -1876,12 +2446,15 @@
                 </a>
                 
             </div>
+            
         </div>
         
 
         <div id="monthly-mean-anomalies-a1" class="station-content a1">
             <p>The monthly mean anomalies were computed by subtracting the monthly climatologies for the period 1991-2020 from the monthly mean data.
 </p>
+
+            
             <div class="grouped-plots">
 
                 
@@ -1910,12 +2483,15 @@
                 </a>
                 
             </div>
+            
         </div>
         
 
         <div id="monthly-mean-anomalies-hak1" class="station-content hak1">
             <p>The monthly mean anomalies were computed by subtracting the monthly climatologies for the period 2016-2022 from the monthly mean data.
 </p>
+
+            
             <div class="grouped-plots">
 
                 
@@ -1932,12 +2508,15 @@
                 </a>
                 
             </div>
+            
         </div>
         
 
         <div id="monthly-mean-anomalies-srn1" class="station-content srn1">
             <p>The monthly mean anomalies were computed by subtracting the monthly climatologies for the period 2017-2022 from the monthly mean data.
 </p>
+
+            
             <div class="grouped-plots">
 
                 
@@ -1958,12 +2537,15 @@
                 </a>
                 
             </div>
+            
         </div>
         
 
         <div id="monthly-mean-anomalies-chat3" class="station-content chat3">
             <p>The monthly mean anomalies were computed by subtracting the monthly climatologies for the period 2019-2022 from the monthly mean data.
 </p>
+
+            
             <div class="grouped-plots">
 
                 
@@ -1984,12 +2566,15 @@
                 </a>
                 
             </div>
+            
         </div>
         
 
         <div id="monthly-mean-anomalies-juan2" class="station-content juan2">
             <p>The monthly mean anomalies were computed by subtracting the monthly climatologies for the period 2019-2022 from the monthly mean data.
 </p>
+
+            
             <div class="grouped-plots">
 
                 
@@ -2006,6 +2591,30 @@
                 </a>
                 
             </div>
+            
+        </div>
+        
+
+        <div id="monthly-mean-anomalies-bp1" class="station-content bp1">
+            <p>Monthly mean anomalies were not computed due to the sparsity of the dataset.
+</p>
+
+            
+        </div>
+        
+
+        <div id="monthly-mean-anomalies-e03" class="station-content e03">
+            <p>Monthly mean anomalies were not computed due to the sparsity of the dataset.
+</p>
+
+            
+        </div>
+        
+
+        <div id="monthly-mean-anomalies-scott3" class="station-content scott3">
+            <p>Monthly mean anomalies were not computed due to the sparsity of the dataset.</p>
+
+            
         </div>
         
     </div>

@@ -14,13 +14,14 @@ BIN_INFO = {
     'E01': {'max_depth': 110, 'bin_depths': [35, 75, 92], 'bin_size': 10},
     'A1': {'max_depth': 620, 'bin_depths': [35, 100, 180, 300, 400, 450], 'bin_size': 20},
     'SCOTT2': {'max_depth': 300, 'bin_depths': [40, 100, 150, 200, 280], 'bin_size': 10},
-    'E03': {'max_depth': 800, 'bin_depths': [35, 100, 175, 350, 400], 'bin_size': 10},
+    'E03': {'max_depth': 800, 'bin_depths': [35, 100, 175, 350, 400], 'bin_size': 20},
     'BP1': {'max_depth': 110, 'bin_depths': [35, 75, 100], 'bin_size': 10},
     'HAK1': {'max_depth': 150, 'bin_depths': [40, 75, 130], 'bin_size': 10},
     'SRN1': {'max_depth': 200, 'bin_depths': [15, 45, 100, 185], 'bin_size': 10},
     'SOGN2': {'max_depth': 360, 'bin_depths': [50, 320], 'bin_size': 10},
-    'FOC1': {'max_depth': 375, 'bin_depths': [15, 50, 150], 'bin_size': 10},
-    'EF04': {'max_depth': 120, 'bin_depths': [34, 74, 102], 'bin_size': 10},
+    'CHAT3': {'max_depth': 160, 'bin_depths': [15, 40, 75, 150], 'bin_size': 10},
+    'JUAN2': {'max_depth': 220, 'bin_depths': [15, 100, 210], 'bin_size': 10},
+    'SCOTT3': {'max_depth': 240, 'bin_depths': [40, 150, 225], 'bin_size': 10}
 }
 
 # Capture all data at A1 between 450m and 520m depth
@@ -37,16 +38,25 @@ PLOT_DATES = {
     'HAK1': [pd.to_datetime(x) for x in ['2016-01-01', f'{CURRENT_YEAR}-12-31']],
     'SRN1': [pd.to_datetime(x) for x in ['2016-01-01', f'{CURRENT_YEAR}-12-31']],
     'SOGN2': [pd.to_datetime(x) for x in ['2016-01-01', f'{CURRENT_YEAR}-12-31']],
-    'FOC1': [pd.to_datetime(x) for x in ['2013-01-01', f'{CURRENT_YEAR}-12-31']],
-    'EF04': [pd.to_datetime(x) for x in ['2008-01-01', f'{CURRENT_YEAR}-12-31']]
+    'CHAT3': [pd.to_datetime(x) for x in ['2019-01-01', f'{CURRENT_YEAR}-12-31']],
+    'JUAN2': [pd.to_datetime(x) for x in ['2019-01-01', f'{CURRENT_YEAR}-12-31']],
+    'SCOTT3': [pd.to_datetime(x) for x in ['2020-01-01', f'{CURRENT_YEAR}-12-31']]
 }
+
+# # Rejected
+# 'FOC1': {'max_depth': 375, 'bin_depths': [15, 50, 150], 'bin_size': 10},
+#     'EF04': {'max_depth': 120, 'bin_depths': [34, 74, 102], 'bin_size': 10},
+# 'FOC1': [pd.to_datetime(x) for x in ['2013-01-01', f'{CURRENT_YEAR}-12-31']],
+#     'EF04': [pd.to_datetime(x) for x in ['2008-01-01', f'{CURRENT_YEAR}-12-31']],
 
 CLIM_YEARS = {
     'E01': (1990, 2020),
     'A1': (1991, 2020),
-    'SCOTT2': (2016, 2022),
+    'SCOTT2': (2016, 2022),  # Update end year to 2023 when the 2023 data are published
     'HAK1': (2016, 2022),
-    'SRN1': (2017, 2022)
+    'SRN1': (2017, 2022),
+    'CHAT3': (2019, 2022),
+    'JUAN2': (2019, 2022)
 }
 
 # Strictly for cast netCDF files which use BODC codes to name variables
@@ -198,7 +208,7 @@ def plot_annual_samp_freq(df: pd.DataFrame, var: str, output_dir: str, station: 
                    f'Number of CTD files: {num_ctd_files}'],
             color=['orange', 'b'])
 
-    ax.set_xlim((1986, 2024))
+    ax.set_xlim((1978, max_year + 1))
     var = var.split(':')[0]  # Remove colons from oxygen
     ax.minorticks_on()
     ax.set_ylabel('Number of Measurements')
@@ -244,7 +254,7 @@ def plot_monthly_samp_freq(df: pd.DataFrame, var: str, output_dir: str, station:
     # Access datetime.datetime properties
     df_masked['Month'] = [x.month for x in df_masked.loc[:, 'Datetime'].copy()]
     df_masked['Year'] = [x.year for x in df_masked.loc[:, 'Datetime'].copy()]
-    min_year = PLOT_DATES[station][0].year  # START_YEAR  # df_masked['Year'].min() Make the same for all of T, S, O
+    min_year = 1979  # PLOT_DATES[station][0].year  # START_YEAR  # df_masked['Year'].min()
     max_year = df_masked['Year'].max()
     year_range = max_year - min_year + 1
 
@@ -257,7 +267,8 @@ def plot_monthly_samp_freq(df: pd.DataFrame, var: str, output_dir: str, station:
         for j in range(len(months)):
             monthly_counts[i, j] = sum(
                 (df_masked['Year'].values == min_year + i) &
-                (df_masked['Month'].values == j + 1))
+                (df_masked['Month'].values == j + 1)
+            )
 
     # Max counts for setting limit of plot colour bar
     max_counts = np.max(monthly_counts)
@@ -319,6 +330,25 @@ def standard_plot_title(station: str, depth: int):
     return
 
 
+def get_depth_mask(station: str, df: pd.DataFrame, depth: float, half_bin_size: float):
+    """
+    Use static instrument depth from data file names to derive the depth masks
+    :param station:
+    :param df:
+    :param depth:
+    :param half_bin_size:
+    :return:
+    """
+    if station == 'A1' and depth == 450:
+        depth_mask = ((df.loc[:, 'Depth_static'].to_numpy() >= 450) &
+                      (df.loc[:, 'Depth_static'].to_numpy() <= 520))
+    else:
+        # Make a mask to capture data within 5 or 10 vertical meters of each bin depth
+        depth_mask = ((df.loc[:, 'Depth_static'].to_numpy() >= depth - half_bin_size) &
+                      (df.loc[:, 'Depth_static'].to_numpy() <= depth + half_bin_size))
+    return depth_mask
+
+
 def plot_raw_TS_by_inst(df: pd.DataFrame, output_dir: str, station: str):
     """
     Plot raw temperature and salinity time series by instru
@@ -341,7 +371,7 @@ def plot_raw_TS_by_inst(df: pd.DataFrame, output_dir: str, station: str):
 
     units = ['C', 'PSS-78', 'mL/L']
 
-    y_axis_limits = [(4, 19), (26, 38), (0, 7.5)]  # for T, S, O
+    y_axis_limits = [(0, 20), (26, 40), (0, 7.5)]  # for T, S, O
 
     half_bin_size = BIN_INFO[station]['bin_size'] / 2
 
@@ -355,13 +385,7 @@ def plot_raw_TS_by_inst(df: pd.DataFrame, output_dir: str, station: str):
     # )
 
     for depth in BIN_INFO[station]['bin_depths']:
-        if station == 'A1' and depth == 450:
-            depth_mask = ((df.loc[:, 'Depth'].to_numpy() >= 450) &
-                          (df.loc[:, 'Depth'].to_numpy() <= 520))
-        else:
-            # Make a mask to capture data within 5 or 10 vertical meters of each bin depth
-            depth_mask = ((df.loc[:, 'Depth'].to_numpy() >= depth - half_bin_size) &
-                          (df.loc[:, 'Depth'].to_numpy() <= depth + half_bin_size))
+        depth_mask = get_depth_mask(station, df, depth, half_bin_size)
 
         # only do temp and sal not oxy
         for i, var in enumerate(VARS[:2]):
@@ -397,7 +421,7 @@ def plot_raw_TS_by_inst(df: pd.DataFrame, output_dir: str, station: str):
     return
 
 
-def plot_raw_time_series(df: pd.DataFrame, output_dir: str, station: str):
+def plot_raw_time_series_deprec(df: pd.DataFrame, output_dir: str, station: str):
     """
     Plot raw time series of temperature, salinity, and oxygen at selected depths
     Bin the data to 10m bins centred on the depths specified in BIN_DEPTHS
@@ -417,13 +441,7 @@ def plot_raw_time_series(df: pd.DataFrame, output_dir: str, station: str):
     half_bin_size = BIN_INFO[station]['bin_size'] / 2
 
     for depth in BIN_INFO[station]['bin_depths']:
-        if station == 'A1' and depth == 450:
-            depth_mask = ((df.loc[:, 'Depth'].to_numpy() >= 450) &
-                          (df.loc[:, 'Depth'].to_numpy() <= 520))
-        else:
-            # Make a mask to capture data within 5 or 10 vertical meters of each bin depth
-            depth_mask = ((df.loc[:, 'Depth'].to_numpy() >= depth - half_bin_size) &
-                          (df.loc[:, 'Depth'].to_numpy() <= depth + half_bin_size))
+        depth_mask = get_depth_mask(station, df, depth, half_bin_size)
 
         if depth == 75:  # No oxygen at this level for all time
             num_subplots = 2
@@ -484,17 +502,11 @@ def compute_daily_means(df: pd.DataFrame, output_dir: str, station: str):
     # Initialize data dictionary to pass to a csv file later
     data_dict = {'Datetime': unique_datetimes}
 
-    # Iterate through the depths 35, 75, 95m
+    # Iterate through the depths
     for i in range(len(BIN_INFO[station]['bin_depths'])):
         depth = BIN_INFO[station]['bin_depths'][i]
         print(depth)
-        if station == 'A1' and depth == 450:
-            depth_mask = ((df.loc[:, 'Depth'].to_numpy() >= 450) &
-                          (df.loc[:, 'Depth'].to_numpy() <= 520))
-        else:
-            # Make a mask to capture data within 5 or 10 vertical meters of each bin depth
-            depth_mask = ((df.loc[:, 'Depth'].to_numpy() >= depth - half_bin_size) &
-                          (df.loc[:, 'Depth'].to_numpy() <= depth + half_bin_size))
+        depth_mask = get_depth_mask(station, df, depth, half_bin_size)
 
         # Iterate through all the unique dates of observation
         for k in trange(len(unique_dates)):
@@ -1069,6 +1081,48 @@ def plot_monthly_anom(df_daily_mean: pd.DataFrame, output_dir: str, station: str
     return
 
 
+def quality_control(df: pd.DataFrame):
+    """
+    Apply quality control on acceptable data ranges from WOD18 surface
+    :param df:
+    :return:
+    """
+    parent_dir = os.path.dirname(os.getcwd())
+    df_range_T = pd.read_csv(parent_dir + '\\QC_ranges\\wod18_ranges_TEMP_Coast_N_Pac.csv')
+    df_range_S = pd.read_csv(parent_dir + '\\QC_ranges\\wod18_ranges_PSAL_Coast_N_Pac.csv')
+
+    mask_range_T = np.array([False] * len(df))
+    mask_range_S = np.array([False] * len(df))
+
+    for i in range(len(df_range_T)):
+        mask = ((df['Depth'].values >= df_range_T.loc[i, 'Depth_min']) &
+                (df['Depth'].values < df_range_T.loc[i, 'Depth_max']) &
+                (df['Temperature'].values >= df_range_T.loc[i, 'Coast_N_Pacific_min']) &
+                (df['Temperature'].values <= df_range_T.loc[i, 'Coast_N_Pacific_max']))
+        mask_range_T = mask_range_T | mask
+
+    for i in range(len(df_range_S)):
+        mask = ((df['Depth'].values >= df_range_S.loc[i, 'Depth_min']) &
+                (df['Depth'].values < df_range_S.loc[i, 'Depth_max']) &
+                (df['Salinity'].values >= df_range_S.loc[i, 'Coast_N_Pacific_min']) &
+                (df['Salinity'].values <= df_range_S.loc[i, 'Coast_N_Pacific_max']))
+        mask_range_S = mask_range_S | mask
+
+    # Apply the masks
+    df.loc[~mask_range_T, 'Temperature'] = np.nan
+    df.loc[~mask_range_S, 'Salinity'] = np.nan
+    df_qc = df.reset_index(drop=True)
+
+    # range_T = (-2.1, 35)
+    # range_S = (0, 40)
+    # mask_qc_T = (df['Temperature'].values >= range_T[0]) & (df['Temperature'].values <= range_T[1])
+    # mask_qc_S = (df['Salinity'].values >= range_S[0]) & (df['Salinity'].values <= range_S[1])
+    # df_qc = df.loc[mask_qc_T & mask_qc_S, :].copy()
+    # df_qc.reset_index(drop=True, inplace=True)
+
+    return df_qc
+
+
 def get_raw_data(data_dir: str, station: str):
     """
     Get dataframes of raw data for the selected station. Also return a flag to plot cast sst data if station==E01
@@ -1078,6 +1132,7 @@ def get_raw_data(data_dir: str, station: str):
     """
 
     if station == 'E01':
+        # Special case
         file_list = [data_dir + f'{station.lower()}_cur_data_all.csv',
                      data_dir + f'{station.lower()}_ctd_data.csv']
 
@@ -1093,6 +1148,7 @@ def get_raw_data(data_dir: str, station: str):
         df_all.reset_index(drop=True, inplace=True)
 
     elif station == 'A1':
+        # Special case
         file_list = [data_dir + f'{station.lower()}_cur_data.csv',
                      data_dir + f'{station.lower()}_ctd_data.csv']
         cur_data_all = pd.read_csv(file_list[0])
@@ -1105,7 +1161,7 @@ def get_raw_data(data_dir: str, station: str):
         df_all = pd.concat((cur_data_all, pd.read_csv(file_list[1])))
         df_all.reset_index(drop=True, inplace=True)
 
-    elif station == 'SCOTT2':
+    elif station in ['SCOTT2', 'HAK1', 'SRN1', 'CHAT3', 'JUAN2', 'SCOTT3']:
         # Don't use any of the current meter data, as it covers the same time and
         # depths as the CTD data
         file_list = [data_dir + f'{station.lower()}_cur_data.csv',
@@ -1113,36 +1169,32 @@ def get_raw_data(data_dir: str, station: str):
         df_merged = pd.read_csv(file_list[1])
 
         df_all = pd.concat((pd.read_csv(file_list[0]), df_merged))
-    elif station == 'E03':
+        df_all.reset_index(drop=True, inplace=True)
+    elif station in ['BP1', 'E03']:
+        # Use all cur and ctd data since they don't overlap
         file_list = [data_dir + f'{station.lower()}_cur_data.csv',
                      data_dir + f'{station.lower()}_ctd_data.csv']
         df_merged = pd.concat((pd.read_csv(file_list[0]), pd.read_csv(file_list[1])))
-        df_all = df_merged
-    elif station == 'HAK1':
-        # Don't use any of the current meter data, as it covers the same time and
-        # depths as the CTD data
-        file_list = [data_dir + f'{station.lower()}_cur_data.csv',
-                     data_dir + f'{station.lower()}_ctd_data.csv']
-        df_merged = pd.read_csv(file_list[1])
+        df_merged.reset_index(drop=True, inplace=True)
 
-        df_all = pd.concat((pd.read_csv(file_list[0]), df_merged))
-    elif station == 'SRN1':
-        # Don't use any of the current meter data, as it covers the same time and
-        # depths as the CTD data
-        file_list = [data_dir + f'{station.lower()}_cur_data.csv',
-                     data_dir + f'{station.lower()}_ctd_data.csv']
-        df_merged = pd.read_csv(file_list[1])
-
-        df_all = pd.concat((pd.read_csv(file_list[0]), df_merged))
+        df_all = df_merged.copy()
     else:
-        print('Station', station, 'not valid ! Exiting')
+        print('Station', station, 'not supported in get_raw_data() ! Exiting')
         return
 
     # Add datetime-format date for plotting ease
     df_dt = add_datetime(df_merged)
     df_all_dt = add_datetime(df_all)
 
-    return df_dt, df_all_dt
+    # Add static instrument depth column
+    df_dt['Depth_static'] = [int(os.path.basename(x).split('_')[3][:4]) for x in df_dt['Filename']]
+    df_all_dt['Depth_static'] = [int(os.path.basename(x).split('_')[3][:4]) for x in df_all_dt['Filename']]
+
+    # Do brief QC on TS ranges
+    df_qc = quality_control(df_dt)
+    df_all_qc = quality_control(df_all_dt)
+
+    return df_qc, df_all_qc
 
 
 def run_plot(
@@ -1152,7 +1204,6 @@ def run_plot(
         do_monthly_avail: bool = False,
         do_annual_avail: bool = False,
         do_raw_by_inst: bool = False,
-        do_raw: bool = False,
         do_daily_means: bool = False,
         do_daily_clim: bool = False,
         do_daily_anom: bool = False,
@@ -1170,9 +1221,8 @@ def run_plot(
     :param do_monthly_avail: Plot monthly observation counts
     :param do_annual_avail: Plot annual observation counts
     :param do_raw_by_inst: plot raw data separated by instrument type, ctd or current meter
-    :param do_raw: plot raw data
     :param do_daily_means: plot daily mean data
-    :param do_daily_clim: plot daily mean climatologies for 1991-2020-ish
+    :param do_daily_clim: plot daily mean climatologies
     :param do_daily_anom: plot daily mean anomalies
     :param do_monthly_anom: plot monthly mean anomalies
     :param do_monthly_clim: plot monthly mean climatologies
@@ -1204,27 +1254,23 @@ def run_plot(
             shell_data_dir = raw_data_dir.replace('csv_data', 'ios_shell_data')
             plot_instrument_depths(figures_dir, station, shell_data_dir=shell_data_dir)
 
-    if any([do_monthly_avail, do_annual_avail, do_raw_by_inst, do_raw]):
+    if any([do_monthly_avail, do_annual_avail, do_raw_by_inst]):
         # Get the raw data
-        df_dt, df_all_dt = get_raw_data(raw_data_dir, station)
+        df_qc, df_all_qc = get_raw_data(raw_data_dir, station)
 
         if do_monthly_avail:
             print('Plotting monthly data availability ...')
             for var in VARS:
-                plot_monthly_samp_freq(df_all_dt, var, figures_dir, station)
+                plot_monthly_samp_freq(df_all_qc, var, figures_dir, station)
 
         if do_annual_avail:
             print('Plotting annual data availability ...')
             for var in VARS:
-                plot_annual_samp_freq(df_all_dt, var, figures_dir, station)
+                plot_annual_samp_freq(df_all_qc, var, figures_dir, station)
 
         if do_raw_by_inst:
             print('Plotting raw data by instrument ...')
-            plot_raw_TS_by_inst(df_all_dt, figures_dir, station)
-
-        if do_raw:
-            print('Plotting raw data combining CTD and CUR data ...')
-            plot_raw_time_series(df_all_dt, figures_dir, station)
+            plot_raw_TS_by_inst(df_all_qc, figures_dir, station)
 
     if do_daily_means:
         print('Plotting daily mean data ...')
@@ -1232,10 +1278,10 @@ def run_plot(
 
         if not os.path.exists(daily_means_file) or recompute_daily_means:
             # Get the raw data
-            df_dt, df_all_dt = get_raw_data(raw_data_dir, station)
+            df_qc, df_all_qc = get_raw_data(raw_data_dir, station)
             # Compute daily means from raw data
             unique_datetimes, daily_means_T, daily_means_S = compute_daily_means(
-                df_dt, avg_data_dir, station
+                df_qc, avg_data_dir, station
             )
         else:
             df_daily_means = pd.read_csv(daily_means_file)
@@ -1301,6 +1347,9 @@ def test():
     run_plot('A1', do_raw_by_inst=True, do_daily_means=True, do_daily_clim=True,
              do_daily_anom=True, do_monthly_means=True, do_monthly_clim=True, do_monthly_anom=True)
 
-    run_plot('HAK1', do_raw_by_inst=True, do_daily_means=True, do_daily_clim=True,
+    run_plot('JUAN2', do_raw_by_inst=True, do_daily_means=True, do_daily_clim=True,
+             do_daily_anom=True, do_monthly_means=True, do_monthly_clim=True, do_monthly_anom=True)
+
+    run_plot('CHAT3', do_raw_by_inst=True, do_daily_means=True, do_daily_clim=True,
              do_daily_anom=True, do_monthly_means=True, do_monthly_clim=True, do_monthly_anom=True)
     return
