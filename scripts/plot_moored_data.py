@@ -371,7 +371,7 @@ def plot_raw_TS_by_inst(df: pd.DataFrame, output_dir: str, station: str):
 
     units = ['C', 'PSS-78', 'mL/L']
 
-    y_axis_limits = [(4, 19), (26, 38), (0, 7.5)]  # for T, S, O
+    y_axis_limits = [(0, 20), (26, 40), (0, 7.5)]  # for T, S, O
 
     half_bin_size = BIN_INFO[station]['bin_size'] / 2
 
@@ -1081,6 +1081,48 @@ def plot_monthly_anom(df_daily_mean: pd.DataFrame, output_dir: str, station: str
     return
 
 
+def quality_control(df: pd.DataFrame):
+    """
+    Apply quality control on acceptable data ranges from WOD18 surface
+    :param df:
+    :return:
+    """
+    parent_dir = os.path.dirname(os.getcwd())
+    df_range_T = pd.read_csv(parent_dir + '\\QC_ranges\\wod18_ranges_TEMP_Coast_N_Pac.csv')
+    df_range_S = pd.read_csv(parent_dir + '\\QC_ranges\\wod18_ranges_PSAL_Coast_N_Pac.csv')
+
+    mask_range_T = np.array([False] * len(df))
+    mask_range_S = np.array([False] * len(df))
+
+    for i in range(len(df_range_T)):
+        mask = ((df['Depth'].values >= df_range_T.loc[i, 'Depth_min']) &
+                (df['Depth'].values < df_range_T.loc[i, 'Depth_max']) &
+                (df['Temperature'].values >= df_range_T.loc[i, 'Coast_N_Pacific_min']) &
+                (df['Temperature'].values <= df_range_T.loc[i, 'Coast_N_Pacific_max']))
+        mask_range_T = mask_range_T | mask
+
+    for i in range(len(df_range_S)):
+        mask = ((df['Depth'].values >= df_range_S.loc[i, 'Depth_min']) &
+                (df['Depth'].values < df_range_S.loc[i, 'Depth_max']) &
+                (df['Salinity'].values >= df_range_S.loc[i, 'Coast_N_Pacific_min']) &
+                (df['Salinity'].values <= df_range_S.loc[i, 'Coast_N_Pacific_max']))
+        mask_range_S = mask_range_S | mask
+
+    # Apply the masks
+    df.loc[~mask_range_T, 'Temperature'] = np.nan
+    df.loc[~mask_range_S, 'Salinity'] = np.nan
+    df_qc = df.reset_index(drop=True)
+
+    # range_T = (-2.1, 35)
+    # range_S = (0, 40)
+    # mask_qc_T = (df['Temperature'].values >= range_T[0]) & (df['Temperature'].values <= range_T[1])
+    # mask_qc_S = (df['Salinity'].values >= range_S[0]) & (df['Salinity'].values <= range_S[1])
+    # df_qc = df.loc[mask_qc_T & mask_qc_S, :].copy()
+    # df_qc.reset_index(drop=True, inplace=True)
+
+    return df_qc
+
+
 def get_raw_data(data_dir: str, station: str):
     """
     Get dataframes of raw data for the selected station. Also return a flag to plot cast sst data if station==E01
@@ -1148,7 +1190,11 @@ def get_raw_data(data_dir: str, station: str):
     df_dt['Depth_static'] = [int(os.path.basename(x).split('_')[3][:4]) for x in df_dt['Filename']]
     df_all_dt['Depth_static'] = [int(os.path.basename(x).split('_')[3][:4]) for x in df_all_dt['Filename']]
 
-    return df_dt, df_all_dt
+    # Do brief QC on TS ranges
+    df_qc = quality_control(df_dt)
+    df_all_qc = quality_control(df_all_dt)
+
+    return df_qc, df_all_qc
 
 
 def run_plot(
@@ -1210,21 +1256,21 @@ def run_plot(
 
     if any([do_monthly_avail, do_annual_avail, do_raw_by_inst]):
         # Get the raw data
-        df_dt, df_all_dt = get_raw_data(raw_data_dir, station)
+        df_qc, df_all_qc = get_raw_data(raw_data_dir, station)
 
         if do_monthly_avail:
             print('Plotting monthly data availability ...')
             for var in VARS:
-                plot_monthly_samp_freq(df_all_dt, var, figures_dir, station)
+                plot_monthly_samp_freq(df_all_qc, var, figures_dir, station)
 
         if do_annual_avail:
             print('Plotting annual data availability ...')
             for var in VARS:
-                plot_annual_samp_freq(df_all_dt, var, figures_dir, station)
+                plot_annual_samp_freq(df_all_qc, var, figures_dir, station)
 
         if do_raw_by_inst:
             print('Plotting raw data by instrument ...')
-            plot_raw_TS_by_inst(df_all_dt, figures_dir, station)
+            plot_raw_TS_by_inst(df_all_qc, figures_dir, station)
 
     if do_daily_means:
         print('Plotting daily mean data ...')
@@ -1232,10 +1278,10 @@ def run_plot(
 
         if not os.path.exists(daily_means_file) or recompute_daily_means:
             # Get the raw data
-            df_dt, df_all_dt = get_raw_data(raw_data_dir, station)
+            df_qc, df_all_qc = get_raw_data(raw_data_dir, station)
             # Compute daily means from raw data
             unique_datetimes, daily_means_T, daily_means_S = compute_daily_means(
-                df_dt, avg_data_dir, station
+                df_qc, avg_data_dir, station
             )
         else:
             df_daily_means = pd.read_csv(daily_means_file)
