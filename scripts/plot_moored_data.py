@@ -67,11 +67,13 @@ VAR_CODES = {'Temperature': {'codes': ['TEMPS901', 'TEMPS601'], 'units': 'C'},
 
 def plot_instrument_depths(output_dir: str, station: str, shell_data_dir: str = None, wget_csv_file: str = None):
     """
-    Visually inspect where the "standard" instrument depths are overall for each station
-    :param wget_csv_file:
-    :param shell_data_dir:
-    :param output_dir:
-    :param station:
+    Visually inspect where the "standard" instrument depths are overall for each station.
+    Plot the bin width around each standard depth as a greyed-out horizontal band.
+
+    :param wget_csv_file: Use instrument depths from file names in the wget csv file downloaded from Water Properties
+    :param shell_data_dir: Directory for IOS shell-format data; alternate to using the wget csv files
+    :param output_dir: directory to save the plot to
+    :param station: name of station
     :return:
     """
     ybot = BIN_INFO[station]['max_depth']
@@ -138,8 +140,8 @@ def plot_instrument_depths(output_dir: str, station: str, shell_data_dir: str = 
 def add_datetime(df: pd.DataFrame):
     """
     Add column containing datetime-format dates to pandas dataframe containing the observations
-    :param df:
-    :return:
+    :param df: pandas dataframe containing the observations
+    :return: the dataframe df with a column added containing observation times in datetime format
     """
     # Need to replace the slash in YYYY/mm/dd format with a dash to comply with ISO format
     # so YYYY-mm-dd
@@ -154,10 +156,10 @@ def add_datetime(df: pd.DataFrame):
 def plot_annual_samp_freq(df: pd.DataFrame, var: str, output_dir: str, station: str):
     """
     Plot histogram of annual counts of observations
-    :param station:
-    :param output_dir:
-    :param df:
-    :param var:
+    :param station: name of station
+    :param output_dir: directory to save plots to
+    :param df: pandas dataframe containing the observations
+    :param var: name of variable being plotted which is one of those in the global variable VARS
     :return:
     """
     # Make a mask for the specific variable and use data in it for the plot
@@ -222,7 +224,7 @@ def plot_annual_samp_freq(df: pd.DataFrame, var: str, output_dir: str, station: 
 
 def plot_monthly_samp_freq(df: pd.DataFrame, var: str, output_dir: str, station: str):
     """
-    Plot monthly numbers of observations.
+    Plot monthly numbers of observations in a table with cell colour intensity determined by number of observations
     Credit: James Hannah
     :param station: station name
     :param output_dir: path to folder for outputs
@@ -323,6 +325,12 @@ def plot_monthly_samp_freq(df: pd.DataFrame, var: str, output_dir: str, station:
 
 
 def standard_plot_title(station: str, depth: int):
+    """
+    Format the plot title for many of the plots here
+    :param station: name of station with the correct capitalization
+    :param depth: bin depth from global variable BIN_INFO
+    :return:
+    """
     if station == 'A1' and depth == 450:
         plt.suptitle(f'Station {station} - below {depth} m')
     else:
@@ -330,14 +338,15 @@ def standard_plot_title(station: str, depth: int):
     return
 
 
-def get_depth_mask(station: str, df: pd.DataFrame, depth: float, half_bin_size: float):
+def get_depth_mask(station: str, df: pd.DataFrame, depth: float, half_bin_size: float) -> np.ndarray:
     """
     Use static instrument depth from data file names to derive the depth masks
-    :param station:
-    :param df:
-    :param depth:
-    :param half_bin_size:
-    :return:
+    so as to only plot data from one depth at a time.
+    :param station: name of station
+    :param df: pandas dataframe containing the observations
+    :param depth: bin depth as specified in the global variable BIN_DEPTHS
+    :param half_bin_size: half of the bin size for the station as specified in the global variable BIN_DEPTHS
+    :return: numpy array of a boolean mask indicating which data to use
     """
     if station == 'A1' and depth == 450:
         depth_mask = ((df.loc[:, 'Depth_static'].to_numpy() >= 450) &
@@ -351,10 +360,12 @@ def get_depth_mask(station: str, df: pd.DataFrame, depth: float, half_bin_size: 
 
 def plot_raw_TS_by_inst(df: pd.DataFrame, output_dir: str, station: str):
     """
-    Plot raw temperature and salinity time series by instru
-    :param df:
-    :param output_dir:
-    :param station:
+    Plot raw temperature and salinity time series by instrument.
+    Separate data from current meters and CTDs into different subplots with different coloured
+    scatter points and sharing the same x axis
+    :param df: pandas dataframe containing the observations
+    :param output_dir: directory to output the plots to
+    :param station: name of station as specified in the global variable BIN_DEPTHS
     :return:
     """
     # Create masks based on instrument type
@@ -426,9 +437,9 @@ def plot_raw_time_series_deprec(df: pd.DataFrame, output_dir: str, station: str)
     Plot raw time series of temperature, salinity, and oxygen at selected depths
     Bin the data to 10m bins centred on the depths specified in BIN_DEPTHS
     Differentiate by colour the data from current meters and from CTDs
-    :param station:
-    :param df:
-    :param output_dir:
+    :param station: name of station
+    :param df: pandas dataframe containing the observations
+    :param output_dir: directory to output the plots to
     :return:
     """
     # Create masks based on instrument type
@@ -479,14 +490,15 @@ def plot_raw_time_series_deprec(df: pd.DataFrame, output_dir: str, station: str)
     return
 
 
-def compute_daily_means(df: pd.DataFrame, output_dir: str, station: str):
+def compute_daily_means(df: pd.DataFrame, output_dir: str, station: str) -> tuple:
     """
-    Compute daily means for temperature and salinity data
-    half_bin_size=5
-    :param station:
-    :param output_dir:
-    :param df:
-    :return:
+    Compute daily means for temperature and salinity data within each of the depth bins for each station
+    as defined in the global variable BIN_DEPTHS.
+    Return the daily mean products for further processing if needed
+    :param station: name of station
+    :param output_dir: directory to save the daily mean data to
+    :param df: pandas dataframe containing the observations
+    :return: datetime days, daily mean temperature, daily mean salinity
     """
     half_bin_size = BIN_INFO[station]['bin_size'] / 2
 
@@ -526,7 +538,13 @@ def compute_daily_means(df: pd.DataFrame, output_dir: str, station: str):
     return unique_datetimes, daily_means_T, daily_means_S
 
 
-def get_cast_sst(station: str):
+def get_cast_sst(station: str) -> tuple:
+    """
+    Get cast CTD sea-surface temperature data by taking the first measurement from each cast,
+    assuming all downcast data
+    :param station: name of station
+    :return: datetime for each surface measurement, sea-surface temperature data, corresponding depths
+    """
     # Add scatter of cast data
     cast_list = glob.glob(
         f'E:\\charles\\mooring_data_page\\{station.lower()}\\cast_ctd_data\\' + '*.ctd.nc'
@@ -567,16 +585,17 @@ def get_cast_sst(station: str):
     return cast_datetime[indices_sorted], sst[indices_sorted], depth[indices_sorted]
 
 
-def plot_daily_means(unique_datetimes, daily_means_T, daily_means_S, output_dir: str,
+def plot_daily_means(unique_datetimes: np.ndarray, daily_means_T: np.ndarray,
+                     daily_means_S: np.ndarray, output_dir: str,
                      station: str, add_cast_sst: bool = False):
     """
     Plot daily mean Temperature and Salinity data
     :param add_cast_sst: Add SST data from CTD casts to E01 35m temperature plot
-    :param unique_datetimes:
-    :param daily_means_T:
-    :param daily_means_S:
-    :param output_dir:
-    :param station:
+    :param unique_datetimes: dates in datetime format
+    :param daily_means_T: daily mean temperature data
+    :param daily_means_S: daily mean salinity data
+    :param output_dir: directory to save plots to
+    :param station: name of station
     :return:
     """
 
@@ -639,12 +658,14 @@ def plot_daily_means(unique_datetimes, daily_means_T, daily_means_S, output_dir:
     return
 
 
-def compute_daily_clim(df_daily_mean: pd.DataFrame, station: str):
+def compute_daily_clim(df_daily_mean: pd.DataFrame, station: str) -> tuple:
     """
-    Compute 1990-2020 climatology for temperature and salinity
-    :param station:
-    :param df_daily_mean:
-    :return:
+    Compute climatology for temperature and salinity using the climatology years specified for
+    each station in the global variable CLIM_YEARS
+    :param station: name of station
+    :param df_daily_mean: pandas dataframe containing daily mean data
+    :return: day of the year, daily temperature climatology, daily salinity climatology,
+    start year of the climatology, end year of the climatology
     """
     days_of_year = np.arange(1, 365 + 1)
     df_daily_mean['Day_of_year'] = np.array(
@@ -683,9 +704,9 @@ def compute_daily_clim(df_daily_mean: pd.DataFrame, station: str):
 def plot_daily_clim(df_daily_mean: pd.DataFrame, output_dir: str, station: str):
     """
     Plot daily climatology for 1990-2020
-    :param station:
-    :param df_daily_mean:
-    :param output_dir:
+    :param station: name of station
+    :param df_daily_mean: pandas dataframe containing the daily mean observations
+    :param output_dir: directory to save the plots to
     :return:
     """
     days_of_year, daily_clim_T, daily_clim_S, start_year, end_year = compute_daily_clim(
@@ -736,12 +757,12 @@ def plot_daily_clim(df_daily_mean: pd.DataFrame, output_dir: str, station: str):
     return
 
 
-def compute_daily_anom(df_daily_mean: pd.DataFrame, station: str):
+def compute_daily_anom(df_daily_mean: pd.DataFrame, station: str) -> pd.DataFrame:
     """
     Compute daily mean anomalies from daily mean data and daily climatologies
-    :param station:
-    :param df_daily_mean:
-    :return:
+    :param station: name of station
+    :param df_daily_mean: pandas dataframe containing the daily mean observations
+    :return: pandas dataframe containing the daily mean anomalies
     """
     # Compute daily climatologies
     days_of_year, daily_clim_T, daily_clim_S, start_year, end_year = compute_daily_clim(
@@ -779,7 +800,10 @@ def compute_daily_anom(df_daily_mean: pd.DataFrame, station: str):
 
 def plot_daily_anom(df_daily_mean: pd.DataFrame, output_dir: str, station: str):
     """
-    Compute daily mean anomalies from daily mean data and daily climatologies
+    Plot the daily mean anomalies
+    :param station: name of station
+    :param df_daily_mean: pandas dataframe containing daily mean data
+    :param output_dir: directory to save the plots to
     :return:
     """
     df_anom = compute_daily_anom(df_daily_mean, station)
@@ -839,9 +863,9 @@ def plot_daily_anom(df_daily_mean: pd.DataFrame, output_dir: str, station: str):
 def compute_monthly_means(df_daily_mean: pd.DataFrame, station: str) -> tuple:
     """
     Compute monthly means from daily means
-    :param station:
-    :param df_daily_mean:
-    :return:
+    :param station: name of station
+    :param df_daily_mean: pandas dataframe containing daily mean observations
+    :return: month numbers, monthly mean temperature data, monthly mean salinity data
     """
     months = np.arange(1, 12 + 1)
     num_months = len(months)
@@ -880,9 +904,9 @@ def compute_monthly_means(df_daily_mean: pd.DataFrame, station: str) -> tuple:
 def plot_monthly_means(df_daily_mean: pd.DataFrame, output_dir: str, station: str):
     """
     Plot monthly means computed from daily means
-    :param station:
-    :param df_daily_mean:
-    :param output_dir:
+    :param station: name of station
+    :param df_daily_mean: pandas dataframe containing daily mean observations
+    :param output_dir: directory to save the plots to
     :return:
     """
     unique_months, monthly_mean_T, monthly_mean_S = compute_monthly_means(df_daily_mean, station)
@@ -925,12 +949,13 @@ def plot_monthly_means(df_daily_mean: pd.DataFrame, output_dir: str, station: st
     return
 
 
-def compute_monthly_clim(df_daily_mean: pd.DataFrame, station: str):
+def compute_monthly_clim(df_daily_mean: pd.DataFrame, station: str) -> tuple:
     """
-    Compute monthly climatologies for temperature and salinity
-    :param station:
-    :param df_daily_mean:
-    :return:
+    Compute monthly climatologies for temperature and salinity using daily mean data
+    :param station: name of station
+    :param df_daily_mean: pandas dataframe containing daily mean observations
+    :return: month numbers, monthly temperature climatology, monthly salinity climatology,
+    start year of the climatology, end year of the climatology
     """
     unique_months, monthly_mean_T, monthly_mean_S = compute_monthly_means(df_daily_mean, station)
     month_only = np.array([dt.month for dt in unique_months])
@@ -956,14 +981,16 @@ def compute_monthly_clim(df_daily_mean: pd.DataFrame, station: str):
 def plot_monthly_clim(df_daily_mean: pd.DataFrame, output_dir: str, station: str):
     """
     Plot monthly climatologies
-    :param station:
-    :param df_daily_mean:
-    :param output_dir:
+    :param station: name of station
+    :param df_daily_mean: pandas dataframe containing daily mean observations
+    :param output_dir: directory to save plots to
     :return:
     """
     xtick_labels = ['Jan', 'Feb', 'Mar', 'Apr', 'May', 'Jun', 'Jul', 'Aug', 'Sep', 'Oct', 'Nov', 'Dec']
 
-    months, monthly_clim_T, monthly_clim_S, start_year, end_year = compute_monthly_clim(df_daily_mean, station)
+    months, monthly_clim_T, monthly_clim_S, start_year, end_year = compute_monthly_clim(
+        df_daily_mean, station
+    )
 
     range_T = (np.nanmin(monthly_clim_T) - 0.5, np.nanmax(monthly_clim_T) + 0.5)
     range_S = (np.nanmin(monthly_clim_S) - 0.5, np.nanmax(monthly_clim_S) + 0.5)
@@ -1004,12 +1031,12 @@ def plot_monthly_clim(df_daily_mean: pd.DataFrame, output_dir: str, station: str
     return
 
 
-def compute_monthly_anom(df_daily_mean: pd.DataFrame, station: str):
+def compute_monthly_anom(df_daily_mean: pd.DataFrame, station: str) -> tuple:
     """
-    Compute monthly mean anomalies
-    :param station:
-    :param df_daily_mean:
-    :return:
+    Compute monthly mean anomalies from daily mean data
+    :param station: name of station
+    :param df_daily_mean: pandas dataframe containing daily mean observations
+    :return: month numbers, monthly temperature anomalies, monthly salinity anomalies
     """
     # Compute monthly means on the data
     unique_months, monthly_mean_T, monthly_mean_S = compute_monthly_means(df_daily_mean, station)
@@ -1033,10 +1060,10 @@ def compute_monthly_anom(df_daily_mean: pd.DataFrame, station: str):
 
 def plot_monthly_anom(df_daily_mean: pd.DataFrame, output_dir: str, station: str):
     """
-    Plot monthly mean anomalies
-    :param station:
-    :param df_daily_mean:
-    :param output_dir:
+    Plot monthly mean anomalies by variable
+    :param station: name of station
+    :param df_daily_mean: pandas dataframe containing daily mean observations
+    :param output_dir: directory to save plots to
     :return:
     """
     unique_months, monthly_anom_T, monthly_anom_S = compute_monthly_anom(df_daily_mean, station)
@@ -1081,11 +1108,11 @@ def plot_monthly_anom(df_daily_mean: pd.DataFrame, output_dir: str, station: str
     return
 
 
-def quality_control(df: pd.DataFrame):
+def quality_control(df: pd.DataFrame) -> pd.DataFrame:
     """
     Apply quality control on acceptable data ranges from WOD18 surface
-    :param df:
-    :return:
+    :param df: pandas dataframe containing the raw observations
+    :return: pandas dataframe containing the quality-controlled data
     """
     parent_dir = os.path.dirname(os.getcwd())
     df_range_T = pd.read_csv(parent_dir + '\\QC_ranges\\wod18_ranges_TEMP_Coast_N_Pac.csv')
@@ -1125,10 +1152,14 @@ def quality_control(df: pd.DataFrame):
 
 def get_raw_data(data_dir: str, station: str):
     """
-    Get dataframes of raw data for the selected station. Also return a flag to plot cast sst data if station==E01
-    :param data_dir:
-    :param station:
-    :return:
+    Get dataframes of raw data for the selected station.
+    Also return a flag to plot cast sst data if station==E01.
+    Apply a quick quality check on the temperature and salinity ranges.
+    :param data_dir: local directory in which the ctd and current meter data are kept in csv format
+    :param station: name of station
+    :return: dataframe containing merged dataset (no overlapping current meter and CTD data) and
+    dataframe containing all available current meter and CTD data regardless of whether they overlap
+    in depth and time. If station has not been added here then the function will return nothing
     """
 
     if station == 'E01':
@@ -1199,6 +1230,7 @@ def get_raw_data(data_dir: str, station: str):
 
 def run_plot(
         station: str,
+        raw_data_dir: str,
         do_instrument_depths: bool = False,
         use_wget_csv_file: bool = False,
         do_monthly_avail: bool = False,
@@ -1213,9 +1245,12 @@ def run_plot(
         recompute_daily_means: bool = False
 ):
     """
-    Main function to make plots of temperature, salinity, and oxygen
-    :param station:
-    :param do_instrument_depths:
+    Main function to make plots of temperature, salinity, and oxygen.
+    Data files are too big to store in the GitHub project directory so host them locally in raw_data_dir
+
+    :param raw_data_dir: full path to where the csv-format current meter and CTD data are stored
+    :param station: name of station; supported stations listed in the global variable BIN_DEPTHS
+    :param do_instrument_depths: plot instrument depths through time
     :param use_wget_csv_file: use to run plot_instrument_depths() without having to download the data, by using the
     wget csv file downloaded from Water Properties for doing batch downloads
     :param do_monthly_avail: Plot monthly observation counts
@@ -1239,10 +1274,6 @@ def run_plot(
 
     # Flag for plotting cast SST data on top of daily mean 35m E01 data
     add_cast_sst = True if station == 'E01' else False
-
-    # Files are too big to store in the GitHub project directory so host them
-    # locally
-    raw_data_dir = f'E:\\charles\\mooring_data_page\\{station.lower()}\\csv_data\\'
 
     if do_instrument_depths:
         if use_wget_csv_file:
@@ -1344,12 +1375,24 @@ def run_plot(
 
 
 def test():
-    run_plot('A1', do_raw_by_inst=True, do_daily_means=True, do_daily_clim=True,
+    """
+    For local testing
+    """
+    station = 'A1'
+    raw_data_dir = f'E:\\charles\\mooring_data_page\\{station.lower()}\\csv_data\\'
+
+    run_plot('A1', raw_data_dir, do_raw_by_inst=True, do_daily_means=True, do_daily_clim=True,
              do_daily_anom=True, do_monthly_means=True, do_monthly_clim=True, do_monthly_anom=True)
 
-    run_plot('JUAN2', do_raw_by_inst=True, do_daily_means=True, do_daily_clim=True,
+    station = 'JUAN2'
+    raw_data_dir = f'E:\\charles\\mooring_data_page\\{station.lower()}\\csv_data\\'
+
+    run_plot('JUAN2', raw_data_dir, do_raw_by_inst=True, do_daily_means=True, do_daily_clim=True,
              do_daily_anom=True, do_monthly_means=True, do_monthly_clim=True, do_monthly_anom=True)
 
-    run_plot('CHAT3', do_raw_by_inst=True, do_daily_means=True, do_daily_clim=True,
+    station = 'CHAT3'
+    raw_data_dir = f'E:\\charles\\mooring_data_page\\{station.lower()}\\csv_data\\'
+
+    run_plot('CHAT3', raw_data_dir, do_raw_by_inst=True, do_daily_means=True, do_daily_clim=True,
              do_daily_anom=True, do_monthly_means=True, do_monthly_clim=True, do_monthly_anom=True)
     return
